@@ -1,7 +1,8 @@
 import { KeyboardControls, OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber"
 import { Physics } from "@react-three/rapier";
-import Character from "./character";
+import MyCharacter from "./myCharacter";
+import OtherCharacter from "./otherCharacter";
 import Obstacle from "./obstacle";
 
 const game = () => {
@@ -18,7 +19,8 @@ const game = () => {
             <ambientLight intensity={0.1} />
             <directionalLight position={[0, 0, 5]} />
                 <Physics gravity={[0,0,0]} >
-                    <Character initPosition={[0,-0.5,0]} initColor="red"/>
+                    <MyCharacter initPosition={[0,-0.5,0]} initColor="red"/>
+                    <OtherCharacter initPosition={[2, 1, 0]} initColor="blue"/>
                     <Obstacle/>
                 </Physics>
                 <OrthographicCamera/>

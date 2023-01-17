@@ -2,10 +2,10 @@ import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
 import { useRef } from "react";
-import { RigidBody, CuboidCollider  } from "@react-three/rapier";
+import { RigidBody  } from "@react-three/rapier";
+import CharacterMesh from "./characterMesh";
 
-const Character = ({initPosition, initColor}) => {
-
+const MyCharacter = ({initPosition, initColor}) => {
     const [, get] = useKeyboardControls()
     const ref = useRef()
 
@@ -30,15 +30,11 @@ const Character = ({initPosition, initColor}) => {
 
     return (
         <>
-                <RigidBody position={initPosition} ref={ref} mass={1} colliders={"hull"} type="dynamic" lockRotations={true}>
-                    <mesh>
-                        <boxGeometry args={[1,1,1]}/>
-                        <meshStandardMaterial color={initColor}/>
-                    </mesh>
-                    <CuboidCollider  args={[0.75, 0.5]} />
+                <RigidBody ref={ref} mass={1} colliders={"hull"} type="dynamic" lockRotations={true}>
+                    <CharacterMesh initPosition={initPosition} initColor={initColor} />
                 </RigidBody>
         </>
     )
 }
 
-export default Character;
+export default MyCharacter;
