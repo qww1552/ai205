@@ -52,7 +52,7 @@ public class OpenviduController {
 	/**
 	 * @param sessionId The Session in which to create the Connection
 	 * @param params    The Connection properties
-	 * @return The Token associated to the Connection
+	 * @return The Token associated to the Connection.
 	 */
 	@PostMapping("/api/sessions/{sessionId}/connections")
 	public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
