@@ -1,8 +1,10 @@
-const PDH = () => {
+import Game from './game/game'
 
+const PDH = () => {
 
     return (
         <>
+            <Game/>
         </>
     )
 }
