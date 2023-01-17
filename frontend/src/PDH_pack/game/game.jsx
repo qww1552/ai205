@@ -1,4 +1,4 @@
-import { KeyboardControls } from "@react-three/drei";
+import { KeyboardControls, OrthographicCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber"
 import { Physics } from "@react-three/rapier";
 import Character from "./character";
@@ -15,10 +15,13 @@ const game = () => {
                 { name: "jump", keys: ["Space"] },
             ]}>
             <Canvas>
+            <ambientLight intensity={0.1} />
+            <directionalLight position={[0, 0, 5]} />
                 <Physics gravity={[0,0,0]} >
-                    <Character/>
+                    <Character initPosition={[0,-0.5,0]} initColor="red"/>
                     <Obstacle/>
                 </Physics>
+                <OrthographicCamera/>
             </Canvas>
         </KeyboardControls>
     )

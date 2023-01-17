@@ -6,10 +6,10 @@ const Obstacle = () => {
         <>
             <RigidBody mass={1} colliders={"hull"} type="fixed">
                 <mesh position={[0, 2, 0]}>
-                    <boxGeometry />
+                    <boxGeometry args={[2,2,0.05]}/>
                     <meshStandardMaterial />
                 </mesh>
-                <CuboidCollider  args={[0.75, 0.5]} />
+                <CuboidCollider args={[0.75, 0.5]} />
             </RigidBody>
         </>
     )
