@@ -1,32 +1,38 @@
 import { OrthographicCamera, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { MathUtils, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import { useRef } from "react";
 import { RigidBody, CuboidCollider  } from "@react-three/rapier";
 
-const Character = ({ lerp = MathUtils.lerp }) => {
+const Character = () => {
 
     const [, get] = useKeyboardControls()
     const ref = useRef()
 
     const frontVector = new Vector3()
     const sideVector = new Vector3()
-    
     const direction = new Vector3()
+
+    const cameraVector = new Vector3();
+
 
     useFrame((state) => {
         const { forward, backward, left, right } = get()
 
-        state.camera.position.set(...ref.current.translation())
-        state.camera.position.z = 5;
-
+        
         frontVector.set(0, forward - backward, 0)
         sideVector.set(left - right, 0, 0)
-
-        direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(10);
-
-
+        
+        direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(5);
+        
+        
         ref.current.setLinvel({ x: direction.x, y: direction.y, z: 0 })
+
+        state.camera.position.lerp(new Vector3(ref.current.translation().x, ref.current.translation().y, 5), 0.025);
+
+        // cameraVector.addVectors({x:ref.current.translation().x,y:ref.current.translation().y,z:5});
+
+        // state.camera.position.copy(cameraVector)
         // console.log(state.camera.position)
     
     })
