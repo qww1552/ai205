@@ -21,11 +21,17 @@ spring:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 server:
   servlet:
-    context-path: /api/v1
+    context-path: /
+  port: 5000
+  ssl:
+    enabled: false
 
 logging:
   level:
     org.hibernate.SQL: debug
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
+OPENVIDU_URL: http://localhost:4443/
+OPENVIDU_SECRET: MY_SECRET
 
