@@ -1,10 +1,13 @@
+import ButtonIndex from './buttonIndex'
+
 const SYJ = () => {
 
 
-    return (
-        <>
-        </>
-    )
+  return (
+    <>
+      <ButtonIndex/>
+    </>
+  )
 }
 
 export default SYJ;
