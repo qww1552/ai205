@@ -21,8 +21,8 @@ spring:
 #      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
 server:
   servlet:
-    context-path: /
-  port: 5000
+    context-path: /api/v1
+  port: 8080
   ssl:
     enabled: false
 
@@ -35,3 +35,4 @@ jwt:
 OPENVIDU_URL: http://localhost:4443/
 OPENVIDU_SECRET: MY_SECRET
 
+allowed-origins: "*"
