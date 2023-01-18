@@ -1,6 +1,6 @@
-import { KeyboardControls, OrthographicCamera } from "@react-three/drei";
+import { KeyboardControls, OrthographicCamera, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber"
-import { Physics } from "@react-three/rapier";
+import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "./myCharacter";
 import OtherCharacter from "./otherCharacter";
 import Obstacle from "./obstacle";
@@ -15,16 +15,20 @@ const game = () => {
                 { name: "right", keys: ["ArrowRight", "d", "D"] },
                 { name: "jump", keys: ["Space"] },
             ]}>
-            <Canvas>
-            <ambientLight intensity={0.1} />
-            <directionalLight position={[0, 0, 5]} />
-                <Physics gravity={[0,0,0]} >
-                    <MyCharacter initPosition={[0,-0.5,0]} initColor="red"/>
-                    <OtherCharacter initPosition={[2, 1, 0]} initColor="blue"/>
-                    <Obstacle/>
-                </Physics>
-                <OrthographicCamera/>
-            </Canvas>
+            <div style={{ width: "70vw", height: "70vh" }}>
+                <Canvas flat linear>
+                    <ambientLight intensity={0.1} />
+                    <directionalLight position={[0, 0, 5]} />
+                    <Physics timeStep={1 / 30} gravity={[0, 0, 0]} >
+                        {/* <Debug /> */}
+                        <MyCharacter initPosition={[0, -0.5, 0]} initColor="red" />
+                        <OtherCharacter initPosition={[2, 1, 0]} initColor="blue" />
+                        <Obstacle />
+                    </Physics>
+                    <OrthographicCamera />
+                    {/* <OrbitControls /> */}
+                </Canvas>
+            </div>
         </KeyboardControls>
     )
 }

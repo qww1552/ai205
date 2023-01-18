@@ -4,12 +4,11 @@ const Obstacle = () => {
 
     return (
         <>
-            <RigidBody mass={1} colliders={"hull"} type="fixed">
+            <RigidBody colliders="cuboid" type="fixed">
                 <mesh position={[0, 2, 0]}>
-                    <boxGeometry args={[2,2,0.05]}/>
-                    <meshStandardMaterial />
+                    <boxGeometry args={[2,2,1]}/>
+                    <meshStandardMaterial color="green"/>
                 </mesh>
-                <CuboidCollider args={[0.75, 0.5]} />
             </RigidBody>
         </>
     )
