@@ -1,4 +1,4 @@
-package com.project.arc205.gamecharacter.dto.receive;
+package com.project.arc205.gamecharacter.dto.request;
 
 import com.project.arc205.gamecharacter.dto.Location;
 import com.project.arc205.gamecharacter.dto.Player;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Move implements Serializable {
+public class MoveRequest implements Serializable {
     private Player player;
     private Location location;
 }

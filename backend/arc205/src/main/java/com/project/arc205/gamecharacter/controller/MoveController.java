@@ -1,7 +1,7 @@
 package com.project.arc205.gamecharacter.controller;
 
-import com.project.arc205.gamecharacter.dto.receive.Move;
-import com.project.arc205.gamecharacter.dto.send.ActionMove;
+import com.project.arc205.gamecharacter.dto.request.MoveRequest;
+import com.project.arc205.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.gamecharacter.service.MoveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ public class MoveController {
 
     @MessageMapping("/{room-id}/move")
     @SendTo("/sub/{room-id}")
-    public ActionMove move(Move move) {
-        log.info("전달 받은 move : {}", move);
-        return moveService.move(move);
+    public MoveResponse move(MoveRequest moveRequest) {
+        log.info("전달 받은 move : {}", moveRequest);
+        return moveService.move(moveRequest);
     }
 }

@@ -1,4 +1,4 @@
-package com.project.arc205.gamecharacter.dto.send;
+package com.project.arc205.gamecharacter.dto.response;
 
 
 import com.project.arc205.gamecharacter.dto.Location;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 @ToString
 @AllArgsConstructor
-public class ActionMove implements Serializable {
+public class MoveResponse implements Serializable {
 
     Action action;
     Player player;
