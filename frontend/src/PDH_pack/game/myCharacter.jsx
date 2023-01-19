@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
 import { useRef } from "react";
 import { RigidBody } from "@react-three/rapier";
+import { changeLocation } from "app/game"
 
 const MyCharacter = ({ initPosition, initColor }) => {
     const [, get] = useKeyboardControls()
