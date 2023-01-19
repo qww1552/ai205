@@ -4,6 +4,7 @@ import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "./myCharacter";
 import OtherCharacter from "./otherCharacter";
 import Obstacle from "./obstacle";
+import Panel from "../UI";
 
 const game = () => {
     return (
@@ -19,7 +20,7 @@ const game = () => {
                 <Canvas flat linear>
                     <ambientLight intensity={0.1} />
                     <directionalLight position={[0, 0, 5]} />
-                    <Physics timeStep={1 / 30} gravity={[0, 0, 0]} >
+                    <Physics timeStep={1 / 60} gravity={[0, 0, 0]} >
                         {/* <Debug /> */}
                         <MyCharacter initPosition={[0, -0.5, 0]} initColor="red" />
                         <OtherCharacter initPosition={[2, 1, 0]} initColor="blue" />
@@ -27,6 +28,7 @@ const game = () => {
                     </Physics>
                     <OrthographicCamera />
                     {/* <OrbitControls /> */}
+                    <Panel/>
                 </Canvas>
             </div>
         </KeyboardControls>
