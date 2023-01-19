@@ -1,0 +1,25 @@
+package com.project.arc205.gamecharacter.controller;
+
+import com.project.arc205.gamecharacter.dto.receive.Move;
+import com.project.arc205.gamecharacter.dto.send.ActionMove;
+import com.project.arc205.gamecharacter.service.MoveService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
+
+@Slf4j
+@RequiredArgsConstructor
+@Controller
+public class MoveController {
+
+    private final MoveService moveService;
+
+    @MessageMapping("/{room-id}/move")
+    @SendTo("/sub/{room-id}")
+    public ActionMove move(Move move) {
+        log.info("전달 받은 move : {}", move);
+        return moveService.move(move);
+    }
+}
