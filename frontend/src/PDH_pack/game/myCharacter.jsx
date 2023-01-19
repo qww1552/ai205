@@ -1,7 +1,7 @@
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { changeLocation } from "../../app/me"
 import { useDispatch } from 'react-redux';
@@ -15,7 +15,16 @@ const MyCharacter = ({ initPosition, initColor }) => {
     const sideVector = new Vector3()
     const direction = new Vector3()
 
-    let cnt = 0;
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            dispatch(changeLocation({x: ref.current.translation().x, y:ref.current.translation().y}))
+        }, 500);
+    
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
     useFrame((state) => {
 
@@ -29,14 +38,6 @@ const MyCharacter = ({ initPosition, initColor }) => {
         direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(10);
 
         ref.current.setLinvel({ x: direction.x, y: direction.y, z: 0 })
-
-        if(cnt == 60) {
-            dispatch(changeLocation({x: ref.current.translation().x, y:ref.current.translation().y}))
-            cnt = 0;
-        }
-
-        cnt += 1;
-
     })
 
     return (
