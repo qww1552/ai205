@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
 import { useRef } from "react";
 import { RigidBody } from "@react-three/rapier";
-import { changeLocation } from "../../app/game"
+import { changeLocation } from "../../app/me"
 import { useDispatch } from 'react-redux';
 
 const MyCharacter = ({ initPosition, initColor }) => {
@@ -31,7 +31,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
         ref.current.setLinvel({ x: direction.x, y: direction.y, z: 0 })
 
         if(cnt == 60) {
-            dispatch(changeLocation({x: direction.x, y:direction.y}))
+            dispatch(changeLocation({x: ref.current.translation().x, y:ref.current.translation().y}))
             cnt = 0;
         }
 
