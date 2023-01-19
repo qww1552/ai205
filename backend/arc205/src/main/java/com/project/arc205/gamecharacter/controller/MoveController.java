@@ -16,8 +16,8 @@ public class MoveController {
 
     private final MoveService moveService;
 
-    @MessageMapping("/{room-id}/move")
-    @SendTo("/sub/{room-id}")
+    @MessageMapping("/room/{room-id}/move")
+    @SendTo("/sub/room/{room-id}")
     public MoveResponse move(MoveRequest moveRequest) {
         log.info("전달 받은 move : {}", moveRequest);
         return moveService.move(moveRequest);
