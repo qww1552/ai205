@@ -29,19 +29,19 @@
     background-color: red;
   }
 
-  #imgBtnFirst {
+  #settingBtn {
     top: 10px;
   }
 
-  #imgBtnSecond {
+  #missionBtn {
     top: 130px;
   }
 
-  #imgBtnThird {
+  #actBtn {
     top: 250px;
   }
 
-  #imgBtnForth {
+  #killBtn {
     top: 370px;
   }
 
