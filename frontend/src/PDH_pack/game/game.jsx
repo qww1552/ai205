@@ -5,8 +5,17 @@ import MyCharacter from "./myCharacter";
 import OtherCharacter from "./otherCharacter";
 import Obstacle from "./obstacle";
 import Panel from "../UI";
+import { useDispatch } from 'react-redux';
+import { useEffect } from "react";
+import { action } from "app/store"
 
-const game = () => {
+const Game = () => {
+
+    useEffect(() => {
+        action('SOCKET_CONNECT_REQUEST')
+    }, [])
+    
+
     return (
         <KeyboardControls
             map={[
@@ -35,4 +44,4 @@ const game = () => {
     )
 }
 
-export default game;
+export default Game;

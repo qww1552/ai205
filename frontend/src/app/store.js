@@ -12,4 +12,6 @@ export const store = configureStore({
 },
 );
 
+export const action = (type, payload) => store.dispatch({type, payload})
+
 sagaMiddleware.run(mySaga);

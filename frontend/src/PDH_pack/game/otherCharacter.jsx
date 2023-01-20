@@ -33,7 +33,7 @@ const OtherCharacter = ({ initPosition, initColor }) => {
 
         const pos = ref.current.position
 
-        console.log(toggle)
+        // console.log(toggle)
 
         pos.x = MathUtils.lerp(pos.x, nextPos.x , 0.01)
         pos.y = MathUtils.lerp(pos.y, nextPos.y, 0.01)

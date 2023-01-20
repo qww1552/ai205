@@ -5,6 +5,7 @@ import { useRef, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
 import { changeLocation } from "../../app/me"
 import { useDispatch } from 'react-redux';
+import { action } from "app/store";
 
 const MyCharacter = ({ initPosition, initColor }) => {
     const [, get] = useKeyboardControls()
@@ -19,6 +20,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
     useEffect(() => {
         const timer = setInterval(() => {
             dispatch(changeLocation({x: ref.current.translation().x, y:ref.current.translation().y}))
+            action("LOCAITION_SEND", {x: ref.current.translation().x, y:ref.current.translation().y})
         }, 500);
     
         return () => {
