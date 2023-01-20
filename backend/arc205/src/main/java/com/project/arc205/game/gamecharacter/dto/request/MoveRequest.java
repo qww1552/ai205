@@ -1,7 +1,7 @@
-package com.project.arc205.gamecharacter.dto.request;
+package com.project.arc205.game.gamecharacter.dto.request;
 
-import com.project.arc205.gamecharacter.dto.Location;
-import com.project.arc205.gamecharacter.dto.Player;
+import com.project.arc205.game.gamecharacter.model.common.Location;
+import com.project.arc205.game.gamecharacter.dto.Player;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

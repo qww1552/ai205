@@ -1,4 +1,4 @@
-package com.project.arc205.gamecharacter.dto;
+package com.project.arc205.game.gamecharacter.dto;
 
 import lombok.*;
 
