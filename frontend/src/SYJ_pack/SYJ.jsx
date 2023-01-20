@@ -6,7 +6,7 @@ const SYJ = () => {
 
   return (
     <>
-      <div style={{position: "absolute", left:"10px", top: "10px", width:"300px"}}>
+      <div className="missionComponent floatingComponent">
         <MissionProgress/>
         <MissionList/>
       </div>
