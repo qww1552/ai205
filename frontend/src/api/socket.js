@@ -12,20 +12,18 @@ const createClient = () => {
     return stomp_client;
 }
 
-const connectClient = (client) => {
+const connectClient = (client, url, callback) => {
     console.log("--connectClient")
-
     client.connect({}, () => {
-        client.subscribe("/sub/room/1", function (res) {
-            console.log("--- subscribe ---")
-            const content = JSON.parse(res.body);
-            console.log(content);
-          });
+        console.log("--- subscribe ---")
+        console.log(client, url)
+        client.subscribe(url, callback);
     })
 }
 
 
-const send = ([client, data]) => {
+
+const send = (client, data) => {
     console.log("--send")
     client.send("/pub/room/1/move", {}, JSON.stringify(data));
 }

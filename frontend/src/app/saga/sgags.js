@@ -18,27 +18,31 @@ import { createClient, connectClient, send } from 'api/socket';
 // */
 let stompClient;
 
-function* initializeStompChannel() {
-  yield startStomp();
-}
 
-function* startStomp() {
-  stompClient = yield call(createClient)
-  yield call(connectClient, stompClient);
-  // yield delay(3000);
-  // yield call(send, stompClient);
-  // stompSubscribe(stompClient);
-
+function locationReceive(res) {
+  console.log("---reafw")
+  console.log(res)
 }
 
 function* locationSend() {
   const stateMe = yield select(state => state.me);
-  yield call(send, [stompClient, stateMe])
+  yield call(send, stompClient, stateMe)
 }
+
+function* initializeStompChannel() {
+  yield startStomp();
+  yield takeEvery("LOCAITION_SEND", locationSend);
+}
+
+function* startStomp() {
+  stompClient = yield call(createClient)
+  yield call(connectClient, stompClient, "/sub/room/1", locationReceive);
+
+}
+
 
 function* mySaga() {
   yield takeLatest("SOCKET_CONNECT_REQUEST", initializeStompChannel);
-  yield takeEvery("LOCAITION_SEND", locationSend);
 }
 
 // /*
