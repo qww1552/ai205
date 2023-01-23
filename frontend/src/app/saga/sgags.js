@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take, takeLatest, delay } from 'redux-saga/effects'
+import { call, put, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects'
 import { createClient, connectClient, send } from 'api/socket';
 
 
@@ -16,7 +16,6 @@ import { createClient, connectClient, send } from 'api/socket';
 //   Starts fetchUser on each dispatched `USER_FETCH_REQUESTED` action.
 //   Allows concurrent fetches of user.
 // */
-
 let stompClient;
 
 function* initializeStompChannel() {
@@ -32,8 +31,9 @@ function* startStomp() {
 
 }
 
-function* locationSend(action) {
-  yield call(send, [stompClient, action.payload])
+function* locationSend() {
+  const stateMe = yield select(state => state.me);
+  yield call(send, [stompClient, stateMe])
 }
 
 function* mySaga() {

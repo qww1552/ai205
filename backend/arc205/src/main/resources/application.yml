@@ -35,4 +35,4 @@ jwt:
 OPENVIDU_URL: http://localhost:4443/
 OPENVIDU_SECRET: MY_SECRET
 
-allowed-origins: "*"
+allowed-origins: "http://192.168.219.105:3000"

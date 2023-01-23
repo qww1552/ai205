@@ -1,9 +1,11 @@
 import SockJS from "sockjs-client"
 import { over } from "stompjs"
 
+
+const url = "http://192.168.219.105:8080/api/v1/ws"
+
 const createClient = () => {
     console.log("--createClient")
-    const url = "http://70.12.246.114:8080/api/v1/ws"
     const socket = new SockJS(url);
     const stomp_client = over(socket);
 
@@ -23,14 +25,8 @@ const connectClient = (client) => {
 }
 
 
-const send = ([client, location]) => {
+const send = ([client, data]) => {
     console.log("--send")
-    const data = {
-        player : { 
-                name : "player1" 
-            },	
-        location
-    }
     client.send("/pub/room/1/move", {}, JSON.stringify(data));
 }
 

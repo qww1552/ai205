@@ -1,16 +1,28 @@
 import Game from './game/game'
-import { useSelector } from 'react-redux';
-import { selectMe } from 'app/me';
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useRef } from 'react'
+import { setPlayer } from 'app/me'
+
 
 const PDH = () => {
 
-    const meState = useSelector(selectMe)
+    const ref = useRef();
+    const [check, setCheck] = useState(false)
+    const dispatch = useDispatch();
+
+    const onClickbtn = () => {
+        setCheck(true)
+        dispatch(setPlayer({name: ref.current.value}))
+    }
 
     return (
         <>
-            <Game/>
-            <div>x : {meState.location.x}</div>
-            <div>y : {meState.location.y}</div> 
+            {check && <Game/>}
+            <div>
+                <input ref={ref} type="text" name="" id="" />
+                <button onClick={onClickbtn}>확인</button>
+            </div>
         </>
     )
 

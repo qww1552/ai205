@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	player : "user",	
+	player : {name : "player1"},	
 	location : {
 		y:0,
 		x:0
@@ -15,10 +15,13 @@ export const meSlice = createSlice({
     changeLocation: (state, action) => {
       state.location = action.payload;
     },
+    setPlayer: (state, action) => {
+      state.player = action.payload;
+    }
   },
 });
 
-export const { changeLocation } = meSlice.actions;
+export const { changeLocation, setPlayer } = meSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
