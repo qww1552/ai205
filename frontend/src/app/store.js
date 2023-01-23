@@ -1,8 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import createSagaMiddleware from 'redux-saga'
+import meReducer from 'app/me'
+import othersReducer from 'app/others'
+import mySaga from './saga/sgags';
 
+const sagaMiddleware = createSagaMiddleware()
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    me: meReducer,
+    others : othersReducer,
   },
-});
+  middleware: [sagaMiddleware]
+},
+);
+
+export const action = (type, payload) => store.dispatch({type, payload})
+
+sagaMiddleware.run(mySaga);
