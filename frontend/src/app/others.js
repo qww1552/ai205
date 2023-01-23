@@ -1,14 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+    otherPlayersCnt : 0,
     players : [
-        {
-            player : {name : "dummy"},	
-            location : {
-                y:0,
-                x:0
-            },
-        }
+
     ]
 }
 
@@ -21,8 +16,6 @@ export const othersSlice = createSlice({
     // },
     setOtherPlayer: (state, action) => {
 
-        console.log(action.payload);
-
         // 이미 존재하면
         for (const idx of state.players.keys()) {
             if(state.players[idx].player.name === action.payload.player.name) {
@@ -32,7 +25,8 @@ export const othersSlice = createSlice({
         }
 
         // 이름이 없으면 추가
-        state.players = [...state.players, action.payload] 
+        state.players = [...state.players, action.payload]
+        state.otherPlayersCnt += 1;
     }
   },
 });
@@ -42,7 +36,8 @@ export const { setOtherPlayer } = othersSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectOther = (state) => state.others;
+export const selectOtherPlayersCnt = (state) => state.others.otherPlayersCnt;
+export const selectOhterPlayers = (state) => state.others.players;
 
 
 export default othersSlice.reducer;

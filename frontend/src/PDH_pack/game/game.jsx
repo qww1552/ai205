@@ -5,16 +5,18 @@ import MyCharacter from "./myCharacter";
 import OtherCharacter from "./otherCharacter";
 import Obstacle from "./obstacle";
 import Panel from "../UI";
-import { useDispatch } from 'react-redux';
 import { useEffect } from "react";
 import { action } from "app/store"
-
+import { selectOhterPlayers } from "app/others";
+import { useSelector } from "react-redux";
 const Game = () => {
+
+    const players = useSelector(selectOhterPlayers);
 
     useEffect(() => {
         action('SOCKET_CONNECT_REQUEST')
     }, [])
-    
+
 
     return (
         <KeyboardControls
@@ -32,12 +34,14 @@ const Game = () => {
                     <Physics timeStep={1 / 60} gravity={[0, 0, 0]} >
                         {/* <Debug /> */}
                         <MyCharacter initPosition={[0, -0.5, 0]} initColor="red" />
-                        <OtherCharacter initPosition={[2, 1, 0]} initColor="blue" />
+                        {players.map((data) => 
+                            <OtherCharacter initPosition={[0, -0.5, 0]} key={data.player.name} location={{x : data.location.x, y : data.location.y, z : 0}} initColor="blue" />
+                        )}
                         <Obstacle />
                     </Physics>
                     <OrthographicCamera />
                     {/* <OrbitControls /> */}
-                    <Panel/>
+                    <Panel />
                 </Canvas>
             </div>
         </KeyboardControls>

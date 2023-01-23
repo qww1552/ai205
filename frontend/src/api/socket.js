@@ -23,7 +23,6 @@ const connectClient = (client) => {
 
 
 const send = (client, data) => {
-    console.log("--send")
     client.send("/pub/room/1/move", {}, JSON.stringify(data));
 }
 

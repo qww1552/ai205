@@ -44,6 +44,7 @@ function* initializeStompChannel() {
 
 function* startStomp() {
   stompClient = yield call(createClient)
+  stompClient.debug = null;
   const channel = yield call(createEventChannel, "/sub/room/1");
 
   while (true) {
@@ -53,15 +54,19 @@ function* startStomp() {
       
       switch (data.action) {
         case "MOVE":
-          const otherPlayerData = {player : data.player, location : data.location}
-          action("others/setOtherPlayer", otherPlayerData);
+          const stateMe = yield select(state => state.me);
+
+          if(stateMe.player.name !== data.player.name) {
+            const otherPlayerData = {player : data.player, location : data.location}
+            action("others/setOtherPlayer", otherPlayerData);
+          }
           break;
         default:
           break;
       }
 
     } catch (e) {
-      alert(e.message);
+      console.error(e.message);
     }
   }
 }
