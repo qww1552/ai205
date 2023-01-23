@@ -2,7 +2,7 @@ import SockJS from "sockjs-client"
 import { over } from "stompjs"
 
 
-const url = "http://192.168.219.105:8080/api/v1/ws"
+const url = "http://192.168.219.102:8080/api/v1/ws"
 
 const createClient = () => {
     console.log("--createClient")
@@ -12,12 +12,11 @@ const createClient = () => {
     return stomp_client;
 }
 
-const connectClient = (client, url, callback) => {
+const connectClient = (client) => {
     console.log("--connectClient")
     client.connect({}, () => {
-        console.log("--- subscribe ---")
-        console.log(client, url)
-        client.subscribe(url, callback);
+        // console.log(client, url)
+        // client.subscribe(url, callback);
     })
 }
 

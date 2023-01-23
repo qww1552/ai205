@@ -1,7 +1,8 @@
 import { call, put, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects'
+import { eventChannel, buffers } from 'redux-saga'
 import { createClient, connectClient, send } from 'api/socket';
-
-
+import { setOtherPlayer } from 'app/others';
+import { action } from 'app/store';
 // // worker Saga: will be fired on USER_FETCH_REQUESTED actions
 // function* fetchUser(action) {
 //    try {
@@ -18,10 +19,18 @@ import { createClient, connectClient, send } from 'api/socket';
 // */
 let stompClient;
 
+function createEventChannel(url) {
 
-function locationReceive(res) {
-  console.log("---reafw")
-  console.log(res)
+  return eventChannel(emit => {
+    const onReceivedMessage = (message) => {emit(message);}
+    stompClient.connect({}, () => {
+      stompClient.subscribe(url, onReceivedMessage)
+  })
+
+    return () => {
+      stompClient.unsubscribe();
+    }
+  }, buffers.expanding(3000) || buffers.none());
 }
 
 function* locationSend() {
@@ -31,18 +40,37 @@ function* locationSend() {
 
 function* initializeStompChannel() {
   yield startStomp();
-  yield takeEvery("LOCAITION_SEND", locationSend);
 }
 
 function* startStomp() {
   stompClient = yield call(createClient)
-  yield call(connectClient, stompClient, "/sub/room/1", locationReceive);
+  const channel = yield call(createEventChannel, "/sub/room/1");
 
+  while (true) {
+    try {
+      const res = yield take(channel);
+      const data = JSON.parse(res.body)
+      
+      switch (data.action) {
+        case "MOVE":
+          const otherPlayerData = {player : data.player, location : data.location}
+          action("others/setOtherPlayer", otherPlayerData);
+          break;
+        default:
+          break;
+      }
+
+    } catch (e) {
+      alert(e.message);
+    }
+  }
 }
 
 
 function* mySaga() {
   yield takeLatest("SOCKET_CONNECT_REQUEST", initializeStompChannel);
+  yield takeEvery("LOCAITION_SEND", locationSend);
+
 }
 
 // /*
