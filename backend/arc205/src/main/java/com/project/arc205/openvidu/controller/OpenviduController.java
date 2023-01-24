@@ -16,14 +16,12 @@ import java.util.Map;
 @org.springframework.web.bind.annotation.RestController
 public class OpenviduController {
 
-	@Autowired OpenVidu openvidu;
 	@Autowired
 	private OpenViduService openViduService;
 	@PostMapping("/api/sessions")
 	public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
 			throws OpenViduJavaClientException, OpenViduHttpException {
-		SessionProperties properties = SessionProperties.fromJson(params).build();
-		Session session = openvidu.createSession(properties);
+		Session session = openViduService.initializeSession(params);
 		return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
 	}
 
@@ -32,12 +30,8 @@ public class OpenviduController {
 	public ResponseEntity<String> createConnection(@PathVariable("roomId") String roomId,
 			@RequestBody(required = false) Map<String, Object> params)
 			throws OpenViduJavaClientException, OpenViduHttpException {
-		Session session = openvidu.getActiveSession(roomId);
-		if (session == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
-		Connection connection = session.createConnection(properties);
+
+		Connection connection = openViduService.createConnection(roomId,params);
 		return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
 	}
 
