@@ -4,8 +4,20 @@ import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "./myCharacter";
 import OtherCharacter from "./otherCharacter";
 import Obstacle from "./obstacle";
+import Panel from "../UI";
+import { useEffect } from "react";
+import { action } from "app/store"
+import { selectOhterPlayers } from "app/others";
+import { useSelector } from "react-redux";
+const Game = () => {
 
-const game = () => {
+    const players = useSelector(selectOhterPlayers);
+
+    useEffect(() => {
+        action('SOCKET_CONNECT_REQUEST')
+    }, [])
+
+
     return (
         <KeyboardControls
             map={[
@@ -19,18 +31,21 @@ const game = () => {
                 <Canvas flat linear>
                     <ambientLight intensity={0.1} />
                     <directionalLight position={[0, 0, 5]} />
-                    <Physics timeStep={1 / 30} gravity={[0, 0, 0]} >
+                    <Physics timeStep={1 / 60} gravity={[0, 0, 0]} >
                         {/* <Debug /> */}
                         <MyCharacter initPosition={[0, -0.5, 0]} initColor="red" />
-                        <OtherCharacter initPosition={[2, 1, 0]} initColor="blue" />
+                        {players.map((data) => 
+                            <OtherCharacter initPosition={[0, -0.5, 0]} key={data.player.name} location={{x : data.location.x, y : data.location.y, z : 0}} initColor="blue" />
+                        )}
                         <Obstacle />
                     </Physics>
                     <OrthographicCamera />
                     {/* <OrbitControls /> */}
+                    <Panel />
                 </Canvas>
             </div>
         </KeyboardControls>
     )
 }
 
-export default game;
+export default Game;
