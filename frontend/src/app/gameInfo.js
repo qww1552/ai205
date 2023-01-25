@@ -9,7 +9,9 @@ export const gameInfoSlice = createSlice({
   name: 'gameInfo',
   initialState,
   reducers: {
-
+    setAdjacentConferBtn: (state, action) => {
+      state.adjacentConferBtn = action.payload;
+    }
   },
 });
 
