@@ -15,11 +15,13 @@ const OtherCharacter = ({ location, initColor, initPosition, name }) => {
         setNextPos(new Vector2(location.x, location.y));
     }, [location]);
 
+    const lerpConst = 0.035
+
     useFrame((state) => {
 
         const pos = ref.current.translation();
 
-        ref.current.setTranslation({ x: MathUtils.lerp(pos.x, nextPos.x, 0.01), y: MathUtils.lerp(pos.y, nextPos.y, 0.01), z: 0 });
+        ref.current.setTranslation({ x: MathUtils.lerp(pos.x, nextPos.x, lerpConst), y: MathUtils.lerp(pos.y, nextPos.y, lerpConst), z: 0 });
 
         // pos.x = MathUtils.lerp(pos.x, nextPos.x, 0.01)
         // pos.y = MathUtils.lerp(pos.y, nextPos.y, 0.01)

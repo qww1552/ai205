@@ -41,7 +41,6 @@ const GameCanvas = () => {
                     </Physics>
                     <OrthographicCamera />
                     {/* <OrbitControls /> */}
-                    <Panel />
                 </Canvas>
             </div>
         </KeyboardControls>
