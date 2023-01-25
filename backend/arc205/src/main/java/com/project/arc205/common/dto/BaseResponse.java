@@ -8,6 +8,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class BaseResponse {
-    Action action;
-    SubAction subAction;
+    protected Action action;
+    protected SubAction subAction;
 }
