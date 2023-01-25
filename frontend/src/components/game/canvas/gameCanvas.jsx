@@ -4,12 +4,11 @@ import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "../canvas/myCharacter";
 import OtherCharacter from "../canvas/otherCharacter";
 import Obstacle from "../canvas/obstacle";
-import Panel from "../../../PDH_pack/UI";
 import { useEffect } from "react";
 import { action } from "app/store"
 import { selectOhterPlayers } from "app/others";
 import { useSelector } from "react-redux";
-import SimpleMap from "../mesh/simpleMap";
+import SimpleMap from "./simpleMap";
 const GameCanvas = () => {
 
     const players = useSelector(selectOhterPlayers);

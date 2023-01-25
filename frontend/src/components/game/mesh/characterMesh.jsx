@@ -1,4 +1,4 @@
-import { Text } from "@react-three/drei";
+import { Plane, Text } from "@react-three/drei";
 import { Vector3 } from 'three';
 
 const CharacterMesh = ({initPosition, initColor, name}) => {
