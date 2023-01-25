@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { action } from "app/store"
 import { selectOhterPlayers } from "app/others";
 import { useSelector } from "react-redux";
+import SimpleMap from "../mesh/simpleMap";
 const GameCanvas = () => {
 
     const players = useSelector(selectOhterPlayers);
@@ -27,7 +28,7 @@ const GameCanvas = () => {
                 { name: "right", keys: ["ArrowRight", "d", "D"] },
                 { name: "jump", keys: ["Space"] },
             ]}>
-            <div style={{ width: "70vw", height: "70vh" }}>
+            <div style={{ width: "100vw", height: "100vh" }}>
                 <Canvas flat linear>
                     <ambientLight intensity={0.1} />
                     <directionalLight position={[0, 0, 5]} />
@@ -38,6 +39,7 @@ const GameCanvas = () => {
                             <OtherCharacter initPosition={[0, -0.5, 0]} name={data.player.name} key={data.player.name} location={{x : data.location.x, y : data.location.y, z : 0}} initColor="blue" />
                         )}
                         <Obstacle />
+                        <SimpleMap/>
                     </Physics>
                     <OrthographicCamera />
                     {/* <OrbitControls /> */}
