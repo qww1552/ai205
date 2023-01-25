@@ -1,36 +1,24 @@
 import { useState, useCallback } from 'react'
 import { Modal, Button } from 'antd'
 import 'styles/styles.css'
-import VideoConference from 'components/webchat/VideoComponent'
+import VideoComponent from 'components/webchat/VideoComponent'
 
 const ModalConference = () => {
 
   const [open, setOpen] = useState(false);
-  const [userMedia, setUserMedia] = useState(false);
 
-  const handleShow = useCallback(() => setOpen(true), [setOpen]);
-
-  const handleClose = useCallback(
-    () => {
-
-      setOpen(false);
-      setUserMedia(false);
-    },
-    [setOpen, setUserMedia]
-  );
-
-  // const handleOnUserMedia = useCallback(() => setUserMedia(true), [
-  //   setUserMedia
-  // ]);
+  const handleOpen = useCallback(() => setOpen(true), [setOpen])
+  const handleClose = useCallback(() => setOpen(false), [setOpen])
 
   return (
     <>
-      <Button type="primary" onClick={handleShow}>
+      {/* button/imageButton에서부터 redux 기능으로 값 변경 정보를 받아와야 함... */}
+      <Button type="primary" onClick={handleOpen}>
         Launch Modal Webcam
       </Button>
       <Modal
         open={open}
-        onClose={handleClose}
+        onCancel={handleClose}
         width={1000}
         footer={[
           <Button
@@ -42,8 +30,7 @@ const ModalConference = () => {
           </Button>
         ]}
       >
-        <h1> 웹캠 화면 넣을 곳 </h1>
-        <VideoConference />
+        <VideoComponent />
       </Modal>
       {/* {check && <div>
         투표 화면
