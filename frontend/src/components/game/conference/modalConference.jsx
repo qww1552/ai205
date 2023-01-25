@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Modal, Button } from 'antd'
 import 'styles/styles.css'
+import VideoConference from 'components/webchat/VideoComponent'
 
 const ModalConference = () => {
 
@@ -11,6 +12,7 @@ const ModalConference = () => {
 
   const handleClose = useCallback(
     () => {
+
       setOpen(false);
       setUserMedia(false);
     },
@@ -41,7 +43,7 @@ const ModalConference = () => {
         ]}
       >
         <h1> 웹캠 화면 넣을 곳 </h1>
-        
+        <VideoConference />
       </Modal>
       {/* {check && <div>
         투표 화면
