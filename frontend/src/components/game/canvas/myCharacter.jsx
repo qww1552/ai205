@@ -3,10 +3,10 @@ import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
 import { useRef, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
-import { changeLocation, selectMe } from "../../app/me"
+import { changeLocation, selectMe } from "../../../app/me"
 import { useDispatch, useSelector } from 'react-redux';
 import { action } from "app/store";
-import CharacterMesh from "./characterMesh";
+import CharacterMesh from "../mesh/characterMesh";
 
 
 const MyCharacter = ({ initPosition, initColor }) => {
