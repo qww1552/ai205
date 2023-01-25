@@ -12,5 +12,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 public class Location implements Serializable {
-    private int y, x;
+    private Double y, x;
 }
