@@ -19,6 +19,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
     const frontVector = new Vector3()
     const sideVector = new Vector3()
     const direction = new Vector3()
+    const cameraVec = new Vector3();
 
     const speed = 6.3;
 
@@ -36,7 +37,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
     useFrame((state) => {
 
-        state.camera.position.lerp(new Vector3(ref.current.translation().x, ref.current.translation().y, 5), 0.02);
+        state.camera.position.lerp(cameraVec.set(ref.current.translation().x, ref.current.translation().y, 5), 0.02);
 
         const { forward, backward, left, right } = get()
 
@@ -51,13 +52,6 @@ const MyCharacter = ({ initPosition, initColor }) => {
     return (
         <>
             <RigidBody restitution={0} colliders="cuboid" ref={ref} type="dynamic" lockRotations={true}>
-                {/* <Text fontSize={0.5} position={new Vector3(0,0.2,0)} color="black" anchorX="center" anchorY="top-baseline">
-                    {me.player.name}
-                </Text>
-                <mesh position={initPosition}>
-                    <boxGeometry args={[1, 1, 0.1]} />
-                    <meshStandardMaterial color={initColor} />
-                </mesh> */}
                 <CharacterMesh initPosition={initPosition} initColor={initColor} name={me.player.name}/>
             </RigidBody>
         </>
