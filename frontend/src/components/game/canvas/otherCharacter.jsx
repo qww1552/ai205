@@ -4,7 +4,7 @@ import { RigidBody } from "@react-three/rapier";
 import { useRef } from "react";
 import { useState, useEffect } from "react";
 import { Vector2, Vector3, MathUtils } from 'three';
-import CharacterMesh from "./characterMesh";
+import CharacterMesh from "../mesh/characterMesh";
 
 const OtherCharacter = ({ location, initColor, initPosition, name }) => {
 
