@@ -1,15 +1,15 @@
 import { KeyboardControls, OrthographicCamera, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber"
 import { Debug, Physics } from "@react-three/rapier";
-import MyCharacter from "./myCharacter";
-import OtherCharacter from "./otherCharacter";
-import Obstacle from "./obstacle";
-import Panel from "../UI";
+import MyCharacter from "../canvas/myCharacter";
+import OtherCharacter from "../canvas/otherCharacter";
+import Obstacle from "../canvas/obstacle";
+import Panel from "../../../PDH_pack/UI";
 import { useEffect } from "react";
 import { action } from "app/store"
 import { selectOhterPlayers } from "app/others";
 import { useSelector } from "react-redux";
-const Game = () => {
+const GameCanvas = () => {
 
     const players = useSelector(selectOhterPlayers);
 
@@ -41,11 +41,10 @@ const Game = () => {
                     </Physics>
                     <OrthographicCamera />
                     {/* <OrbitControls /> */}
-                    <Panel />
                 </Canvas>
             </div>
         </KeyboardControls>
     )
 }
 
-export default Game;
+export default GameCanvas;
