@@ -1,8 +1,8 @@
-package com.project.arc205.gamecharacter.controller;
+package com.project.arc205.game.gamecharacter.controller;
 
-import com.project.arc205.gamecharacter.dto.request.MoveRequest;
-import com.project.arc205.gamecharacter.dto.response.MoveResponse;
-import com.project.arc205.gamecharacter.service.MoveService;
+import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
+import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
+import com.project.arc205.game.gamecharacter.service.MoveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
