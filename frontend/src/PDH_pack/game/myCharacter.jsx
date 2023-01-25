@@ -1,13 +1,17 @@
-import { useKeyboardControls } from "@react-three/drei";
+import { useKeyboardControls, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
 import { useRef, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
-import { changeLocation } from "../../app/me"
-import { useDispatch } from 'react-redux';
+import { changeLocation, selectMe } from "../../app/me"
+import { useDispatch, useSelector } from 'react-redux';
 import { action } from "app/store";
+import CharacterMesh from "./characterMesh";
+
 
 const MyCharacter = ({ initPosition, initColor }) => {
+
+    const me = useSelector(selectMe);
     const [, get] = useKeyboardControls()
     const ref = useRef()
     const dispatch = useDispatch();
@@ -19,10 +23,10 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
     useEffect(() => {
         const timer = setInterval(() => {
-            dispatch(changeLocation({x: ref.current.translation().x, y:ref.current.translation().y}))
-            action("LOCAITION_SEND", {x: ref.current.translation().x, y:ref.current.translation().y})
+            dispatch(changeLocation({ x: ref.current.translation().x, y: ref.current.translation().y }))
+            action("LOCAITION_SEND", { x: ref.current.translation().x, y: ref.current.translation().y })
         }, 500);
-    
+
         return () => {
             clearInterval(timer);
         };
@@ -45,10 +49,14 @@ const MyCharacter = ({ initPosition, initColor }) => {
     return (
         <>
             <RigidBody restitution={0} colliders="cuboid" ref={ref} type="dynamic" lockRotations={true}>
+                {/* <Text fontSize={0.5} position={new Vector3(0,0.2,0)} color="black" anchorX="center" anchorY="top-baseline">
+                    {me.player.name}
+                </Text>
                 <mesh position={initPosition}>
                     <boxGeometry args={[1, 1, 0.1]} />
                     <meshStandardMaterial color={initColor} />
-                </mesh>
+                </mesh> */}
+                <CharacterMesh initPosition={initPosition} initColor={initColor} name={me.player.name}/>
             </RigidBody>
         </>
     )
