@@ -1,10 +1,12 @@
+import { Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RigidBody } from "@react-three/rapier";
 import { useRef } from "react";
 import { useState, useEffect } from "react";
-import { Vector2, MathUtils } from 'three';
+import { Vector2, Vector3, MathUtils } from 'three';
+import CharacterMesh from "./characterMesh";
 
-const OtherCharacter = ({ location, initColor, initPosition }) => {
+const OtherCharacter = ({ location, initColor, initPosition, name }) => {
 
     const ref = useRef();
     const [nextPos, setNextPos] = useState(new Vector2(2, 0));
@@ -14,19 +16,19 @@ const OtherCharacter = ({ location, initColor, initPosition }) => {
     }, [location]);
 
     useFrame((state) => {
-        const pos = ref.current.position
 
-        pos.x = MathUtils.lerp(pos.x, nextPos.x , 0.01)
-        pos.y = MathUtils.lerp(pos.y, nextPos.y, 0.01)
+        const pos = ref.current.translation();
+
+        ref.current.setTranslation({ x: MathUtils.lerp(pos.x, nextPos.x, 0.01), y: MathUtils.lerp(pos.y, nextPos.y, 0.01), z: 0 });
+
+        // pos.x = MathUtils.lerp(pos.x, nextPos.x, 0.01)
+        // pos.y = MathUtils.lerp(pos.y, nextPos.y, 0.01)
     })
 
     return (
         <>
-            <RigidBody colliders={false} type="dynamic" lockRotations={true}>
-                <mesh ref={ref} position={initPosition}>
-                    <boxGeometry args={[1, 1, 0.1]} />
-                    <meshStandardMaterial color={initColor} />
-                </mesh>
+            <RigidBody ref={ref} colliders={false} type="dynamic" lockRotations={true}>
+                <CharacterMesh initPosition={initPosition} initColor={initColor} name={name}/>
             </RigidBody>
         </>
     )
