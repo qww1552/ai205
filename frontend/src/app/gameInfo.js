@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    adjacentConferBtn: false,
-    
+    // 회의 버튼에 인접해 있는지 체크하는 변수
+    isAdjacentConfer: false,
+    // 회의가 진행중인지 체크하는 변수
+    isInCouncil: false,
 }
 
 export const gameInfoSlice = createSlice({
@@ -10,7 +12,10 @@ export const gameInfoSlice = createSlice({
   initialState,
   reducers: {
     setAdjacentConferBtn: (state, action) => {
-      state.adjacentConferBtn = action.payload;
+      state.isAdjacentConfer = action.payload;
+    },
+    setInCouncil: (state, action) => {
+      state.isInCouncil = action.payload;
     }
   },
 });
