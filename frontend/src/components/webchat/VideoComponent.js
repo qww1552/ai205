@@ -1,3 +1,5 @@
+// 세션 컴포넌트 (사실상)
+
 import { OpenVidu } from "openvidu-browser";
 import { Row, Col, Button, Modal } from "antd";
 import axios from "axios";
