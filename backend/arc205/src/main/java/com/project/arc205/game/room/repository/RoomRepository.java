@@ -22,7 +22,7 @@ public class RoomRepository {
     }
 
     public Room findById(UUID id) {
-        if (!roomStorage.contains(id)) throw new RoomNotFoundException();
+        if (!roomStorage.containsKey(id)) throw new RoomNotFoundException();
         return roomStorage.get(id);
     }
 
