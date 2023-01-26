@@ -26,10 +26,8 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      dispatch(changeLocation({ x: ref.current.translation().x, y: ref.current.translation().y }))
       action("LOCAITION_SEND", { x: ref.current.translation().x, y: ref.current.translation().y })
     }, 300);
-
 
     return () => {
       clearInterval(timer);

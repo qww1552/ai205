@@ -1,8 +1,8 @@
 import { call, put, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects'
 import { eventChannel, buffers } from 'redux-saga'
-import { createClient, connectClient, send } from 'api/socket';
-import { setOtherPlayer } from 'app/others';
-import { action } from 'app/store';
+import { createClient, send, connectClient } from 'api/socket';
+
+
 // // worker Saga: will be fired on USER_FETCH_REQUESTED actions
 // function* fetchUser(action) {
 //    try {
@@ -19,13 +19,12 @@ import { action } from 'app/store';
 // */
 let stompClient;
 
-function createEventChannel(url) {
+function createEventChannel(roomId) {
 
   return eventChannel(emit => {
     const onReceivedMessage = (message) => {emit(message);}
-    stompClient.connect({}, () => {
-      stompClient.subscribe(url, onReceivedMessage)
-  })
+    
+    connectClient(stompClient, roomId, onReceivedMessage);
 
     return () => {
       stompClient.unsubscribe();
@@ -33,9 +32,16 @@ function createEventChannel(url) {
   }, buffers.expanding(3000) || buffers.none());
 }
 
-function* locationSend() {
+// 이동 정보 전송
+function* locationSend(action) {
   const stateMe = yield select(state => state.me);
-  yield call(send, stompClient, stateMe)
+  yield put({type : "me/changeLocation", payload: action.payload})
+  yield call(send, stompClient, "move", 1, stateMe)
+}
+
+// 미팅 시작 트리거 전송
+function* startMeeting(action) {
+  yield call(send, stompClient, "meeting", 1)
 }
 
 function* initializeStompChannel() {
@@ -45,21 +51,33 @@ function* initializeStompChannel() {
 function* startStomp() {
   stompClient = yield call(createClient)
   stompClient.debug = null;
-  const channel = yield call(createEventChannel, "/sub/room/1");
+  const channel = yield call(createEventChannel, 1);
 
   while (true) {
     try {
       const res = yield take(channel);
       const data = JSON.parse(res.body)
       
+      // 채널로 전송 받는거
       switch (data.action) {
         case "MOVE":
           const stateMe = yield select(state => state.me);
 
           if(stateMe.player.name !== data.player.name) {
             const otherPlayerData = {player : data.player, location : data.location}
-            action("others/setOtherPlayer", otherPlayerData);
+            yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
           }
+          break;
+
+        // 미팅 관련
+        case "MEETING":
+
+          if(data.subAction === 'START') {
+
+          } else if (data.subAction === 'START_VOTING') {
+
+          }
+
           break;
         default:
           break;
@@ -75,7 +93,7 @@ function* startStomp() {
 function* mySaga() {
   yield takeLatest("SOCKET_CONNECT_REQUEST", initializeStompChannel);
   yield takeEvery("LOCAITION_SEND", locationSend);
-
+  yield takeEvery("START_MEETING", startMeeting);
 }
 
 // /*
