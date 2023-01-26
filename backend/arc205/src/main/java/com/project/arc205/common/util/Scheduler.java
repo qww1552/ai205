@@ -1,4 +1,4 @@
-package com.project.arc205.meeting;
+package com.project.arc205.common.util;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

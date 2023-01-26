@@ -1,4 +1,4 @@
-package com.project.arc205.meeting.event;
+package com.project.arc205.game.meeting.event;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
