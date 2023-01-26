@@ -21,7 +21,9 @@
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
     "three-mesh-ui": "^6.5.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "axios": "0.21.1",
+    "openvidu-browser": "2.25.0"
   },
   "scripts": {
     "start": "react-scripts start",

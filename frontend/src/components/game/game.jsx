@@ -6,6 +6,7 @@ import GameCanvas from 'components/game/canvas/gameCanvas'
 import MissionProgress from 'components/game/mission/missionProgress'
 import MissionList from 'components/game/mission/missionList'
 import ImageButton from 'components/game/button/imageButton'
+import ModalConference from 'components/game/conference/modalConference'
 
 const Game = () => {
 
@@ -27,6 +28,7 @@ const Game = () => {
                     <MissionList/>
                 </div>
                 <ImageButton/>
+                <ModalConference/>
             </div>}
             {!check && <div>
                 <input ref={ref} type="text" name="" id="" />
