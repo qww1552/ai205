@@ -13,7 +13,7 @@ const ModalConference = () => {
   return (
     <>
       {/* button/imageButton에서부터 redux 기능으로 값 변경 정보를 받아와야 함... */}
-      <Button type="primary" onClick={handleOpen}>
+      {/* <Button type="primary" onClick={handleOpen}>
         Launch Modal Webcam
       </Button>
       <Modal
@@ -30,8 +30,9 @@ const ModalConference = () => {
           </Button>
         ]}
       >
-        <VideoComponent />
-      </Modal>
+       
+      </Modal> */}
+       <VideoComponent />
       {/* {check && <div>
         투표 화면
       </div>}
