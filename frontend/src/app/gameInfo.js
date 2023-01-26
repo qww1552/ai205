@@ -3,8 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     // 회의 버튼에 인접해 있는지 체크하는 변수
     isAdjacentConfer: false,
+
     // 회의가 진행중인지 체크하는 변수
-    isInCouncil: false,
+    isInMeeting: false,
+    // 투표가 진행중인지 체크하는 변수
+    isInVote: false,
+    // 투표가 끝났는지 체크하는 변수
+    isInVoteResult: false,
 }
 
 export const gameInfoSlice = createSlice({
@@ -14,8 +19,14 @@ export const gameInfoSlice = createSlice({
     setAdjacentConferBtn: (state, action) => {
       state.isAdjacentConfer = action.payload;
     },
-    setInCouncil: (state, action) => {
-      state.isInCouncil = action.payload;
+    setInMeeting: (state, action) => {
+      state.isInMeeting = action.payload;
+    },
+    setInVote: (state, action) => {
+      state.isInVote = action.payload;
+    },
+    setInVoteResult: (state, action) => {
+      state.isInVoteResult = action.payload;
     }
   },
 });
