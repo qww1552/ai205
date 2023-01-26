@@ -60,6 +60,7 @@ function* startStomp() {
       
       // 채널로 전송 받는거
       switch (data.action) {
+        // 이동 관련
         case "MOVE":
           const stateMe = yield select(state => state.me);
 
@@ -71,11 +72,18 @@ function* startStomp() {
 
         // 미팅 관련
         case "MEETING":
-
+          // 미팅 시작 알림 받음
           if(data.subAction === 'START') {
-
-          } else if (data.subAction === 'START_VOTING') {
-
+            yield put({type : "gameInfo/setInMeeting", payload: true})
+          }
+          // 투표 시작 알림 받음 
+          else if (data.subAction === 'START_VOTING') {
+            yield put({type : "gameInfo/setInVote", payload: true})
+          }
+          // 투표 종료 (임시)
+          else if (data.subAction === 'END_MEETING') {
+            yield put({type : "gameInfo/setInVote", payload: false})
+            yield put({type : "gameInfo/setInVoteResult", payload: true})
           }
 
           break;
@@ -93,7 +101,7 @@ function* startStomp() {
 function* mySaga() {
   yield takeLatest("SOCKET_CONNECT_REQUEST", initializeStompChannel);
   yield takeEvery("LOCAITION_SEND", locationSend);
-  yield takeEvery("START_MEETING", startMeeting);
+  yield takeEvery("START_MEETING_REQUEST", startMeeting);
 }
 
 // /*
