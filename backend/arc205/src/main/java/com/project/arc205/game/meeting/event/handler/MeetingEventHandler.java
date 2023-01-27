@@ -1,8 +1,10 @@
-package com.project.arc205.meeting.event.handler;
+package com.project.arc205.game.meeting.event.handler;
 
-import com.project.arc205.meeting.Scheduler;
-import com.project.arc205.meeting.dto.StartVotingResponse;
-import com.project.arc205.meeting.event.MeetingEvent;
+import com.project.arc205.common.dto.BaseResponse;
+import com.project.arc205.common.operation.Type;
+import com.project.arc205.common.operation.action.MeetingOperation;
+import com.project.arc205.common.util.Scheduler;
+import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -20,7 +22,8 @@ public class MeetingEventHandler {
         String destination = destPrefix + event.getRoomId();
         Scheduler scheduler = new Scheduler();
         Runnable runnable = () -> {
-            event.getMessagingTemplate().convertAndSend(destination, new StartVotingResponse());
+            BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
+            event.getMessagingTemplate().convertAndSend(destination, response);
             log.info("Send StartVoting");
         };
         long delay = 60;      //TODO: Get from game setting
