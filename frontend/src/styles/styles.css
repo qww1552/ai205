@@ -14,19 +14,19 @@
     width: 300px;
   }
 
-  .imgBtn {
+  .imgBtn, .imgBtnNoHover {
     background-color: silver;
     right: 10px;
     padding: 4px 0px 0px;
     opacity: 0.3;
   }
 
-  .imgBtn:active {
+  .imgBtn:active, .imgBtnReady:active{
     background-color: red;
   }
 
   /* 나중에 회의 요청 버튼 근처에 다가가면 투명도 1이 되도록 수정해야 함. */
-  .imgBtn:hover {
+  .imgBtn:hover, .imgBtnReady{
     opacity: 1;
   }
 
