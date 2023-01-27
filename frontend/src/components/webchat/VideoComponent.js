@@ -7,7 +7,7 @@ import React, { Component } from "react";
 import "./VideoComponent.css";
 import UserVideoComponent from "./UserVideoComponent";
 
-const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+const APPLICATION_SERVER_URL = "http://70.12.246.108:8080/api/v1/";
 
 class App extends Component {
   constructor(props) {

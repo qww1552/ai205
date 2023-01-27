@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {selectResult} from '../../../app/result'
 
-const ResultConference = () => {
+const ResultMeeting = () => {
 
   const result = useSelector(selectResult);
   return (
@@ -13,4 +13,4 @@ const ResultConference = () => {
   )
 }
 
-export default ResultConference;
+export default ResultMeeting;
