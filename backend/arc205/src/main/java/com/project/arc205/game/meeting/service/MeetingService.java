@@ -1,7 +1,7 @@
 package com.project.arc205.game.meeting.service;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.game.meeting.dto.StartMeetingResponse;
+import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

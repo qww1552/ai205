@@ -1,8 +1,8 @@
-package com.project.arc205.game.meeting.dto;
+package com.project.arc205.game.meeting.dto.response;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
-import com.project.arc205.common.operation.action.MeetingOperation;
+import com.project.arc205.common.operation.operation.MeetingOperation;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
