@@ -14,19 +14,20 @@ const ModalConference = () => {
       conference(회의)/modalConference 파일 하나에 2가지 기능이 몰려 있음
       -> redux를 이용해서 기능을 분화해야 함 */}
       {/* <VideoComponent /> */}
-      {/* <Modal
-        open={this.state.open}
-        onCancel={this.handleClose}
+      <Modal
+        title="AI는 누구인가?"
+        open={isInMeeting}
         width={1000}
+        closable={false}
         footer={[
-          <Button key="Close" type="primary" onClick={this.handleClose}>
-            Close
-          </Button>,
+          // 추후 닫기 버튼을 제거하고 회의 완료 요청을 받으면 action이 수행되도록 수정 필요
+          <Button key="back" onClick={() => action('gameInfo/setInMeeting', false)}>
+            닫기
+          </Button>
         ]}
       >
-        TEST
+        회의 창
       </Modal>
-      {!this.state.open ? (<div></div>) : null} */}
 
     </>
 )

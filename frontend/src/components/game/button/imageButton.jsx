@@ -14,7 +14,7 @@ const ImageButton = () => {
       {/* 미션 버튼을 따로 만들 필요가 없어서 주석 처리 */}
       {/* <button className="imgBtn floatingComponent" id="missionBtn"><img className="imgBtnIcon" src="/btnIcons/iconMission1.png" alt="미션"/></button> */}
 
-      <button className={"imgBtnNoHover floatingComponent " + (isAdjacentConfer ? "imgBtnReady" : "")} id="actBtn" onClick={() => action('gameInfo/setAdjacentConferBtn', false) }><img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/></button>
+      <button className={"imgBtnNoHover floatingComponent " + (isAdjacentConfer ? "imgBtnReady" : "")} id="actBtn" onClick={() => action('gameInfo/setInMeeting', true) }><img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/></button>
       <button className="imgBtn floatingComponent" id="killBtn"><img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해"/></button>
     </>
   );
