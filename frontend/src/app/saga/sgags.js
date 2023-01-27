@@ -3,21 +3,14 @@ import { eventChannel, buffers } from 'redux-saga'
 import { createClient, send, connectClient } from 'api/socket';
 
 
-// // worker Saga: will be fired on USER_FETCH_REQUESTED actions
-// function* fetchUser(action) {
-//    try {
-//     //   const user = yield call(Api.fetchUser, action.payload.userId);
-//       yield put({type: "USER_FETCH_SUCCEEDED", user: []});EW
-//    } catch (e) {
-//       yield put({type: "USER_FETCH_FAILED", message: e.message});
-//    }
-// }
-
-// /*
-//   Starts fetchUser on each dispatched `USER_FETCH_REQUESTED` action.
-//   Allows concurrent fetches of user.
-// */
 let stompClient;
+
+//////////////////////// 채널 관련
+
+function* initializeStompChannel() {
+  yield startStomp();
+}
+
 
 function createEventChannel(roomId) {
 
@@ -30,22 +23,6 @@ function createEventChannel(roomId) {
       stompClient.unsubscribe();
     }
   }, buffers.expanding(3000) || buffers.none());
-}
-
-// 이동 정보 전송
-function* locationSend(action) {
-  const stateMe = yield select(state => state.me);
-  yield put({type : "me/changeLocation", payload: action.payload})
-  yield call(send, stompClient, "move", 1, stateMe)
-}
-
-// 미팅 시작 트리거 전송
-function* startMeeting(action) {
-  yield call(send, stompClient, "meeting", 1)
-}
-
-function* initializeStompChannel() {
-  yield startStomp();
 }
 
 function* startStomp() {
@@ -81,10 +58,10 @@ function* startStomp() {
             yield put({type : "gameInfo/setInVote", payload: true})
           }
           // 투표 종료 (임시)
-          else if (data.subAction === 'END_MEETING') {
-            yield put({type : "gameInfo/setInVote", payload: false})
-            yield put({type : "gameInfo/setInVoteResult", payload: true})
-          }
+          // else if (data.subAction === 'END_MEETING') {
+          //   yield put({type : "gameInfo/setInVote", payload: false})
+          //   yield put({type : "gameInfo/setInVoteResult", payload: true})
+          // }
 
           break;
         default:
@@ -97,19 +74,33 @@ function* startStomp() {
   }
 }
 
+//////////////////////////////////////
+
+// 이동 정보 전송 요청
+function* locationSend(action) {
+  const stateMe = yield select(state => state.me);
+  yield put({type : "me/changeLocation", payload: action.payload})
+  yield call(send, stompClient, "move", 1, stateMe)
+}
+
+// 미팅 시작 요청
+function* startMeeting(action) {
+  yield call(send, stompClient, "meeting", 1)
+}
+
+// 미팅 종료 요청
+function* endMeeting(action) {
+  yield put({type : "gameInfo/setInVote", payload: false})
+  yield put({type : "gameInfo/setInVoteResult", payload: true})
+}
+
 
 function* mySaga() {
   yield takeLatest("SOCKET_CONNECT_REQUEST", initializeStompChannel);
-  yield takeEvery("LOCAITION_SEND", locationSend);
+  yield takeEvery("LOCAITION_SEND_REQUEST", locationSend);
   yield takeEvery("START_MEETING_REQUEST", startMeeting);
+  yield takeEvery("END_MEETING_REQUEST", endMeeting);
+  
 }
-
-// /*
-//   Alternatively you may use takeLatest.
-
-//   Does not allow concurrent fetches of user. If "USER_FETCH_REQUESTED" gets
-//   dispatched while a fetch is already pending, that pending fetch is cancelled
-//   and only the latest one will be run.
-// */
 
 export default mySaga;
