@@ -1,7 +1,7 @@
 package com.project.arc205.game.meeting.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.game.meeting.dto.StartMeetingResponse;
+import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
 import com.project.arc205.game.meeting.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

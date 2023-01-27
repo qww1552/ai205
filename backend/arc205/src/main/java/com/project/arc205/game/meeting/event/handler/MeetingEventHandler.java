@@ -2,7 +2,7 @@ package com.project.arc205.game.meeting.event.handler;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
-import com.project.arc205.common.operation.action.MeetingOperation;
+import com.project.arc205.common.operation.operation.MeetingOperation;
 import com.project.arc205.common.util.Scheduler;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.RequiredArgsConstructor;
