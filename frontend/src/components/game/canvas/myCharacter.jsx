@@ -1,10 +1,10 @@
-import { useKeyboardControls, Text } from "@react-three/drei";
+import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from 'three';
 import { useRef, useEffect } from "react";
 import { RigidBody } from "@react-three/rapier";
-import { changeLocation, selectMe } from "../../../app/me"
-import { useDispatch, useSelector } from 'react-redux';
+import { selectMe } from "../../../app/me"
+import { useSelector } from 'react-redux';
 import { action } from "app/store";
 import CharacterMesh from "../mesh/characterMesh";
 
@@ -14,7 +14,6 @@ const MyCharacter = ({ initPosition, initColor }) => {
   const me = useSelector(selectMe);
   const [, get] = useKeyboardControls()
   const ref = useRef()
-  const dispatch = useDispatch();
 
   const frontVector = new Vector3()
   const sideVector = new Vector3()
@@ -26,7 +25,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      action("LOCAITION_SEND", { x: ref.current.translation().x, y: ref.current.translation().y })
+      action("LOCAITION_SEND_REQUEST", { x: ref.current.translation().x, y: ref.current.translation().y })
     }, 300);
 
     return () => {
