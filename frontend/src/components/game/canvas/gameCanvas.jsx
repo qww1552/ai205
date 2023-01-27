@@ -9,9 +9,12 @@ import { action } from "app/store"
 import { selectOhterPlayers } from "app/others";
 import { useSelector } from "react-redux";
 import SimpleMap from "./simpleMap";
+import { selectGameInfo } from "app/gameInfo";
+
 const GameCanvas = () => {
 
     const players = useSelector(selectOhterPlayers);
+    const gameInfo = useSelector(selectGameInfo);
 
     useEffect(() => {
         action('SOCKET_CONNECT_REQUEST')
@@ -31,7 +34,7 @@ const GameCanvas = () => {
                 <Canvas flat linear>
                     <ambientLight intensity={0.1} />
                     <directionalLight position={[0, 0, 5]} />
-                    <Physics timeStep={1 / 60} gravity={[0, 0, 0]} >
+                    <Physics timeStep={1 / 60} gravity={[0, 0, 0]} paused={gameInfo.isInMeeting}>
                         {/* <Debug /> */}
                         <MyCharacter initPosition={[0, -0.5, 0]} initColor="red" />
                         {players.map((data) => 
