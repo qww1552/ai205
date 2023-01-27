@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga'
 import meReducer from 'app/me'
 import othersReducer from 'app/others'
+import resultReducer from 'app/result'
+import gamesetReducer from './gameset';
 import mySaga from './saga/sgags';
 import gameInfoReducer from 'app/gameInfo'
 
@@ -10,7 +12,9 @@ export const store = configureStore({
   reducer: {
     me: meReducer,
     others : othersReducer,
-    gameInfo : gameInfoReducer
+    gameInfo : gameInfoReducer,
+    result : resultReducer,
+    gameset : gamesetReducer,
   },
   middleware: [sagaMiddleware]
 },
