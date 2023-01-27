@@ -1,11 +1,11 @@
-import { Plane, Text } from "@react-three/drei";
+import { Text } from "@react-three/drei";
 import { Vector3 } from 'three';
 
 const CharacterMesh = ({initPosition, initColor, name}) => {
 
     return (
         <>
-                <Text fontSize={0.5} position={new Vector3(0,0.2,0)} color="black" anchorX="center" anchorY="top-baseline">
+                <Text fontSize={0.5} font='./SeoulHangangM.woff' position={new Vector3(0,0.2,0)} color="black" anchorX="center" anchorY="top-baseline">
                     {name}
                 </Text>
                 <mesh position={initPosition}>
