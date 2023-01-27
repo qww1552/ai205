@@ -1,7 +1,8 @@
-package com.project.arc205.meeting.controller;
+package com.project.arc205.game.meeting.controller;
 
-import com.project.arc205.meeting.dto.StartMeetingResponse;
-import com.project.arc205.meeting.service.MeetingService;
+import com.project.arc205.common.dto.BaseResponse;
+import com.project.arc205.game.meeting.dto.StartMeetingResponse;
+import com.project.arc205.game.meeting.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -20,7 +21,7 @@ public class MeetingController {
 
     @MessageMapping("/room/{room-id}/meeting")
     @SendTo("/sub/room/{room-id}")
-    public StartMeetingResponse startMeeting(@DestinationVariable("room-id") String roomId) {
+    public BaseResponse<StartMeetingResponse> startMeeting(@DestinationVariable("room-id") String roomId) {
         log.info("StartMeeting: {}", roomId);
         return meetingService.startMeeting(roomId, simpMessagingTemplate);
     }
