@@ -3,11 +3,11 @@ import { selectResult } from 'app/result';
 import React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import ResultConference from './ResultConference';
-import TimerConference from './timerConference';
+import ResultMeeting from './resultMeeting';
+import TimerMeeting from './timerMeeting';
 
 
-const VoteConference = () => {
+const VoteMeeting = () => {
   const result = useSelector(selectResult).result
   console.log(result)
   const time = useSelector(selectGameset).time
@@ -23,12 +23,12 @@ const VoteConference = () => {
     <div>
       <div></div>
       {/* Todo: 게임방 세팅에서 회의시간 저장한것 받아오기 */}
-      {time !== 0 ? <TimerConference sec={time}/>:<div>아직회의시간이 아님</div>}
-      {result.length === 0 ? <div>결과없는경우 보일것</div>:<div><ResultConference/></div>}
+      {time !== 0 ? <TimerMeeting sec={time}/>:<div>아직회의시간이 아님</div>}
+      {result.length === 0 ? <div>결과없는경우 보일것</div>:<div><ResultMeeting/></div>}
       {/* <button onClick={clickevent}>시간이벤트</button> */}
     
     </div>
   );
 };
 
-export default VoteConference;
+export default VoteMeeting;

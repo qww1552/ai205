@@ -4,7 +4,7 @@ const padNumber = (num, length) => {
   return String(num).padStart(length, '0');
 };
 
-const TimerConference = (props) => {
+const TimerMeeting = (props) => {
   // 아무것도 입력하지 않으면 undefined가 들어오기 때문에 유효성 검사부터..
   const tempHour = props.hour ? parseInt(props.hour) : 0;
   const tempMin = props.min ? parseInt(props.min) : 0;
@@ -42,4 +42,4 @@ const TimerConference = (props) => {
   );
 };
 
-export default TimerConference;
+export default TimerMeeting;

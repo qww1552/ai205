@@ -1,6 +1,6 @@
 import React from 'react';
 
-const chatConference = () => {
+const ChatMeeting = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const chatConference = () => {
   );
 };
 
-export default chatConference;
+export default ChatMeeting;

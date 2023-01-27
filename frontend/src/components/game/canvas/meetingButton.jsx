@@ -4,20 +4,20 @@ import { selectGameInfo } from "app/gameInfo";
 import { action } from "app/store";
 import { useSelector } from "react-redux";
 
-const ConfernceButton = ({ position }) => {
+const MeetingButton = ({ position }) => {
     
-    const isAdjacentConfer = useSelector(selectGameInfo).isAdjacentConfer;
+    const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn;
 
     return (
         <>
             <RigidBody colliders="cuboid" type="fixed" sensor 
-            onIntersectionEnter={() => action('gameInfo/setAdjacentConferBtn', true)} 
-            onIntersectionExit={() => action('gameInfo/setAdjacentConferBtn', false)}
+            onIntersectionEnter={() => action('gameInfo/setAdjacentMeetingBtn', true)} 
+            onIntersectionExit={() => action('gameInfo/setAdjacentMeetingBtn', false)}
             >
                 <mesh position={position}>
-                    <Box args={[1, 1, 1]} material-color={isAdjacentConfer? "purple" : "yellow"} />
+                    <Box args={[1, 1, 1]} material-color={isAdjacentMeetingBtn? "purple" : "yellow"} />
                     <Text fontSize={0.5} position={[0, 0, 1]} color="black" anchorX="center" >
-                        Conference
+                        Meeting
                     </Text>
                 </mesh>
             </RigidBody>
@@ -25,4 +25,4 @@ const ConfernceButton = ({ position }) => {
     )
 }
 
-export default ConfernceButton;
+export default MeetingButton;
