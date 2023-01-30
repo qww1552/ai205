@@ -33,15 +33,15 @@
     top: 10px;
   }
 
-  /* #missionBtn {
+  #chatBtn {
     top: 130px;
-  } */
-
-  #actBtn {
-    top: 250px;
   }
 
   #killBtn {
+    top: 250px;
+  }
+
+  #actBtn {
     top: 370px;
   }
 

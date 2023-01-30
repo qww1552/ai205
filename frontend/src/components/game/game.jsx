@@ -7,6 +7,7 @@ import MissionProgress from 'components/game/mission/missionProgress'
 import MissionList from 'components/game/mission/missionList'
 import ImageButton from 'components/game/button/imageButton'
 import ModalMeeting from 'components/game/meeting/modalMeeting'
+// import VoteMeeting from 'components/game/meeting/voteMeeting'
 
 const Game = () => {
 
@@ -29,6 +30,7 @@ const Game = () => {
                 </div>
                 <ImageButton/>
                 <ModalMeeting/>
+                {/* <VoteMeeting/> */}
             </div>}
             {!check && <div>
                 <input ref={ref} type="text" name="" id="" />
