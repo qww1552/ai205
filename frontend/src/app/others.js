@@ -30,7 +30,18 @@ export const othersSlice = createSlice({
         // 이름이 없으면 추가
         state.players = [...state.players, action.payload]
         state.otherPlayersCnt += 1;
+    },
+
+    // 아이디 투표 세팅
+    setVote: (state, action) => {
+      for (const idx of state.players.keys()) {
+        if(state.players[idx].player.id === action.payload.id) {
+            state.players[idx].player.isVoted = action.payload.value;
+            return;
+        }
     }
+    }
+    
   },
 });
 

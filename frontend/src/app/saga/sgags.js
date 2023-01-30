@@ -32,8 +32,12 @@ function* startStomp() {
 
   while (true) {
     try {
+      const stateMe = yield select(state => state.me);
+
       const res = yield take(channel);
       const body = JSON.parse(res.body)
+
+      const data = body.data;
       
       // 채널로 전송 받는거
       switch (body.type) {
@@ -42,10 +46,8 @@ function* startStomp() {
           // 움직임
           if(body.operation === 'MOVE') {
 
-            const stateMe = yield select(state => state.me);
-
-            if(stateMe.player.id !== body.data.player.id) {
-              const otherPlayerData = {player : body.data.player, location : body.data.location}
+            if(stateMe.player.id !== data.player.id) {
+              const otherPlayerData = {player : data.player, location : data.location}
               yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
             }
           }
@@ -63,12 +65,14 @@ function* startStomp() {
           }
           // 투표 알림 받음
           else if (body.operation === 'VOTE') {
-            
+            yield put({type: "others/setVote", payload: {id : data.playerId, value : true}})            
           } 
           // 투표 종료 (임시)
           else if (body.operation === 'END') {
+            yield put({type : "voteInfo/setVoteResult", payload: data})
             yield put({type : "gameInfo/setInVote", payload: false})
             yield put({type : "gameInfo/setInVoteResult", payload: true})
+            // 전체 투표 관련 초기화 필요
           }
 
 
@@ -101,7 +105,8 @@ function* startMeeting(action) {
 
 // 투표 요청
 function* vote(action) {
-  yield call(send, stompClient, "vote", 1, action.payload)
+  const stateMe = yield select(state => state.me);
+  yield call(send, stompClient, "vote", 1, {from : stateMe.player.id, to : action.payload})
 }
 
 // // 미팅 종료 요청
