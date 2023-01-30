@@ -13,7 +13,7 @@ const PDH = () => {
 
     const onClickbtn = () => {
         setCheck(true)
-        dispatch(setPlayer({name: ref.current.value}))
+        dispatch(setPlayer({id: ref.current.value}))
     }
 
     return (
