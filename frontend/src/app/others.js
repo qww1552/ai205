@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+    // 다른 플레이어 수
     otherPlayersCnt : 0,
+
+    // 다른 플레이어 정보
     players : [
 
     ]
@@ -18,7 +21,7 @@ export const othersSlice = createSlice({
 
         // 이미 존재하면
         for (const idx of state.players.keys()) {
-            if(state.players[idx].player.name === action.payload.player.name) {
+            if(state.players[idx].player.id === action.payload.player.id) {
                 state.players[idx].location = action.payload.location;
                 return;
             }

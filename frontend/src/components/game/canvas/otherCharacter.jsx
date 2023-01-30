@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Vector2, Vector3, MathUtils } from 'three';
 import CharacterMesh from "../mesh/characterMesh";
 
-const OtherCharacter = ({ location, initColor, initPosition, name }) => {
+const OtherCharacter = ({ location, initColor, initPosition, id }) => {
 
     const ref = useRef();
     const [nextPos, setNextPos] = useState(new Vector2(2, 0));
@@ -30,7 +30,7 @@ const OtherCharacter = ({ location, initColor, initPosition, name }) => {
     return (
         <>
             <RigidBody ref={ref} colliders={false} type="dynamic" lockRotations={true}>
-                <CharacterMesh initPosition={initPosition} initColor={initColor} name={name}/>
+                <CharacterMesh initPosition={initPosition} initColor={initColor} id={id}/>
             </RigidBody>
         </>
     )
