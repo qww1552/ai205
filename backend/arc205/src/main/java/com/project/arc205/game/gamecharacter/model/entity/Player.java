@@ -4,12 +4,13 @@ import com.project.arc205.game.room.model.entity.Room;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 public class Player {
 
-    private Long id;
-    private String name;
+    private UUID id;
     private Room room;
     private GameCharacter gameCharacter;
 
