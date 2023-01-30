@@ -33,36 +33,40 @@ function* startStomp() {
   while (true) {
     try {
       const res = yield take(channel);
-      const data = JSON.parse(res.body)
+      const body = JSON.parse(res.body)
       
       // 채널로 전송 받는거
-      switch (data.action) {
-        // 이동 관련
-        case "MOVE":
-          const stateMe = yield select(state => state.me);
+      switch (body.type) {
+        // 캐릭터 관련
+        case "CHARACTER":
+          // 움직임
+          if(body.operation === 'MOVE') {
 
-          if(stateMe.player.id !== data.player.id) {
-            const otherPlayerData = {player : data.player, location : data.location}
-            yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
+            const stateMe = yield select(state => state.me);
+
+            if(stateMe.player.id !== body.data.player.id) {
+              const otherPlayerData = {player : body.data.player, location : body.data.location}
+              yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
+            }
           }
           break;
 
         // 미팅 관련
         case "MEETING":
           // 미팅 시작 알림 받음
-          if(data.subAction === 'START') {
+          if(body.operation === 'START') {
             yield put({type : "gameInfo/setInMeeting", payload: true})
           }
           // 투표 시작 알림 받음 
-          else if (data.subAction === 'START_VOTING') {
+          else if (body.operation === 'START_VOTING') {
             yield put({type : "gameInfo/setInVote", payload: true})
           }
-          // 다른 플레이어의 투표 알림 받음
-          else if (data.subAction === 'VOTE') {
+          // 투표 알림 받음
+          else if (body.operation === 'VOTE') {
             
           } 
           // 투표 종료 (임시)
-          else if (data.subAction === 'END') {
+          else if (body.operation === 'END') {
             yield put({type : "gameInfo/setInVote", payload: false})
             yield put({type : "gameInfo/setInVoteResult", payload: true})
           }
@@ -75,6 +79,7 @@ function* startStomp() {
       }
 
     } catch (e) {
+      console.error("Sagas recive error!!")
       console.error(e.message);
     }
   }
