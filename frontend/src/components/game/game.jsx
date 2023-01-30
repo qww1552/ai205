@@ -7,6 +7,7 @@ import MissionProgress from 'components/game/mission/missionProgress'
 import MissionList from 'components/game/mission/missionList'
 import ImageButton from 'components/game/button/imageButton'
 import ModalMeeting from 'components/game/meeting/modalMeeting'
+import LoadingSpinner from 'components/loadingSpinner'
 
 const Game = () => {
 
@@ -31,6 +32,9 @@ const Game = () => {
                 <ModalMeeting/>
             </div>}
             {!check && <div>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <LoadingSpinner/>
+                </div>
                 <input ref={ref} type="text" name="" id="" />
                 <button onClick={onClickbtn}>확인</button>
             </div>}
