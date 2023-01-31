@@ -4,6 +4,7 @@ import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.MeetingOperation;
 import com.project.arc205.common.util.Scheduler;
+import com.project.arc205.game.gamedata.model.entity.DummyGame;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MeetingEventHandler {
+    private final DummyGame curGame;  //TODO: change game repo
+
     private final String destPrefix = "/sub/room/";
     @EventListener
     public void startMeeting(MeetingEvent event) {
@@ -22,11 +25,12 @@ public class MeetingEventHandler {
         String destination = destPrefix + event.getRoomId();
         Scheduler scheduler = new Scheduler();
         Runnable runnable = () -> {
+            log.info("/room/{}: StartVoting", event.getRoomId());
             BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
             event.getMessagingTemplate().convertAndSend(destination, response);
-            log.info("Send StartVoting");
+            curGame.getGameData().startVote();
         };
-        long delay = 60;      //TODO: Get from game setting
+        long delay = 10;      //TODO: Get from game setting
         scheduler.execute(runnable, delay);
     }
 }
