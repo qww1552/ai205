@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take, takeLatest, delay, select } from 'redux-saga/effects'
+import { call, put, takeEvery, take, takeLatest, delay, select, fork } from 'redux-saga/effects'
 import { eventChannel, buffers } from 'redux-saga'
 import { createClient, send, connectClient } from 'api/socket';
 
@@ -12,7 +12,7 @@ function* initializeStompChannel() {
 }
 
 
-function createEventChannel(roomId) {
+function createEventChannel(stompClient, roomId) {
 
   return eventChannel(emit => {
     const onReceivedMessage = (message) => {emit(message);}
@@ -26,76 +26,89 @@ function createEventChannel(roomId) {
 }
 
 function* startStomp() {
-  stompClient = yield call(createClient)
+  const stompClient = yield call(createClient)
   stompClient.debug = null;
-  const channel = yield call(createEventChannel, 1);
+  const channel = yield call(createEventChannel, stompClient, 1);
+
+  yield fork(sendChannel, stompClient);
 
   while (true) {
+
     try {
-      const stateMe = yield select(state => state.me);
-
       const res = yield take(channel);
-      const body = JSON.parse(res.body)
-
-      const data = body.data;
-      
-      // 채널로 전송 받는거
-      switch (body.type) {
-        // 캐릭터 관련
-        case "CHARACTER":
-          // 움직임
-          if(body.operation === 'MOVE') {
-
-            if(stateMe.player.id !== data.player.id) {
-              const otherPlayerData = {player : data.player, location : data.location}
-              yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
-            }
-          }
-          break;
-
-        // 미팅 관련
-        case "MEETING":
-          // 미팅 시작 알림 받음
-          if(body.operation === 'START') {
-            yield put({type : "gameInfo/setInMeeting", payload: true})
-          }
-          // 투표 시작 알림 받음 
-          else if (body.operation === 'START_VOTING') {
-            yield put({type : "gameInfo/setInVote", payload: true})
-          }
-          // 투표 알림 받음
-          else if (body.operation === 'VOTE') {
-            yield put({type: "others/setVote", payload: {id : data.playerId, value : true}})            
-          } 
-          // 투표 종료 (임시)
-          else if (body.operation === 'END') {
-            yield put({type : "voteInfo/setVoteResult", payload: data})
-            yield put({type : "gameInfo/setInVote", payload: false})
-            yield put({type : "gameInfo/setInVoteResult", payload: true})
-            // 전체 투표 관련 초기화 필요
-          }
-
-
-
-          break;
-        default:
-          break;
-      }
-
     } catch (e) {
-      console.error("Sagas recive error!!")
-      console.error(e.message);
+      console.log(e)
     }
+    // try {
+    //   const stateMe = yield select(state => state.me);
+
+    //   const res = yield take(channel);
+    //   const body = JSON.parse(res.body)
+
+    //   const data = body.data;
+      
+    //   // 채널로 전송 받는거
+    //   switch (body.type) {
+    //     // 캐릭터 관련
+    //     case "CHARACTER":
+    //       // 움직임
+    //       if(body.operation === 'MOVE') {
+
+    //         if(stateMe.player.id !== data.player.id) {
+    //           const otherPlayerData = {player : data.player, location : data.location}
+    //           yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
+    //         }
+    //       }
+    //       break;
+
+    //     // 미팅 관련
+    //     case "MEETING":
+    //       // 미팅 시작 알림 받음
+    //       if(body.operation === 'START') {
+    //         yield put({type : "gameInfo/setInMeeting", payload: true})
+    //       }
+    //       // 투표 시작 알림 받음 
+    //       else if (body.operation === 'START_VOTING') {
+    //         yield put({type : "gameInfo/setInVote", payload: true})
+    //       }
+    //       // 투표 알림 받음
+    //       else if (body.operation === 'VOTE') {
+    //         yield put({type: "others/setVote", payload: {id : data.playerId, value : true}})            
+    //       } 
+    //       // 투표 종료 (임시)
+    //       else if (body.operation === 'END') {
+    //         yield put({type : "voteInfo/setVoteResult", payload: data})
+    //         yield put({type : "gameInfo/setInVote", payload: false})
+    //         yield put({type : "gameInfo/setInVoteResult", payload: true})
+    //         // 전체 투표 관련 초기화 필요
+    //       }
+
+
+
+    //       break;
+    //     default:
+    //       break;
+    //   }
+
+    // } catch (e) {
+    //   console.error("Sagas recive error!!")
+    //   console.error(e.message);
+    // }
   }
+}
+
+
+function* sendChannel(client) {
+  yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client);
 }
 
 //////////////////////////////////////
 
 // 이동 정보 전송 요청
-function* locationSend(action) {
+function* locationSend(client, action) {
   const stateMe = yield select(state => state.me);
   yield put({type : "me/changeLocation", payload: action.payload})
-  yield call(send, stompClient, "move", 1, stateMe)
+  yield call(send, client, "move", 1, stateMe)
 }
 
 // 미팅 시작 요청
@@ -118,9 +131,9 @@ function* vote(action) {
 
 function* mySaga() {
   yield takeLatest("SOCKET_CONNECT_REQUEST", initializeStompChannel);
-  yield takeEvery("LOCAITION_SEND_REQUEST", locationSend);
-  yield takeEvery("START_MEETING_REQUEST", startMeeting);
-  yield takeEvery("VOTE_REQUEST", vote)
+  // yield takeEvery("LOCAITION_SEND_REQUEST", locationSend);
+  // yield takeEvery("START_MEETING_REQUEST", startMeeting);
+  // yield takeEvery("VOTE_REQUEST", vote)
   // yield takeEvery("END_MEETING_REQUEST", endMeeting);
   
 }
