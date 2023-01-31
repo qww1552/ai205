@@ -15,10 +15,10 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class StartMeetingResponse {
     @Getter
-    @AllArgsConstructor
+    @AllArgsConstructor(staticName = "of")
     public static class Player {
         String id;
-        boolean alive;
+        boolean isAlive;
     }
     private final List<Player> players;       //플레이어들 상태 정보(생존 여부)
 
