@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 public class MeetingController {
 
     private final MeetingService meetingService;
-//    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/start")
     @SendTo("/sub/room/{room-id}")
