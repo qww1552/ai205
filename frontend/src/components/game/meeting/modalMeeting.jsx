@@ -1,13 +1,35 @@
-import VideoComponent from 'components/webchat/VideoComponent'
+import 'styles/styles.css'
 import { selectGameInfo } from "app/gameInfo"
 import { useSelector } from "react-redux"
 import { action } from "app/store"
-// import { useState } from "react"
-import { Row, Col, Button, Modal, Progress } from "antd"
+import { Row, Col, Card, Button, Modal, Progress } from "antd"
+import {
+  AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
+} from '@ant-design/icons';
+
+const VideoCards = () => {
+  const userIds = ["유저 1", "유저 2", "유저 3", "유저 4", "유저 5"]
+  return(<>
+  {
+      userIds.map((name, idx) =>
+      <Col span={6}>
+        <Card
+          title={name}
+          size="small"
+          extra={[
+            <CheckSquareTwoTone twoToneColor='LimeGreen' style={{ fontSize: '20px'}}/>," ",
+            <CustomerServiceTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>," ",
+            <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>, " ",
+            <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px'}}/>
+        ]}>
+          <div className="blackBox"/>
+        </Card>
+      </Col>)
+  }
+  </>)
+}
 
 const ModalMeeting = () => {
-
-  // const [toggle, setToggle] = useState(false)
 
   const isInMeeting = useSelector(selectGameInfo).isInMeeting
 
@@ -24,27 +46,39 @@ const ModalMeeting = () => {
         width={1920}
         closable={false}
         footer={[
-          // 추후 닫기 버튼을 제거하고 회의 완료 요청을 받으면 action이 수행되도록 수정 필요
-          // <Button key="submit" onClick={()=> [action('gameInfo/setInMeeting', false), setToggle(true)]}>
-          //   작은 모달 열기
-          // </Button>,
           <Button key="back" onClick={() => action('gameInfo/setInMeeting', false)}>
             닫기
           </Button>
         ]}
       >
-        <Progress percent={80} success={{ percent: 50 }} showInfo={false} strokeWidth={20}/>
-        <p> 회의 </p>
+        {/* 거터는 가로, 세로 여백을 px 단위로 지정 */}
+        <Row gutter={[8, 8]}>
+          <Col span={22}>
+            <Progress percent={80} success={{ percent: 50 }} showInfo={false} strokeWidth={20}/>
+          </Col>
+          <Col span={1}>  
+            <Button id="chatBtnIcon" onClick={() => console.log("채팅 open")}>
+              <MessageTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
+            </Button>
+          </Col>
+          <Col span={1}>  
+            <Button id="settingBtnIcon" onClick={() => console.log("채팅 open")}>
+              <SettingTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
+            </Button>
+          </Col>
+          {/* Ant Design의 Grid System은 n/24 기반임. 예를 들어 span={8}이면 창 가로 길이의 8/24 = 1/3만큼 차지함 */}
+          <VideoCards/>
+          <Col span={24}>
+            <Card size="small">
+              <Button id="voteSkipIcon" onClick={() => console.log("투표 skip")}>
+                <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
+              </Button>
+              {"   유저 1, 유저 13"}
+            </Card>
+          </Col>
+        </Row>
         
       </Modal>
-      {/* <Modal
-        title="작아진 모달 테스트"
-        open={toggle}
-        onOk={() => setToggle(false)}
-        onCancel={() => setToggle(false)}
-      >
-        미니미니한 모달
-      </Modal> */}
     </>
 )
 };
