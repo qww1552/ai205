@@ -50,7 +50,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
   return (
     <>
       <RigidBody restitution={0} colliders="cuboid" ref={ref} type="dynamic" lockRotations={true}>
-        <CharacterMesh initPosition={initPosition} initColor={initColor} name={me.player.name} />
+        <CharacterMesh initPosition={initPosition} initColor={initColor} id={me.player.id} />
       </RigidBody>
     </>
   )

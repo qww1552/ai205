@@ -7,6 +7,7 @@ import MissionProgress from 'components/game/mission/missionProgress'
 import MissionList from 'components/game/mission/missionList'
 import ImageButton from 'components/game/button/imageButton'
 import ModalMeeting from 'components/game/meeting/modalMeeting'
+import LoadingSpinner from 'components/loadingSpinner'
 
 const Game = () => {
 
@@ -16,7 +17,7 @@ const Game = () => {
 
     const onClickbtn = () => {
         setCheck(true)
-        dispatch(setPlayer({name: ref.current.value}))
+        dispatch(setPlayer({id: ref.current.value}))
     }
 
     return (
@@ -31,6 +32,8 @@ const Game = () => {
                 <ModalMeeting/>
             </div>}
             {!check && <div>
+                {/* 로딩 스피너 필요시 import 후 다음과 같이 사용하면 됩니다. */}
+                <LoadingSpinner/>
                 <input ref={ref} type="text" name="" id="" />
                 <button onClick={onClickbtn}>확인</button>
             </div>}

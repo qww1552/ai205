@@ -38,7 +38,7 @@ const GameCanvas = () => {
                         {/* <Debug /> */}
                         <MyCharacter initPosition={[0, -0.5, 0]} initColor="red" />
                         {players.map((data) => 
-                            <OtherCharacter initPosition={[0, -0.5, 0]} name={data.player.name} key={data.player.name} location={{x : data.location.x, y : data.location.y, z : 0}} initColor="blue" />
+                            <OtherCharacter initPosition={[0, -0.5, 0]} id={data.player.id} key={data.player.id} location={{x : data.location.x, y : data.location.y, z : 0}} initColor="blue" />
                         )}
                         <Obstacle />
                         <SimpleMap/>
