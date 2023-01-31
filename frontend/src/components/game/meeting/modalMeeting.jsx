@@ -31,7 +31,8 @@ const ModalMeeting = () => {
   
   const votetest = () => {
     console.log('votetest실행')
-    setTimeout(() => action('gameInfo/setInVoteResult', !isInVoteResult),5000);
+    action('gameInfo/setInVote', !isInVote)
+    // setTimeout(() => action('gameInfo/setInVote', !isInVote),5000); 
   }
 
 
