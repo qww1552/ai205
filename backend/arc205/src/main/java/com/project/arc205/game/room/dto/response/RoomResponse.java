@@ -22,7 +22,6 @@ public class RoomResponse {
     }
 
     @JsonProperty("roomId")
-
     private String id;
     private String title;
     @JsonProperty("players")
