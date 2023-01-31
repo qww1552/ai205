@@ -21,13 +21,13 @@ import org.springframework.stereotype.Controller;
 public class MeetingController {
 
     private final MeetingService meetingService;
-    private final SimpMessagingTemplate simpMessagingTemplate;
+//    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/start")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<StartMeetingResponse> startMeeting(@DestinationVariable("room-id") String roomId) {
         log.info("/room/{}/meeting/start", roomId);
-        return meetingService.startMeeting(roomId, simpMessagingTemplate);
+        return meetingService.startMeeting(roomId);
     }
 
     @MessageMapping("/vote")

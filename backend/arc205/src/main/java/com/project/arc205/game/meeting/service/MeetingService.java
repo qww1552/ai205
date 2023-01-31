@@ -9,7 +9,6 @@ import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,8 +20,8 @@ public class MeetingService {
     private final ApplicationEventPublisher publisher;
     private final DummyGame curGame;  //TODO: change game repo
 
-    public BaseResponse<StartMeetingResponse> startMeeting(String roomId, SimpMessagingTemplate simpMessagingTemplate) {
-        publisher.publishEvent(new MeetingEvent(roomId, simpMessagingTemplate));
+    public BaseResponse<StartMeetingResponse> startMeeting(String roomId) {
+        publisher.publishEvent(new MeetingEvent(roomId));
 
         //TODO: Get curGame from GameData
         List<StartMeetingResponse.Player> players = new ArrayList<>();
