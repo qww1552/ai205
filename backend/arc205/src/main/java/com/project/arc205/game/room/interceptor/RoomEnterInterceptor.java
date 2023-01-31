@@ -1,6 +1,5 @@
 package com.project.arc205.game.room.interceptor;
 
-import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,6 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Subscribe 요청을 가로채서 해당 Room에 입장시켜주는 인터셉터
@@ -24,18 +22,16 @@ import java.util.UUID;
 @Component
 public class RoomEnterInterceptor implements ChannelInterceptor {
 
+
     private final RoomService roomService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (!StompCommand.SUBSCRIBE.equals(accessor.getCommand())) return message;
+        String roomId = getRoomIdFromHeader(accessor);
 
-        UUID roomId = UUID.fromString(getRoomIdFromHeader(accessor));
-        Player player = Player.create(accessor.getSessionId()); // 방 최초 입장 시 (subscribe) 플레이어 생성
-        roomService.enterRoom(roomId, player);
-
-        log.info("player {} entered room {}", player, roomId);
+        roomService.enterRoom(roomId, accessor.getSessionId());
 
         return ChannelInterceptor.super.preSend(message, channel);
     }
