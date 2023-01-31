@@ -5,6 +5,7 @@ import com.project.arc205.game.room.model.entity.Room;
 import com.project.arc205.game.room.model.exception.RoomNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RoomRepository {
 
     private final ConcurrentHashMap<UUID, Room> roomStorage = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    public void init() {
+//         최초 한 개의 room 생성
+        roomStorage.put(UUID.fromString("0c827963-6661-5511-92f9-dd7d375b968d"), Room.create("first", Player.create("master")));
+    }
 
     public Room create(String title, Player master) {
         Room room = Room.create(title, master);

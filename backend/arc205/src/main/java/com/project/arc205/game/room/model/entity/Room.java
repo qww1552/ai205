@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "title", "master"})
 public class Room {
 
     private UUID id;
@@ -30,5 +31,11 @@ public class Room {
         return room;
     }
 
+    public boolean enter(Player player) {
+        if (this.players.contains(player)) return false;
+        this.players.add(player);
+        player.setRoom(this); // 양방향 매핑이므로 player에도 room을 추가함
+        return true;
+    }
 
 }
