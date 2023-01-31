@@ -84,7 +84,11 @@ const channelHandling = {
         yield put({type : "gameInfo/setInVoteResult", payload: true})
 
         // 투표 관련 초기화
+
+        const stateMe = yield select(state => state.me);
+
         yield put({type : "others/setAllVoteFalse"})
+        yield put({type : "me/setPlayer", payload: {...stateMe.player, isVoted: false}})
 
         break;
       default:
@@ -116,6 +120,7 @@ function* startMeeting(client, action) {
 // 투표 요청
 function* vote(client, action) {
   const stateMe = yield select(state => state.me);
+  yield put({type: "me/setPlayer", payload: {...stateMe.player, isVoted: true}})
   yield call(send, client, "meeting/vote", 1, {from : stateMe.player.id, to : action.payload})
 }
 
