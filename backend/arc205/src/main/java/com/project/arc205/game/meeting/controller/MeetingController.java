@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -34,7 +33,7 @@ public class MeetingController {
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<VotedResponse> voting(@DestinationVariable("room-id") String roomId, @NotNull VoteRequest voteRequest) {
         log.info("/room/{}/meeting/vote: {} voted for {}", roomId, voteRequest.getFrom(), voteRequest.getTo());
-        return meetingService.vote(voteRequest);
+        return meetingService.vote(roomId, voteRequest);
     }
 
 }

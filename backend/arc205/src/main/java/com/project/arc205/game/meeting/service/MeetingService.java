@@ -7,6 +7,7 @@ import com.project.arc205.game.meeting.dto.request.VoteRequest;
 import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
+import com.project.arc205.game.meeting.event.VotingEndEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,12 @@ public class MeetingService {
         return StartMeetingResponse.of(players);
     }
 
-    public BaseResponse<VotedResponse> vote(VoteRequest voteRequest) {
+    public BaseResponse<VotedResponse> vote(String roomId, VoteRequest voteRequest) {
         GameData gameData = curGame.getGameData();          //TODO
         int remainingVoteTicket = gameData.vote(voteRequest.getFrom(), voteRequest.getTo());
+        if (remainingVoteTicket == 0) {
+            publisher.publishEvent(new VotingEndEvent(roomId));
+        }
         return VotedResponse.of(voteRequest.getFrom(), remainingVoteTicket);
     }
 

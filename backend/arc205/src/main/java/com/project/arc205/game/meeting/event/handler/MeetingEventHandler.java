@@ -3,13 +3,14 @@ package com.project.arc205.game.meeting.event.handler;
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.MeetingOperation;
-import com.project.arc205.common.util.Scheduler;
 import com.project.arc205.game.gamedata.model.entity.DummyGame;
+import com.project.arc205.game.meeting.event.VotingEndEvent;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 
@@ -19,34 +20,41 @@ import org.springframework.stereotype.Component;
 public class MeetingEventHandler {
     private final DummyGame curGame;  //TODO: change game repo
     private final SimpMessagingTemplate simpMessagingTemplate;
-
     private final String destPrefix = "/sub/room/";
+
+    @Async
     @EventListener
-    public void startMeeting(MeetingEvent event) {
+    public void meetingStart(MeetingEvent event) throws InterruptedException {
         String destination = destPrefix + event.getRoomId();
         log.info("{}: start meeting event", destination);
         //TODO: Get from game setting
-        long meetingLimitTime = 10;
-        long votingLimitTime = 20;
+        long meetingLimitTime = 10 * 1000;
+        long votingLimitTime = 20 * 1000;
 
-        Scheduler scheduler = new Scheduler();
+        //wait voting start
+        Thread.sleep(meetingLimitTime);
 
-        Runnable runnableEndVoting = () -> {
-            log.info("{}: EndVoting", destination);
-            BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.END);
-            simpMessagingTemplate.convertAndSend(destination, response);
-            curGame.getGameData().endVote();
-        };
+        log.info("{}: StartVoting", destination);
+        BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
+        simpMessagingTemplate.convertAndSend(destination, response);
+        curGame.getGameData().startVote();
 
-        Runnable runnableStartVoting = () -> {
-            log.info("{}: StartVoting", destination);
-            BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
-            simpMessagingTemplate.convertAndSend(destination, response);
-            curGame.getGameData().startVote();
+        //wait voting end
+        Thread.sleep(votingLimitTime);
 
-            scheduler.execute(runnableEndVoting, votingLimitTime);
-        };
+        if (curGame.getGameData().isVotingPeriod()) {
+            votingEnd(new VotingEndEvent(event.getRoomId()));
+        }
+    }
 
-        scheduler.execute(runnableStartVoting, meetingLimitTime);
+    @Async
+    @EventListener
+    public void votingEnd(VotingEndEvent event) {
+        String destination = destPrefix + event.getRoomId();
+        log.info("{}: EndVoting", destination);
+        //TODO: 투표 결과 집계
+        BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.END);
+        simpMessagingTemplate.convertAndSend(destination, response);
+        curGame.getGameData().endVote();
     }
 }
