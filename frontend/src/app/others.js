@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    // 다른 플레이어 수
-    otherPlayersCnt : 0,
+  // 다른 플레이어 수
+  otherPlayersCnt: 0,
 
-    // 다른 플레이어 정보
-    players : [
+  // 다른 플레이어 정보
+  players: [
 
-    ]
+  ]
 }
 
 export const othersSlice = createSlice({
@@ -19,18 +19,37 @@ export const othersSlice = createSlice({
     // },
     setOtherPlayer: (state, action) => {
 
-        // 이미 존재하면
-        for (const idx of state.players.keys()) {
-            if(state.players[idx].player.id === action.payload.player.id) {
-                state.players[idx].location = action.payload.location;
-                return;
-            }
+      // 이미 존재하면
+      for (const idx of state.players.keys()) {
+        if (state.players[idx].player.id === action.payload.player.id) {
+          state.players[idx].location = action.payload.location;
+          return;
         }
+      }
 
-        // 이름이 없으면 추가
-        state.players = [...state.players, action.payload]
-        state.otherPlayersCnt += 1;
+      // 이름이 없으면 추가
+      state.players = [...state.players, action.payload]
+      state.otherPlayersCnt += 1;
+    },
+
+    // 아이디 투표 세팅
+    setVote: (state, action) => {
+      for (const idx of state.players.keys()) {
+        if (state.players[idx].player.id === action.payload.id) {
+          state.players[idx].player.isVoted = action.payload.value;
+          return;
+        }
+      }
+    },
+
+    // 모든 플레이어 투표 초기화
+    setAllVoteFalse: (state, action) => {
+      for(const player of state.players) {
+        player.isVoted = false;
+      }
+
     }
+
   },
 });
 

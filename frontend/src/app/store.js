@@ -6,6 +6,7 @@ import resultReducer from 'app/result'
 import gamesetReducer from './gameset';
 import mySaga from './saga/sgags';
 import gameInfoReducer from 'app/gameInfo'
+import voteReducer from 'app/voteInfo'
 
 const sagaMiddleware = createSagaMiddleware()
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     gameInfo : gameInfoReducer,
     result : resultReducer,
     gameset : gamesetReducer,
+    voteInfo : voteReducer,
   },
   middleware: [sagaMiddleware]
 },
