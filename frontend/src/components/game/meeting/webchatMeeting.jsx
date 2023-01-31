@@ -7,6 +7,10 @@ import { selectMe } from '../../../app/me';
 import { selectGameInfo } from '../../../app/gameInfo';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { action } from "app/store"
+import { Row, Col, Card, Button, Modal, Progress } from "antd"
+import {
+  AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
+} from '@ant-design/icons';
 
 // Todo: voteInfo에서 정보를 받아옴
 // import { selectVoteInfo } from '../../../app/voteInfo';
@@ -41,17 +45,39 @@ const WebchatMeeting = () => {
   }
   return (
     <div>
-      <WebchatMeetingcomponent className="col" userinfo={me}/>
-      <div className="row row-cols-3">
+
+      <Row gutter={[8, 8]}>
+
+      <Col span = {8}>
+        {/* <Card title={me.id}> */}
+      <WebchatMeetingcomponent userinfo={me}/>
+      {/* </Card> */}
+      </Col>
+      <Col span = {16}>
+        <div>여기에 무슨정보를 넣는게 좋을까</div>
+      </Col>
       {otherplayers.map((otherplayer) => (
         // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
-        <div key={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}>
-        <WebchatMeetingcomponent className="col" userinfo={otherplayer} voteuser={voteResult[otherplayer.id]}/>
-        </div>    
+        <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
+        {/* <Card
+          title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
+        <WebchatMeetingcomponent userinfo={otherplayer} voteuser={voteResult[otherplayer.id]}/>
+        {/* </Card> */}
+        </Col>    
       ))}
+      {/* 스킵한 유저의 결과창을 보일곳 */}
+      {isInVoteResult === true&&
+        <Col span={24}>
+          <Card size="small">
+          <Button id="voteSkipIcon" onClick={() => console.log("투표 skip")}>
+          <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
+          </Button>
+          {voteResult.skip === []?"기권한 사람이 없는 경우 보일 메세지":voteResult.skip}
+        </Card>
+        </Col>}
+      </Row>
       {/* Todo: 대충 props로 컴포넌트에 자기 정보를 넘겨준다 */}
       
-      </div>
       {/* isInVote가 실행되면 활성화 */}
       {/* 죽은 경우에는 투표를 못하니까 표시안함 */}
       {(me.isAlive&&!me.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>제출</button>}

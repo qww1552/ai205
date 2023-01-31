@@ -2,12 +2,15 @@ import VideoComponent from 'components/webchat/VideoComponent'
 import { selectGameInfo, setInVote, setInVoteResult } from "app/gameInfo"
 import { useDispatch, useSelector } from "react-redux"
 import { action } from "app/store"
-import { Row, Col, Button, Modal } from "antd"
+import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import VoteMeeting from './voteMeeting'
 import { useEffect, useRef } from 'react'
 import ResultMeeting from './resultMeeting'
 import { useState } from 'react'
 import { setInMeeting } from 'app/gameInfo'
+import {
+  AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
+} from '@ant-design/icons';
 
 
 const ModalMeeting = () => {

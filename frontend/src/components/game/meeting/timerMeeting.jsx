@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Row, Col, Card, Button, Modal, Progress } from "antd"
 
 const padNumber = (num, length) => {
   return String(num).padStart(length, '0');
@@ -16,6 +17,10 @@ const TimerMeeting = (props) => {
   const [hour, setHour] = useState(padNumber(tempHour, 2));
   const [min, setMin] = useState(padNumber(tempMin, 2));
   const [sec, setSec] = useState(padNumber(tempSec, 2));
+  const sendTime = (t) =>{
+    props.getRestTime(t)
+
+  }
 
   useEffect(() => {
     interval.current = setInterval(() => {
@@ -35,8 +40,15 @@ const TimerMeeting = (props) => {
     }
   }, [sec]);
 
+
   return (
     <div>
+    <Col span={22}>
+      {/* Todo: success를 좀더 예쁘게 하는방법이 없나 */}
+      {/* success에서 +1을 한것은 진행중 percent와 겹치지 않게 하기 위해서임 */}
+      <Progress percent={initialTime.current/props.sec*100} success={{ percent: Math.min(50,initialTime.current/props.sec*100+1) }} showInfo={false} strokeWidth={20}/>
+    </Col>
+      {/* <div>{(initialTime.current/props.sec)*100}</div> */}
       {hour} : {min} : {sec}
     </div>
   );
