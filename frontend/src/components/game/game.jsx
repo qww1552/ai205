@@ -32,9 +32,8 @@ const Game = () => {
                 <ModalMeeting/>
             </div>}
             {!check && <div>
-                <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <LoadingSpinner/>
-                </div>
+                {/* 로딩 스피너 필요시 import 후 다음과 같이 사용하면 됩니다. */}
+                <LoadingSpinner/>
                 <input ref={ref} type="text" name="" id="" />
                 <button onClick={onClickbtn}>확인</button>
             </div>}
