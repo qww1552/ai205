@@ -21,6 +21,7 @@ public class GameData {
     private int meetingLimitTime;       //회의 시간
     private int votingLimitTime;        //투표 시간
     private Map<String, String> voted;  //현재 투표 정보(from, to)
+    private final String skip = "skip";
 
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
@@ -53,7 +54,7 @@ public class GameData {
         if (voted.containsKey(from)) {
             throw new AlreadyVotedException();
         }
-        if (!gameCharacters.containsKey(to)) {
+        if (!to.equals(skip) && !gameCharacters.containsKey(to)) {
             throw new InvalidTargetException(to);
         }
         voted.put(from, to);
