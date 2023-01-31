@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	player : {name : "player1"},	
+  // 내 플레이어 정보
+	player : {id: "player1",},
+  
 	location : {
 		y:0,
 		x:0

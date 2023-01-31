@@ -2,7 +2,7 @@ package com.project.arc205.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.arc205.common.operation.Type;
-import com.project.arc205.common.operation.action.Operation;
+import com.project.arc205.common.operation.operation.Operation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,12 +1,16 @@
 package com.project.arc205.common.operation;
 
-import com.project.arc205.common.operation.action.MeetingOperation;
+import com.project.arc205.common.operation.operation.CharacterOperation;
+import com.project.arc205.common.operation.operation.MeetingOperation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
 public enum Type {
-    MEETING(MeetingOperation.class);       //회의
-    private final Class<?> action;
+    EXCEPTION(HttpStatus.class),
+    MEETING(MeetingOperation.class),       //회의
+    CHARACTER(CharacterOperation.class);
+    private final Class<?> subType;
 }

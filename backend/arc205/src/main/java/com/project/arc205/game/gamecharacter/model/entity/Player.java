@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 public class Player {
 
-    private Long id;
-    private String name;
+    private String id;
     private Room room;
     private GameCharacter gameCharacter;
 

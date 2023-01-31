@@ -1,4 +1,4 @@
-package com.project.arc205.common.operation.action;
+package com.project.arc205.common.operation.operation;
 
 public enum MeetingOperation implements Operation {
     START,          //회의 시작
