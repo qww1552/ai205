@@ -1,5 +1,6 @@
 package com.project.arc205.game.room.interceptor;
 
+import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,18 +23,40 @@ import java.util.Objects;
 @Component
 public class RoomEnterInterceptor implements ChannelInterceptor {
 
-
     private final RoomService roomService;
+    private final String ROOM_SUBSCRIPTION_PREFIX = "/sub";
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        if (!StompCommand.SUBSCRIBE.equals(accessor.getCommand())) return message;
-        String roomId = getRoomIdFromHeader(accessor);
 
-        roomService.enterRoom(roomId, accessor.getSessionId());
+        if (isRoomSubscriptionMessage(accessor)) {
+            log.info("accessor in interceptor :: {}", accessor);
 
-        return ChannelInterceptor.super.preSend(message, channel);
+            String roomId = getRoomIdFromHeader(accessor);
+
+            String id = accessor.getFirstNativeHeader("playerId");
+            String sessionId = accessor.getSessionId();
+
+            Player player = Player.create(id, sessionId); // 방 최초 입장 시 (subscribe) 플레이어 생성
+
+            roomService.enterRoom(roomId, player);
+        }
+
+        return message;
+    }
+
+    private boolean isRoomSubscriptionMessage(StompHeaderAccessor accessor) {
+        return isSubscriptionCommand(accessor) &&
+                isSubScriptionDestination(accessor);
+    }
+
+    private boolean isSubScriptionDestination(StompHeaderAccessor accessor) {
+        return accessor.getDestination().startsWith(ROOM_SUBSCRIPTION_PREFIX);
+    }
+
+    private static boolean isSubscriptionCommand(StompHeaderAccessor accessor) {
+        return StompCommand.SUBSCRIBE.equals(accessor.getCommand());
     }
 
     private static String getRoomIdFromHeader(StompHeaderAccessor accessor) {

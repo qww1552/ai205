@@ -1,4 +1,4 @@
-package com.project.arc205.game.gamecharacter.model.common;
+package com.project.arc205.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

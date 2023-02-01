@@ -20,9 +20,8 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    public void enterRoom(String roomId, String sessionId) {
+    public void enterRoom(String roomId, Player player) {
         UUID uuidRoomId = UUID.fromString(roomId);
-        Player player = Player.create(sessionId); // 방 최초 입장 시 (subscribe) 플레이어 생성
 
         Room room = roomRepository.findById(uuidRoomId);
         room.enter(player);

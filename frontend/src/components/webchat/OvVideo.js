@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
+import React, {useCallback, useEffect, useRef} from "react";
+export default function OpenViduVideoComponent(props) {
+  const videoRef = useRef();
 
-export default class OpenViduVideoComponent extends Component {
+  const makeStyle = useCallback(() => {
+    return { display: props.mutedVideo ? "none" : "block" };
+  }, [props.mutedVideo]);
 
-    constructor(props) {
-        super(props);
-        this.videoRef = React.createRef();
+  useEffect(() => {
+    if (props && !!videoRef) {
+      props.streamManager.addVideoElement(videoRef.current);
     }
+  }, [props.streamManager]);
 
-    componentDidUpdate(props) {
-        if (props && !!this.videoRef) {
-            this.props.streamManager.addVideoElement(this.videoRef.current);
-        }
-    }
-
-    componentDidMount() {
-        if (this.props && !!this.videoRef) {
-            this.props.streamManager.addVideoElement(this.videoRef.current);
-        }
-    }
-
-    render() {
-        return <video autoPlay={true} ref={this.videoRef} />;
-    }
-
+  return (
+    <div style={makeStyle()}>
+      <video autoPlay={true} muted={props.mutedSound} ref={videoRef} />
+    </div>
+  );
 }
