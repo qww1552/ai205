@@ -21,6 +21,7 @@ const WebchatMeetingcomponent = (props) => {
       <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>, " ",
       <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px'}}/>
   ]}> 
+      
       {/* <div>{props.userinfo.id}</div> */}
       {/* 자바스크립트에서 true false는 출력이 안된다 */}
       {props.userinfo.isAlive === true? <div>살아있음</div> : <div>쥬금</div>}
@@ -34,7 +35,9 @@ const WebchatMeetingcomponent = (props) => {
     {/* > */}
       <UserVideoComponent user={props.user} />
       {/* </div> */}
+      <button onClick={() => console.log(props.user)}>dpd</button>
     </Card>
+    
   );
 };
 

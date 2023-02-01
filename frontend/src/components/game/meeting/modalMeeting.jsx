@@ -10,6 +10,7 @@ import { setInMeeting } from 'app/gameInfo'
 import {
   AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
 } from '@ant-design/icons';
+import NoticeMeeting from './noticeMeeting'
 
 
 const ModalMeeting = () => {
@@ -17,7 +18,7 @@ const ModalMeeting = () => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const isInVote = useSelector(selectGameInfo).isInVote
   const [seeNextResult,setseeNextResult] = useState(false)
-  
+  const [completenoticemeet, setcompletenoticemeet] = useState(false)
   useEffect(() => {
     if (!isInVoteResult && !isInMeeting) {
       Modal.destroyAll()
@@ -37,7 +38,16 @@ const ModalMeeting = () => {
     // setTimeout(() => action('gameInfo/setInVote', !isInVote),5000); 
   }
 
-
+  // 대충 미팅시작할때랑 끝날때 변수를 변화시키는 내용
+  // isInMeeting에 연결되었기때문에 문제생길수 있을듯...?
+  useEffect(() => {
+    if (isInMeeting === false) {
+      setcompletenoticemeet(false)
+    }
+    if (isInMeeting === true) {
+      setTimeout(()=>setcompletenoticemeet(true),5000)
+    }
+  },[isInMeeting])
   return (
     <>
       {/* 현재 게임 화면하단의 컴포넌트 + 회의때의 모달로 기능이 2가지로 분리되어 있는데도 불구,
@@ -57,7 +67,7 @@ const ModalMeeting = () => {
           </Button>
         ]}
       >
-        {isInMeeting &&(!seeNextResult)?<VoteMeeting/>:<ResultMeeting/>}
+        {completenoticemeet === false?<NoticeMeeting/>:isInMeeting &&(!seeNextResult)?<VoteMeeting/>:<ResultMeeting/>}
         
         {/* ※시험용으로 만둘어둔 버튼 나중에 지우기 */}
         <Button key="test1" onClick={() => action('gameInfo/setInVoteResult', !isInVoteResult)}>
