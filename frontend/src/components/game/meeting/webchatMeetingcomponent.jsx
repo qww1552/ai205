@@ -9,6 +9,7 @@ import {
 
 const WebchatMeetingcomponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
+  
   return (
     // props.userinfo.key 로 가져온다
     <Card title={props.userinfo.id} size="small"
