@@ -7,7 +7,7 @@ import gamesetReducer from './gameset';
 import mySaga from './saga/sgags';
 import gameInfoReducer from 'app/gameInfo'
 import voteReducer from 'app/voteInfo'
-
+import videoReducer from 'app/videoInfo'
 const sagaMiddleware = createSagaMiddleware()
 export const store = configureStore({
   reducer: {
@@ -17,6 +17,7 @@ export const store = configureStore({
     result : resultReducer,
     gameset : gamesetReducer,
     voteInfo : voteReducer,
+    videoInfo : videoReducer
   },
   middleware: [sagaMiddleware]
 },
