@@ -2,7 +2,7 @@ import SockJS from "sockjs-client"
 import axios from "axios"
 import { over } from "stompjs"
 
-const BASE_URL = `http://${process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost'}:8080/api/v1`
+const BASE_URL = `http://localhost:8080/api/v1`
 const SUBSCRIBE_URL = '/sub/room'
 const PUBLISHER_URL = '/pub/room'
 
@@ -16,7 +16,6 @@ const createClient = () => {
 
 const connectClient = (client, roomId, player, callback) => {
   console.log("--connectClient")
-  console.log(player)
   client.connect({playerId : player.id}, 
   () => {
     client.subscribe(`${SUBSCRIBE_URL}/${roomId}`, callback, {playerId : player.id});

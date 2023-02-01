@@ -5,7 +5,6 @@ import { store } from './app/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-import registerServiceWorker from './components/webchat/registerServiceWorker'
 import { RouterProvider } from 'react-router-dom';
 import router from 'router';
 

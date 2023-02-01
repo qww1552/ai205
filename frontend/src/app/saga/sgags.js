@@ -117,19 +117,19 @@ function* sendChannel(client, roomId) {
 function* locationSend(client, action) {
   const stateMe = yield select(state => state.me);
   yield put({type : "me/changeLocation", payload: action.payload})
-  yield call(send, client, "move", 1, stateMe)
+  yield call(send, client, "move", action.roomId, stateMe)
 }
 
 // 미팅 시작 요청
 function* startMeeting(client, action) {
-  yield call(send, client, "meeting/start", 1)
+  yield call(send, client, "meeting/start", action.roomId)
 }
 
 // 투표 요청
 function* vote(client, action) {
   const stateMe = yield select(state => state.me);
   yield put({type: "me/setPlayer", payload: {...stateMe.player, isVoted: true}})
-  yield call(send, client, "meeting/vote", 1, {from : stateMe.player.id, to : action.payload})
+  yield call(send, client, "meeting/vote", action.roomId, {from : stateMe.player.id, to : action.payload})
 }
 
 function* mySaga() {
