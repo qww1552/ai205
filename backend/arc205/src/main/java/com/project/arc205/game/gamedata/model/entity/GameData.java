@@ -48,7 +48,7 @@ public class GameData {
         voted = null;
     }
     public int vote(String from, String to) {
-        if (voted == null) {
+        if (!isVotingPeriod()) {
             throw new NotVotingPeriodException();
         }
         if (voted.containsKey(from)) {
@@ -58,12 +58,16 @@ public class GameData {
             throw new InvalidTargetException(to);
         }
         voted.put(from, to);
-        return getAliveCount() - voted.size();
+        return getAliveCount() - voted.size();      //return remainingVotingTicket
     }
 
     public List<?> getVoteResult() {
         //TODO
         return null;
+    }
+
+    public boolean isVotingPeriod() {
+        return voted != null;
     }
     public boolean isVotingEnd() {
         return voted.size() == getAliveCount();

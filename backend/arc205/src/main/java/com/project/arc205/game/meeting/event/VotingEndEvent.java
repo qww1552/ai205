@@ -1,10 +1,11 @@
 package com.project.arc205.game.meeting.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
-public class MeetingEvent {
+@AllArgsConstructor
+public class VotingEndEvent {
     private final String roomId;
+
 }
