@@ -1,4 +1,5 @@
 import { roomRequest } from 'api';
+import { action } from 'app/store';
 import React, { useState, useEffect } from 'react';
 import { Link, useRouteLoaderData } from 'react-router-dom';
 
@@ -10,9 +11,14 @@ const LobbySimple = () => {
   //   { id : "player2" }, 
   // ]
 
+
   const [players, setPlayers] = useState([])
 
   const roomId = useRouteLoaderData("lobby");
+
+  useEffect(()=> {
+    action('SOCKET_CONNECT_REQUEST', {roomId})
+  },[])
 
   useEffect(() => {
     document.title = `Waiting Room - ${players.length} players`;
@@ -38,7 +44,7 @@ const LobbySimple = () => {
         ))}
       </ul>
       {players.length >= 2 && (
-        <Link to='game'><button>Start Game</button></Link>
+        <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
       )}
     </div>
   );

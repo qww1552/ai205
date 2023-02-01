@@ -5,16 +5,16 @@ import { createClient, send, connectClient } from 'api';
 
 //////////////////////// 채널 관련
 
-function* initializeStompChannel() {
-  yield call(startStomp);
+function* initializeStompChannel(action) {
+  yield call(startStomp, action);
 }
 
-function createEventChannel(client, roomId) {
+function createEventChannel(client, roomId, player) {
 
   return eventChannel(emit => {
     const onReceivedMessage = (message) => {emit(message);}
     
-    connectClient(client, roomId, onReceivedMessage);
+    connectClient(client, roomId, player, onReceivedMessage);
 
     return () => {
       client.unsubscribe();
@@ -22,13 +22,18 @@ function createEventChannel(client, roomId) {
   }, buffers.expanding(3000) || buffers.none());
 }
 
-function* startStomp() {
+function* startStomp(action) {
+
+
+  console.log(action)
   const stompClient = yield call(createClient)
   stompClient.debug = null;
 
-  const channel = yield call(createEventChannel, stompClient, 1);
+  const stateMe = yield select(state => state.me);
 
-  yield fork(sendChannel, stompClient);
+  const channel = yield call(createEventChannel, stompClient, action.payload.roomId, stateMe.player);
+
+  yield fork(sendChannel, stompClient, action.payload);
 
   while (true) {
 
@@ -102,10 +107,10 @@ const channelHandling = {
 
 /////////////////////////////////
 /////////////////// 클라이언트 -> 서버 소켓 전송
-function* sendChannel(client) {
-  yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client);
-  yield takeEvery("START_MEETING_REQUEST", startMeeting, client);
-  yield takeEvery("VOTE_REQUEST", vote, client)
+function* sendChannel(client, roomId) {
+  yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client, roomId);
+  yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
+  yield takeEvery("VOTE_REQUEST", vote, client, roomId)
 }
 
 // 이동 정보 전송 요청

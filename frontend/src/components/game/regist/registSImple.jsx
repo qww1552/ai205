@@ -6,11 +6,10 @@ const RegistSimple = () => {
     const ref = useRef();
     const nav = useNavigate();
 
-    const roomId = useRouteLoaderData('rooms');
+    const roomId = useRouteLoaderData('regist');
 
     const onClickbtn = () => {
         action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
-        action('SOCKET_CONNECT_REQUEST')
         nav(`/rooms/${roomId}/lobby`)
     }
 

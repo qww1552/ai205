@@ -17,21 +17,21 @@ const router = createBrowserRouter([
         element: <RoomList />,
       },
       {
-        path: "rooms/:roomId/regist",
-        id: "rooms",
-        element: <RegistSimple/>,
-        loader: async ({params}) => {
-          return params.roomId;
-          // return roomRequest(params.roomId);
-        },
-      },
-      {
         path: "rooms/:roomId/lobby",
         element: <LobbySimple/>,
         id: "lobby",
         loader: async ({params}) => {
           return params.roomId;
         }
+      },
+      {
+        path: "rooms/:roomId/regist",
+        id: "regist",
+        element: <RegistSimple/>,
+        loader: async ({params}) => {
+          return params.roomId;
+          // return roomRequest(params.roomId);
+        },
       },
       {
         path: "rooms/:roomId/game",
