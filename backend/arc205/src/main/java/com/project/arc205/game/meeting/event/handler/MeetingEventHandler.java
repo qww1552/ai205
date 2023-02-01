@@ -73,9 +73,9 @@ public class MeetingEventHandler {
         List<String> survivors = curGame.getGameData().getSurvivors();
         Map<String, String> ballotBox = curGame.getGameData().getVoted();
         Map<String, List<String>> voteResults = survivors.stream()
-                    .collect(Collectors.groupingBy(id -> ballotBox.getOrDefault(id, Constant.votedSkipId)));
+                    .collect(Collectors.groupingBy(id -> ballotBox.getOrDefault(id, Constant.VOTED_SKIP_ID)));
 
-        String elected = Constant.votedSkipId;
+        String elected = Constant.VOTED_SKIP_ID;
         List<Map.Entry<String, List<String>>> sorted = voteResults.entrySet().stream()
                 .sorted(Comparator.comparingInt(e -> -e.getValue().size()))
                 .limit(2).collect(Collectors.toList());

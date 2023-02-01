@@ -57,7 +57,7 @@ public class GameData {
         if (voted.containsKey(from)) {
             throw new AlreadyVotedException();
         }
-        if (!to.equals(Constant.votedSkipId) && !gameCharacters.containsKey(to)) {
+        if (!to.equals(Constant.VOTED_SKIP_ID) && !gameCharacters.containsKey(to)) {
             throw new InvalidTargetException(to);
         }
         voted.put(from, to);
