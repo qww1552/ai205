@@ -7,7 +7,9 @@
 
   margin: 50px;
 }
-@import url(https://fonts.googleapis.com/css?family=Raleway:500,900);
+
+/* 호버링 관련 css파일을 넣어놓은것임 */
+/* @import url(https://fonts.googleapis.com/css?family=Raleway:500,900); */
 /* figure.snip1432 {
   font-family: 'Raleway', Arial, sans-serif;
   color: #fff;

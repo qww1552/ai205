@@ -26,14 +26,14 @@ import { useEffect } from 'react';
 
 // 화상채팅컴포넌트만 모아놓은 컴포넌트
 const WebchatMeeting = () => {
-  // const otherplayers = useSelector(selectOhterPlayers).players
+  // const P = useSelector(selectOhterPlayers).players
   // const me = useSelector(selectMe)
   const isInMeeting = useSelector(selectGameInfo).isInMeeting
   const isInVote= useSelector(selectGameInfo).isInVote
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const [VoteduserInfo, setVoteduserinfo] = useState('')
   const me = useSelector(selectMe).player
-  const otherplayers = [{id:1, isAlive:true,isVote:true,},{id:2, isAlive:true,isVote:true,},{id:3, isAlive:true,isVote:true,},{id:'fd', isAlive:true,isVote:true,}];
+  const otherPlayers = [{id:1, isAlive:true,isVote:true,},{id:2, isAlive:true,isVote:true,},{id:3, isAlive:true,isVote:true,},{id:'fd', isAlive:true,isVote:true,}];
   // const me = {id:'myid', isAlive:true, isVote:true}
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
   // const voteResult = useSelector(selectVoteInfo).voteResult
@@ -115,4 +115,4 @@ const WebchatMeeting = () => {
 };
 
 export default WebchatMeeting;
-//  userinfo={otherplayers[sub.nickname]} voteuser={voteResult[sub.nickname]}
+//  userinfo={P[sub.nickname]} voteuser={voteResult[sub.nickname]}

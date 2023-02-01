@@ -5,7 +5,7 @@ const NoticeMeeting = () => {
     // Todo: 나중에 좀더 보기좋게 수정하기
     <div>
       <h1>대충회의시작했을때 알림창(5초정도 보이는중)</h1>
-      <img src='img/download.jpg'/>
+      <img src='testImg/testStartMeeting.jpg'/>
     </div>
   );
 };
