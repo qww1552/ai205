@@ -48,10 +48,10 @@ public class RoomEnterInterceptor implements ChannelInterceptor {
 
     private boolean isRoomSubscriptionMessage(StompHeaderAccessor accessor) {
         return isSubscriptionCommand(accessor) &&
-                isSubScriptionDestination(accessor);
+                isSubscriptionDestination(accessor);
     }
 
-    private boolean isSubScriptionDestination(StompHeaderAccessor accessor) {
+    private boolean isSubscriptionDestination(StompHeaderAccessor accessor) {
         return accessor.getDestination().startsWith(ROOM_SUBSCRIPTION_PREFIX);
     }
 
