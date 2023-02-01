@@ -4,6 +4,7 @@ import { over } from "stompjs"
 const BASE_URL = `http://${process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost'}:8080/api/v1/ws`
 const SUBSCRIBE_URL = '/sub/room'
 const PUBLISHER_URL = '/pub/room'
+const ROOM_URL = '/rooms'
 
 const createClient = () => {
   console.log("--createClient")
