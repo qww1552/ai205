@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import { selectOhterPlayers } from '../../../app/others';
 import WebchatMeetingcomponent from './webchatMeetingcomponent';
 import { selectMe } from '../../../app/me';
@@ -11,6 +11,13 @@ import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import {
   AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
 } from '@ant-design/icons';
+
+
+
+import {
+  selectMainUser,
+  selectVideoUsers,mutedSound,mutedVideo
+} from "app/videoInfo";
 
 // Todo: voteInfo에서 정보를 받아옴
 // import { selectVoteInfo } from '../../../app/voteInfo';
@@ -24,7 +31,7 @@ const WebchatMeeting = () => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const [VoteduserInfo, setVoteduserinfo] = useState('')
   const me = useSelector(selectMe).player
-  const otherplayers = [{id:1, isAlive:true,isVote:true,},{id:2, isAlive:true,isVote:true},{id:3, isAlive:true,isVote:true},{id:4, isAlive:true,isVote:true},{id:5, isAlive:true,isVote:true},{id:6, isAlive:false,isVote:false},{id:7, isAlive:false,isVote:false},{id:8, isAlive:false,isVote:false}]
+  const otherplayer = {id:1, isAlive:true,isVote:true,};
   // const me = {id:'myid', isAlive:true, isVote:true}
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
   // const voteResult = useSelector(selectVoteInfo).voteResult
@@ -38,11 +45,28 @@ const WebchatMeeting = () => {
       setVoteduserinfo(voteduserInfo)
     }
   }
+
+  const videoUsers = useSelector(selectVideoUsers);
+  const  mainUser = useSelector(selectMainUser);
+  const dispatch = new useDispatch();
+
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
     console.log({VoteduserInfo},'한테 대충 제출하는 이벤트')
     action('VOTE', { to: "id"})
   }
+
+  const handleSound = (user) => {
+    console.log("handleSound~~!")
+    dispatch(mutedSound(user));
+    dispatch(mutedVideo(user))
+  }
+
+  const handleVideo = (user) => {
+    console.log("handleVideo!!")
+   
+  }
+
   return (
     <div>
 
@@ -50,18 +74,19 @@ const WebchatMeeting = () => {
 
       <Col span = {8}>
         {/* <Card title={me.id}> */}
-      <WebchatMeetingcomponent userinfo={me}/>
+      <WebchatMeetingcomponent user={mainUser} userinfo={me}/>
       {/* </Card> */}
       </Col>
       <Col span = {16}>
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
-      {otherplayers.map((otherplayer) => (
+      {videoUsers.map((sub) => (
         // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
-        <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
+        // <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
+        <Col span={6}>
         {/* <Card
           title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
-        <WebchatMeetingcomponent userinfo={otherplayer} voteuser={voteResult[otherplayer.id]}/>
+        <WebchatMeetingcomponent user={sub} userinfo={otherplayer} voteuser={voteResult[otherplayer.id]}/>
         {/* </Card> */}
         </Col>    
       ))}
