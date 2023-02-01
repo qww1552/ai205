@@ -42,6 +42,7 @@ const Game = () => {
     const onClickbtn = () => {
         setCheck(true)
         action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
+        joinSession(ref.current.value);
     }
 
      //비디오
@@ -50,7 +51,7 @@ const Game = () => {
     };
 
 
-    const joinSession = () => {
+    const joinSession = (name) => {
         window.addEventListener("beforeunload", onbeforeunload);
     
         OV = new OpenVidu();
@@ -60,7 +61,7 @@ const Game = () => {
 
 
         const localUser = new createUser();
-        localUser.setNickname("Participant" + Math.floor(Math.random() * 100));
+        localUser.setNickname(name);
         getToken().then((token) => {
       
         mySession
@@ -166,7 +167,7 @@ const Game = () => {
 
 
     useEffect(() => {
-        joinSession();
+        
         return () => {
         leaveSession();
         };

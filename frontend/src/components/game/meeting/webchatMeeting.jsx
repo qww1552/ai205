@@ -33,7 +33,7 @@ const WebchatMeeting = () => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const [VoteduserInfo, setVoteduserinfo] = useState('')
   const me = useSelector(selectMe).player
-  const otherplayer = {id:1, isAlive:true,isVote:true,};
+  const otherplayers = [{id:1, isAlive:true,isVote:true,},{id:2, isAlive:true,isVote:true,},{id:3, isAlive:true,isVote:true,},{id:'fd', isAlive:true,isVote:true,}];
   // const me = {id:'myid', isAlive:true, isVote:true}
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
   // const voteResult = useSelector(selectVoteInfo).voteResult
@@ -88,7 +88,7 @@ const WebchatMeeting = () => {
         <Col className="unvoted" span={6}>
         {/* <Card
           title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
-        <WebchatMeetingcomponent user={sub} userinfo={otherplayer} voteuser={voteResult[otherplayer.id]}/>
+        <WebchatMeetingcomponent user={sub}/>
         {/* </Card> */}
         </Col>    
       ))}
@@ -115,3 +115,4 @@ const WebchatMeeting = () => {
 };
 
 export default WebchatMeeting;
+//  userinfo={otherplayers[sub.nickname]} voteuser={voteResult[sub.nickname]}
