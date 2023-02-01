@@ -23,25 +23,40 @@ import java.util.Objects;
 @Component
 public class RoomEnterInterceptor implements ChannelInterceptor {
 
-
     private final RoomService roomService;
+    private final String ROOM_SUBSCRIPTION_PREFIX = "/sub";
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        if (!StompCommand.SUBSCRIBE.equals(accessor.getCommand())) return message;
-        log.info("accessor in interceptor :: {}", accessor);
 
-        String roomId = getRoomIdFromHeader(accessor);
+        if (isRoomSubscriptionMessage(accessor)) {
+            log.info("accessor in interceptor :: {}", accessor);
 
-        String id = accessor.getFirstNativeHeader("playerId");
-        String sessionId = accessor.getSessionId();
+            String roomId = getRoomIdFromHeader(accessor);
 
-        Player player = Player.create(id, sessionId); // 방 최초 입장 시 (subscribe) 플레이어 생성
+            String id = accessor.getFirstNativeHeader("playerId");
+            String sessionId = accessor.getSessionId();
 
-        roomService.enterRoom(roomId, player);
+            Player player = Player.create(id, sessionId); // 방 최초 입장 시 (subscribe) 플레이어 생성
 
-        return ChannelInterceptor.super.preSend(message, channel);
+            roomService.enterRoom(roomId, player);
+        }
+
+        return message;
+    }
+
+    private boolean isRoomSubscriptionMessage(StompHeaderAccessor accessor) {
+        return isSubscriptionCommand(accessor) &&
+                isSubScriptionDestination(accessor);
+    }
+
+    private boolean isSubScriptionDestination(StompHeaderAccessor accessor) {
+        return accessor.getDestination().startsWith(ROOM_SUBSCRIPTION_PREFIX);
+    }
+
+    private static boolean isSubscriptionCommand(StompHeaderAccessor accessor) {
+        return StompCommand.SUBSCRIBE.equals(accessor.getCommand());
     }
 
     private static String getRoomIdFromHeader(StompHeaderAccessor accessor) {

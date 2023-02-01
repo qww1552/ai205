@@ -1,4 +1,3 @@
-import VideoComponent from 'components/webchat/VideoComponent'
 import { selectGameInfo, setInVote, setInVoteResult } from "app/gameInfo"
 import { useDispatch, useSelector } from "react-redux"
 import { action } from "app/store"
