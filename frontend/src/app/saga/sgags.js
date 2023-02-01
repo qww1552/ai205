@@ -6,7 +6,7 @@ import { createClient, send, connectClient } from 'api/socket';
 //////////////////////// 채널 관련
 
 function* initializeStompChannel() {
-  yield startStomp();
+  yield call(startStomp);
 }
 
 function createEventChannel(client, roomId) {
@@ -54,7 +54,10 @@ const channelHandling = {
         const stateMe = yield select(state => state.me);
 
         if(stateMe.player.id !== data.player.id) {
-          const otherPlayerData = {player : data.player, location : data.location}
+          const otherPlayerData = {
+            player : {id : data.player.id, isVoted : false, isAlive : true}, 
+            location : data.location
+          }
           yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
         }
         break;
