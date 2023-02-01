@@ -1,6 +1,7 @@
 package com.project.arc205.game.gamecharacter;
 
 import com.project.arc205.common.model.Location;
+import com.project.arc205.game.dummy.DummyMission;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.mission.ActiveMission;
@@ -17,14 +18,6 @@ public class CitizenTests {
     private GameCharacter gameCharacter;
     private ActiveMission dummyMission;
 
-    static class DummyMission extends ActiveMission {
-
-        @Override
-        public boolean solve() {
-            solved = true;
-            return true;
-        }
-    }
 
     @BeforeEach
     void init() {
