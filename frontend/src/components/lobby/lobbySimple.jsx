@@ -12,7 +12,7 @@ const LobbySimple = () => {
 
   const [players, setPlayers] = useState([])
 
-  const roomId = useRouteLoaderData("rooms");
+  const roomId = useRouteLoaderData("lobby");
 
   useEffect(() => {
     document.title = `Waiting Room - ${players.length} players`;

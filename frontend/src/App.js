@@ -1,14 +1,11 @@
 import React from 'react';
 import './App.css';
-import Game from 'components/game/game';
-import RoomList from 'components/lobby/roomList';
-import { BrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom';
-import router from 'router';
+import { BrowserRouter, Link, Outlet, Route, RouterProvider, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <RouterProvider router={router}/>
+      <Outlet/>
     </div>
   );
 }

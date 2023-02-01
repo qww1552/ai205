@@ -1,16 +1,17 @@
 import { action } from "app/store";
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 const RegistSimple = () => {
 
     const ref = useRef();
     const nav = useNavigate();
 
+    const roomId = useRouteLoaderData('rooms');
+
     const onClickbtn = () => {
-        // action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
-        // action('SOCKET_CONNECT_REQUEST')
-        nav("../lobby")
+        action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
+        action('SOCKET_CONNECT_REQUEST')
+        nav(`/rooms/${roomId}/lobby`)
     }
 
     return (<>
