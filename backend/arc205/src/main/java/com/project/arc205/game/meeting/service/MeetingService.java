@@ -7,9 +7,9 @@ import com.project.arc205.game.meeting.dto.request.VoteRequest;
 import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
+import com.project.arc205.game.meeting.event.VotingEndEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ public class MeetingService {
     private final ApplicationEventPublisher publisher;
     private final DummyGame curGame;  //TODO: change game repo
 
-    public BaseResponse<StartMeetingResponse> startMeeting(String roomId, SimpMessagingTemplate simpMessagingTemplate) {
-        publisher.publishEvent(new MeetingEvent(roomId, simpMessagingTemplate));
+    public BaseResponse<StartMeetingResponse> startMeeting(String roomId) {
+        publisher.publishEvent(new MeetingEvent(roomId));
 
         //TODO: Get curGame from GameData
         List<StartMeetingResponse.Player> players = new ArrayList<>();
@@ -33,9 +33,12 @@ public class MeetingService {
         return StartMeetingResponse.of(players);
     }
 
-    public BaseResponse<VotedResponse> vote(VoteRequest voteRequest) {
+    public BaseResponse<VotedResponse> vote(String roomId, VoteRequest voteRequest) {
         GameData gameData = curGame.getGameData();          //TODO
         int remainingVoteTicket = gameData.vote(voteRequest.getFrom(), voteRequest.getTo());
+        if (remainingVoteTicket == 0) {
+            publisher.publishEvent(new VotingEndEvent(roomId));
+        }
         return VotedResponse.of(voteRequest.getFrom(), remainingVoteTicket);
     }
 
