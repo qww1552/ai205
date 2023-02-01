@@ -49,7 +49,7 @@ public class MeetingEventHandler {
             log.info("{}: voting start", destination);
             BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
             simpMessagingTemplate.convertAndSend(destination, response);
-            curGame.getGameData().startVote();
+            curGame.getGameData().votingStart();
 
             //schedule voting end
             ScheduledFuture<?> votingEndSchedule = taskScheduler.schedule(() -> votingEnd(new VotingEndEvent(event.getRoomId())), new Date(System.currentTimeMillis() + votingLimitTime));
@@ -87,6 +87,7 @@ public class MeetingEventHandler {
         //broadcast voting result
         BaseResponse<VoteResultResponse> response = VoteResultResponse.newBaseResponse(voteResults, elected);
         simpMessagingTemplate.convertAndSend(destination, response);
-        curGame.getGameData().endVote();
+        curGame.getGameData().votingEnd();
+        curGame.getGameData().meetingEnd();
     }
 }
