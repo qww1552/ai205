@@ -19,7 +19,7 @@ public class RoomRepository {
     @PostConstruct
     public void init() {
 //         최초 한 개의 room 생성
-        roomStorage.put(UUID.fromString("0c827963-6661-5511-92f9-dd7d375b968d"), Room.create("first", Player.create("master")));
+        roomStorage.put(UUID.fromString("0c827963-6661-5511-92f9-dd7d375b968d"), Room.create("first", Player.create("master", "master")));
     }
 
     public Room create(String title, Player master) {

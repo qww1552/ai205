@@ -11,6 +11,7 @@ import lombok.ToString;
 public class Player {
 
     private String id;
+    private String sessionId;
     private Room room;
     private GameCharacter gameCharacter;
 
@@ -18,9 +19,10 @@ public class Player {
         this.room = room;
     }
 
-    public static Player create(String id) {
+    public static Player create(String id, String sessionId) {
         Player player = new Player();
         player.id = id;
+        player.sessionId = sessionId;
         return player;
     }
 }
