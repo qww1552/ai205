@@ -28,27 +28,27 @@ public class MeetingEventHandler {
     private final TaskScheduler taskScheduler;
     private final String destPrefix = "/sub/room/";
 
-    private Map<String, ScheduledFuture<?>> endSchedules;
+    private Map<String, ScheduledFuture<?>> votingEndSchedules;
 
     @Async
     @EventListener
     public void meetingStart(MeetingEvent event) {
         String destination = destPrefix + event.getRoomId();
-        log.info("{}: start meeting event", destination);
+        log.info("{}: meeting start event", destination);
         //TODO: Get from game setting
         long meetingLimitTime = 10 * 1000;
         long votingLimitTime = 20 * 1000;
 
         //schedule voting start
         taskScheduler.schedule(() -> {
-            log.info("{}: StartVoting", destination);
+            log.info("{}: voting start", destination);
             BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
             simpMessagingTemplate.convertAndSend(destination, response);
             curGame.getGameData().startVote();
 
             //schedule voting end
-            ScheduledFuture<?> endSchedule = taskScheduler.schedule(() -> votingEnd(new VotingEndEvent(event.getRoomId())), new Date(System.currentTimeMillis() + votingLimitTime));
-            endSchedules.put(event.getRoomId(), endSchedule);
+            ScheduledFuture<?> votingEndSchedule = taskScheduler.schedule(() -> votingEnd(new VotingEndEvent(event.getRoomId())), new Date(System.currentTimeMillis() + votingLimitTime));
+            votingEndSchedules.put(event.getRoomId(), votingEndSchedule);
 
         }, new Date(System.currentTimeMillis() + meetingLimitTime));
     }
@@ -57,11 +57,11 @@ public class MeetingEventHandler {
     @EventListener
     public void votingEnd(VotingEndEvent event) {
         String destination = destPrefix + event.getRoomId();
-        log.info("{}: EndVoting", destination);
+        log.info("{}: voting end", destination);
 
         //cancel End schedule
-        if (endSchedules.containsKey(event.getRoomId())) {
-            endSchedules.remove(event.getRoomId()).cancel(true);
+        if (votingEndSchedules.containsKey(event.getRoomId())) {
+            votingEndSchedules.remove(event.getRoomId()).cancel(true);
         }
 
         //broadcast voting result
