@@ -1,23 +1,25 @@
 package com.project.arc205.game.gamecharacter.model.entity;
 
-import com.project.arc205.game.gamecharacter.model.common.Location;
-import com.project.arc205.game.gamecharacter.model.common.Role;
-import lombok.AccessLevel;
+import com.project.arc205.common.model.Location;
+import com.project.arc205.common.model.Role;
+import com.project.arc205.game.mission.ActiveMission;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GameCharacter {
+public abstract class GameCharacter {
 
-    private Role role;
-    private Boolean isAlive;
-    private Location location;
+    protected Role role;
+    protected Boolean isAlive;
+    protected Location location;
 
-    public GameCharacter(Role role, Location location) {
-        this.role = role;
+    protected Map<String, ActiveMission> missions;
+
+    protected GameCharacter(Location location, Map<String, ActiveMission> missions) {
         this.isAlive = true;
         this.location = location;
+        this.missions = missions;
     }
 
     public void die() {
@@ -27,4 +29,6 @@ public class GameCharacter {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public abstract void interaction(String missionId);
 }
