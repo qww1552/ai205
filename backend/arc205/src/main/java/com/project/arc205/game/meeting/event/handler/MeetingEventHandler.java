@@ -1,9 +1,11 @@
 package com.project.arc205.game.meeting.event.handler;
 
+import com.project.arc205.common.Constant;
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.MeetingOperation;
 import com.project.arc205.game.gamedata.model.entity.DummyGame;
+import com.project.arc205.game.meeting.dto.response.VoteResultResponse;
 import com.project.arc205.game.meeting.event.VotingEndEvent;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import lombok.AllArgsConstructor;
@@ -14,9 +16,12 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -64,9 +69,22 @@ public class MeetingEventHandler {
             votingEndSchedules.remove(event.getRoomId()).cancel(true);
         }
 
+        //generate voting result
+        List<String> survivors = curGame.getGameData().getSurvivors();
+        Map<String, String> ballotBox = curGame.getGameData().getVoted();
+        Map<String, List<String>> voteResults = survivors.stream()
+                    .collect(Collectors.groupingBy(id -> ballotBox.getOrDefault(id, Constant.votedSkipId)));
+
+        String elected = Constant.votedSkipId;
+        List<Map.Entry<String, List<String>>> sorted = voteResults.entrySet().stream()
+                .sorted(Comparator.comparingInt(e -> -e.getValue().size()))
+                .limit(2).collect(Collectors.toList());
+        if (sorted.get(0).getValue().size() != sorted.get(1).getValue().size()) {
+            elected = sorted.get(0).getKey();
+        }
+
         //broadcast voting result
-        //TODO: 투표 결과 집계
-        BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.END);
+        BaseResponse<VoteResultResponse> response = VoteResultResponse.newBaseResponse(voteResults, elected);
         simpMessagingTemplate.convertAndSend(destination, response);
         curGame.getGameData().endVote();
     }
