@@ -22,18 +22,32 @@ import java.util.Objects;
 @Component
 public class RoomEnterInterceptor implements ChannelInterceptor {
 
-
     private final RoomService roomService;
+    private final String ROOM_SUBSCRIPTION_PREFIX = "/sub";
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        if (!StompCommand.SUBSCRIBE.equals(accessor.getCommand())) return message;
-        String roomId = getRoomIdFromHeader(accessor);
 
-        roomService.enterRoom(roomId, accessor.getSessionId());
+        if (isRoomSubscriptionMessage(accessor)) {
+            String roomId = getRoomIdFromHeader(accessor);
+            roomService.enterRoom(roomId, accessor.getSessionId());
+        }
 
-        return ChannelInterceptor.super.preSend(message, channel);
+        return message;
+    }
+
+    private boolean isRoomSubscriptionMessage(StompHeaderAccessor accessor) {
+        return isSubscriptionCommand(accessor) &&
+                isSubScriptionDestination(accessor);
+    }
+
+    private boolean isSubScriptionDestination(StompHeaderAccessor accessor) {
+        return accessor.getDestination().startsWith(ROOM_SUBSCRIPTION_PREFIX);
+    }
+
+    private static boolean isSubscriptionCommand(StompHeaderAccessor accessor) {
+        return StompCommand.SUBSCRIBE.equals(accessor.getCommand());
     }
 
     private static String getRoomIdFromHeader(StompHeaderAccessor accessor) {
