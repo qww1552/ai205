@@ -41,7 +41,7 @@ public class GameData {
     public List<String> getSurvivors() {
         return gameCharacters.entrySet().stream().filter(e -> e.getValue().getIsAlive()).map(Map.Entry::getKey).collect(Collectors.toList());
     }
-    private int getSurvivorCount() {
+    public int getSurvivorCount() {
         return aliveCitizenCount + aliveMafiaCount;
     }
     public void startVote() {
