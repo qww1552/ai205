@@ -14,19 +14,20 @@ const WebchatMeetingcomponent = (props) => {
   
   return (
     // props.userinfo.key 로 가져온다
-    <Card title={props.userinfo.id} size="small"
+    <Card title={props.user.nickname} size="small"
     extra={[
       <CheckSquareTwoTone twoToneColor='LimeGreen' style={{ fontSize: '20px'}}/>," ",
       <CustomerServiceTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>," ",
       <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>, " ",
       <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px'}}/>
   ]}> 
+      
       {/* <div>{props.userinfo.id}</div> */}
       {/* 자바스크립트에서 true false는 출력이 안된다 */}
-      {props.userinfo.isAlive === true? <div>살아있음</div> : <div>쥬금</div>}
+      {/* {props.userinfo.isAlive === true? <div>살아있음</div> : <div>쥬금</div>} */}
       {/* <div>{props.userinfo.isVote}</div> */}
       {/* 투표결과를 보여주는 경우 voteuser를 출력, 아닌경우 투표 여부를 출력 */}
-      {isInVoteResult === true ? <div>{props.voteuser}</div>:props.userinfo.isVote === true? <div>투표완</div>:<div>투표안함</div>}
+      {/* {isInVoteResult === true ? <div>{props.voteuser}</div>:props.userinfo.isVote === true? <div>투표완</div>:<div>투표안함</div>} */}
       {/* <div className="blackBox"/> */}
       {/* <div
       className="stream-container" */}
@@ -35,6 +36,7 @@ const WebchatMeetingcomponent = (props) => {
       <UserVideoComponent user={props.user} />
       {/* </div> */}
     </Card>
+    
   );
 };
 
