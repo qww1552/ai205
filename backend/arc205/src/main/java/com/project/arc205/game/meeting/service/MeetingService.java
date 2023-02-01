@@ -8,7 +8,6 @@ import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import com.project.arc205.game.meeting.event.VotingEndEvent;
-import com.project.arc205.game.meeting.exception.LowSurvivorsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -23,10 +22,6 @@ public class MeetingService {
     private final DummyGame curGame;  //TODO: change game repo
 
     public BaseResponse<StartMeetingResponse> startMeeting(String roomId) {
-        if (curGame.getGameData().getSurvivorCount() < 3) {
-            throw new LowSurvivorsException();
-        }
-
         publisher.publishEvent(new MeetingEvent(roomId));
 
         //TODO: Get curGame from GameData

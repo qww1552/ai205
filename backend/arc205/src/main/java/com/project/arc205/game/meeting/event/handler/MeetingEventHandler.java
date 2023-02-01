@@ -75,13 +75,14 @@ public class MeetingEventHandler {
         Map<String, List<String>> voteResults = survivors.stream()
                     .collect(Collectors.groupingBy(id -> ballotBox.getOrDefault(id, Constant.VOTED_SKIP_ID)));
 
-        String elected = Constant.VOTED_SKIP_ID;
         List<Map.Entry<String, List<String>>> sorted = voteResults.entrySet().stream()
                 .sorted(Comparator.comparingInt(e -> -e.getValue().size()))
                 .limit(2).collect(Collectors.toList());
-        if (sorted.get(0).getValue().size() != sorted.get(1).getValue().size()) {
+        String elected = Constant.VOTED_SKIP_ID;
+        if (sorted.size() < 2)
             elected = sorted.get(0).getKey();
-        }
+        else if (sorted.get(0).getValue().size() != sorted.get(1).getValue().size())
+            elected = sorted.get(0).getKey();
 
         //broadcast voting result
         BaseResponse<VoteResultResponse> response = VoteResultResponse.newBaseResponse(voteResults, elected);
