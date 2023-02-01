@@ -5,7 +5,6 @@ import com.project.arc205.common.model.Role;
 import com.project.arc205.game.mission.ActiveMission;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -17,10 +16,10 @@ public abstract class GameCharacter {
 
     protected Map<String, ActiveMission> missions;
 
-    protected GameCharacter(Location location) {
+    protected GameCharacter(Location location, Map<String, ActiveMission> missions) {
         this.isAlive = true;
         this.location = location;
-        this.missions = new HashMap<>();
+        this.missions = missions;
     }
 
     public void die() {
@@ -29,10 +28,6 @@ public abstract class GameCharacter {
 
     public void setLocation(Location location) {
         this.location = location;
-    }
-
-    public void addMission(String missionId, ActiveMission mission) {
-        this.missions.put(missionId, mission);
     }
 
     public abstract void interaction(String missionId);

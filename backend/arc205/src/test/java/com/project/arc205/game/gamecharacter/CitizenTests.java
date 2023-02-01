@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CitizenTests {
@@ -15,7 +17,7 @@ public class CitizenTests {
     private GameCharacter gameCharacter;
     private ActiveMission dummyMission;
 
-    class DummyMission extends ActiveMission {
+    static class DummyMission extends ActiveMission {
 
         @Override
         public boolean solve() {
@@ -33,9 +35,10 @@ public class CitizenTests {
     @Test
     @DisplayName("시민은 미션을 수행할 수 있다.")
     void citizenSolveMission() {
-        gameCharacter = new Citizen(new Location(0.0, 0.0));
         String missionId = "test";
-        gameCharacter.addMission(missionId, dummyMission);
+        HashMap<String, ActiveMission> missionMap = new HashMap<>();
+        missionMap.put(missionId, dummyMission);
+        gameCharacter = new Citizen(new Location(0.0, 0.0), missionMap);
         gameCharacter.interaction(missionId);
         assertTrue(dummyMission.isSolved());
     }
