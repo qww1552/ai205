@@ -16,11 +16,6 @@ const GameCanvas = () => {
     const players = useSelector(selectOhterPlayers);
     const gameInfo = useSelector(selectGameInfo);
 
-    useEffect(() => {
-        action('SOCKET_CONNECT_REQUEST')
-    }, [])
-
-
     return (
         <KeyboardControls
             map={[

@@ -11,7 +11,7 @@ const RoomList = () => {
       <ul>
         {rooms.map(room => (
           <li key={room.id}>
-            <Link to={`${room.id}`}>{room.name}</Link>
+            <Link to={`${room.id}/regist`}>{room.name}</Link>
           </li>
         ))}
       </ul>

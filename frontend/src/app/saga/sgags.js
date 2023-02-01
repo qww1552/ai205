@@ -1,6 +1,6 @@
 import { call, put, takeEvery, take, takeLatest, select, fork } from 'redux-saga/effects'
 import { eventChannel, buffers } from 'redux-saga'
-import { createClient, send, connectClient } from 'api/socket';
+import { createClient, send, connectClient } from 'api';
 
 
 //////////////////////// 채널 관련

@@ -1,4 +1,6 @@
+import { roomRequest } from "api";
 import Game from "components/game/game";
+import RegistSimple from "components/game/regist/registSImple";
 import LobbySimple from "components/lobby/lobbySimple";
 import RoomList from "components/lobby/roomList";
 import { createBrowserRouter, Link } from "react-router-dom";
@@ -18,15 +20,24 @@ const router = createBrowserRouter([
     element: <RoomList />,
   },
   {
-    path: "rooms/:roomId",
-    loader: async () => {
-      // return axios('http://localhost:8080/api/v1/rooms/0c827963-6661-5511-92f9-dd7d375b968d')
+    path: "rooms/:roomId/regist",
+    id: "rooms",
+    element: <RegistSimple/>,
+    loader: async ({params}) => {
+      return params.roomId;
+      // return roomRequest(params.roomId);
     },
-    element: <LobbySimple/>
+  },
+  {
+    path: "rooms/:roomId/lobby",
+    element: <LobbySimple/>,
+    loader: async ({params}) => {
+      return params.roomId;
+    }
   },
   {
     path: "rooms/:roomId/game",
-    element: <Game/>
+    element: <Game/>,
   },
 ]);
 
