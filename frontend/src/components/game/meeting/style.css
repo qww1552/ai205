@@ -97,6 +97,7 @@ figure.snip1432.hover figcaption h3:nth-of-type(2) {
   transform: translateY(0%);
 } */
 /* 투표한 클래스와 투표하지 않은 클래스 */
+/* Todo: 호버링되었을때의 효과와 투표했을때의 효과가 같은데 나중에 수정할지? */
 .voted {
   width: 100%;
   height: 100%;

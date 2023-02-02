@@ -71,6 +71,8 @@ const channelHandling = {
     }
   },
   MEETING: function* (operation, data) {
+    console.log('receive', operation)
+    
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
@@ -123,6 +125,7 @@ function* locationSend(client, roomId, action) {
 
 // 미팅 시작 요청
 function* startMeeting(client, roomId, action) {
+  console.log('send')
   yield call(send, client, "meeting/start", roomId)
 }
 
