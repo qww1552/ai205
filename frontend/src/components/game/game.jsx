@@ -225,8 +225,10 @@ const Game = () => {
                     <MissionProgress/>
                     <MissionList/>
                 </div>
-                <ImageButton/>
-                <ModalMeeting/>
+                {/* joinSession을 실행하는데 시간이 오래 걸려서, openVidu와 관련된 컴포넌트를 먼저 렌더링하려고 시도하면
+                mainUser에 아직 값이 없어 에러가 발생함 */}
+                {mainUser!==undefined &&(<ImageButton/>)}
+                {mainUser!==undefined &&(<ModalMeeting/>)}
             </div>
             {
             // !check && <div>

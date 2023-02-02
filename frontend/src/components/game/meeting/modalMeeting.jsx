@@ -58,7 +58,7 @@ const ModalMeeting = () => {
       <Modal 
         title="AI는 누구인가?"
         open={isInMeeting}
-        width={1000}
+        width={1920}
         closable={false}
         footer={[
           // 추후 닫기 버튼을 제거하고 회의 완료 요청을 받으면 action이 수행되도록 수정 필요
