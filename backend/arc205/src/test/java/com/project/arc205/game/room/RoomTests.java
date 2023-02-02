@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
+import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.room.model.entity.Room;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,5 +57,29 @@ public class RoomTests {
         room.enter(player);
 
         assertThat(room.enter(player), is(false));
+    }
+
+    @Test
+    @DisplayName("게임 설정 변경")
+    void gameSettingUpdate() {
+        Room room = Room.create("update setting", getPlayer("master"));
+        GameSetting incoming = new GameSetting();
+        GameSetting gameSetting = room.getGameSetting();
+        incoming.setMaxPlayers(10000000);
+        gameSetting.update(incoming);
+
+        assertThat(room.getGameSetting().getMaxPlayers(), is(equalTo(incoming.getMaxPlayers())));
+    }
+
+    @Test
+    @DisplayName("게임 설정 변경 시 값이 null일 경우 무시된다")
+    void gameSettingUpdateIgnoredWhenValueIsNull() {
+        Room room = Room.create("update setting", getPlayer("master"));
+        GameSetting incoming = new GameSetting();
+        incoming.setMaxPlayers(null);
+        GameSetting gameSetting = room.getGameSetting();
+        int originalMaxPlayers = gameSetting.getMaxPlayers();
+        gameSetting.update(incoming);
+        assertThat(room.getGameSetting().getMaxPlayers(), is(equalTo(originalMaxPlayers)));
     }
 }

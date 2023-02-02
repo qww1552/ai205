@@ -1,6 +1,7 @@
 package com.project.arc205.game.room.model.entity;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
+import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class Room {
     private String title;
     private Player master;
     private Map<String, Player> players;
+    private GameSetting gameSetting;
 
     public static Room create(String title, Player master) {
         Room room = new Room();
@@ -32,6 +34,7 @@ public class Room {
         players.put(master.getSessionId(), master);
         room.players = players;
         master.setRoom(room);
+        room.gameSetting = new GameSetting();
         return room;
     }
 
