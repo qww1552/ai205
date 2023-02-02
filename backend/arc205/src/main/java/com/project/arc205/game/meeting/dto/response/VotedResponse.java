@@ -8,21 +8,24 @@ import lombok.Getter;
 
 @Getter
 public class VotedResponse {
-    @Getter
-    @AllArgsConstructor(staticName = "of")
-    public static class Player {
-        String id;
-    }
 
     private final Player player;
     private final int remainingVoteTicket;
-
     private VotedResponse(String playerId, int remainingVoteTicket) {
         this.player = Player.of(playerId);
         this.remainingVoteTicket = remainingVoteTicket;
     }
 
-    static public BaseResponse<VotedResponse> of(String playerId, int remainingVoteTicket) {
-        return BaseResponse.of(Type.MEETING, MeetingOperation.VOTE, new VotedResponse(playerId, remainingVoteTicket));
+    static public BaseResponse<VotedResponse> newBaseResponse(String playerId,
+            int remainingVoteTicket) {
+        return BaseResponse.of(Type.MEETING, MeetingOperation.VOTE,
+                new VotedResponse(playerId, remainingVoteTicket));
+    }
+
+    @Getter
+    @AllArgsConstructor(staticName = "of")
+    private static class Player {
+
+        String id;
     }
 }

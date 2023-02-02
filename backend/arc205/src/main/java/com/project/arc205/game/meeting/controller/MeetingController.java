@@ -2,7 +2,7 @@ package com.project.arc205.game.meeting.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.game.meeting.dto.request.VoteRequest;
-import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
+import com.project.arc205.game.meeting.dto.response.MeetingStartResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.service.MeetingService;
 import com.sun.istack.NotNull;
@@ -23,15 +23,18 @@ public class MeetingController {
 
     @MessageMapping("/start")
     @SendTo("/sub/room/{room-id}")
-    public BaseResponse<StartMeetingResponse> startMeeting(@DestinationVariable("room-id") String roomId) {
+    public BaseResponse<MeetingStartResponse> startMeeting(
+            @DestinationVariable("room-id") String roomId) {
         log.info("/room/{}/meeting/start", roomId);
-        return meetingService.startMeeting(roomId);
+        return meetingService.meetingStart(roomId);
     }
 
     @MessageMapping("/vote")
     @SendTo("/sub/room/{room-id}")
-    public BaseResponse<VotedResponse> voting(@DestinationVariable("room-id") String roomId, @NotNull VoteRequest voteRequest) {
-        log.info("/room/{}/meeting/vote: {} voted for {}", roomId, voteRequest.getFrom(), voteRequest.getTo());
+    public BaseResponse<VotedResponse> voting(@DestinationVariable("room-id") String roomId,
+            @NotNull VoteRequest voteRequest) {
+        log.info("/room/{}/meeting/vote: {} voted for {}", roomId, voteRequest.getFrom(),
+                voteRequest.getTo());
         return meetingService.vote(roomId, voteRequest);
     }
 
