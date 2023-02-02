@@ -12,15 +12,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     @MessageExceptionHandler(CustomException.class)
-    @SendToUser("/queue/errors")
+    @SendToUser("/queue")
     public ExceptionResponse handleException(CustomException e) {
 //        log.info("exception: {}", e.getMessage());
         return ExceptionResponse.of(e);
     }
 
     @MessageExceptionHandler(MethodArgumentNotValidException.class)
-    @SendToUser("/queue/errors")
+    @SendToUser("/queue")
     public ExceptionResponse handleArgumentNotValidException(Exception e) {
         return ExceptionResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
