@@ -1,9 +1,8 @@
 package com.project.arc205.game.room.model.entity;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
-import com.project.arc205.game.gamedata.model.entity.GameSetting;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,24 +21,25 @@ public class Room {
     private UUID id;
     private String title;
     private Player master;
-    private List<Player> players = new ArrayList<>();
-    private GameSetting gameSetting = new GameSetting();
+    private Map<String, Player> players;
 
     public static Room create(String title, Player master) {
         Room room = new Room();
         room.id = UUID.randomUUID();
         room.title = title;
         room.master = master;
-        room.players.add(master);
+        Map<String, Player> players = new HashMap<>();
+        players.put(master.getSessionId(), master);
+        room.players = players;
         master.setRoom(room);
-
         return room;
     }
 
     public boolean enter(Player player) {
-        if (this.players.contains(player))
+        if (this.players.containsValue(player)) {
             return false;
-        this.players.add(player);
+        }
+        this.players.put(player.getSessionId(), player);
         player.setRoom(this); // 양방향 매핑이므로 player에도 room을 추가함
         return true;
     }

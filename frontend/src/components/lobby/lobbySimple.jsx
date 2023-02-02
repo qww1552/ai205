@@ -27,8 +27,12 @@ const LobbySimple = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       roomRequest(roomId).then(res =>  {
-        const data = res.data.data
-        setPlayers(data.players);
+
+        const players = res.data.data.players.filter(v => v.id != 'master')
+        setPlayers(players);
+        for(const player of players) {
+          action('others/setOtherPlayer', {player, location : {x : 0, y: 0}})
+        }
       });
     }, 2000)
     return () => clearInterval(timer);

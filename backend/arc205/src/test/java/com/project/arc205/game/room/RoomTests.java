@@ -22,7 +22,7 @@ public class RoomTests {
         Player master = getPlayer("master");
         Room room = Room.create("test", master);
 
-        assertThat(room.getPlayers().contains(master), is(true));
+        assertThat(room.getPlayers().containsValue(master), is(true));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class RoomTests {
 
         room.enter(player);
 
-        assertThat(room.getPlayers().contains(player), is(true));
+        assertThat(room.getPlayers().containsValue(player), is(true));
         assertThat(player.getRoom(), is(equalTo(room)));
     }
 

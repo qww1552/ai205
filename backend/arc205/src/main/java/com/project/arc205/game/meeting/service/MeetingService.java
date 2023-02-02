@@ -1,49 +1,42 @@
 package com.project.arc205.game.meeting.service;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.game.gamedata.model.entity.DummyGame;
 import com.project.arc205.game.gamedata.model.entity.GameData;
+import com.project.arc205.game.gamedata.repository.GameRepository;
 import com.project.arc205.game.meeting.dto.request.VoteRequest;
-import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
+import com.project.arc205.game.meeting.dto.response.MeetingStartResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import com.project.arc205.game.meeting.event.VotingEndEvent;
 import com.project.arc205.game.meeting.exception.AlreadyInMeetingException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class MeetingService {
+
     private final ApplicationEventPublisher publisher;
-    private final DummyGame curGame;  //TODO: change game repo
+    private final GameRepository gameRepository;
 
-    public BaseResponse<StartMeetingResponse> startMeeting(String roomId) {
-        if (!curGame.getGameData().meetingStart())
+    public BaseResponse<MeetingStartResponse> meetingStart(String roomId) {
+        GameData curGame = gameRepository.findById(UUID.fromString(roomId));
+        if (!curGame.meetingStart()) {
             throw new AlreadyInMeetingException();
-
+        }
         publisher.publishEvent(new MeetingEvent(roomId));
-
-        //TODO: Get curGame from GameData
-        List<StartMeetingResponse.Player> players = new ArrayList<>();
-        curGame.getGameData().getGameCharacters().forEach((id, gameCharacter) ->
-            players.add(StartMeetingResponse.Player.of(id, gameCharacter.getIsAlive()))
-        );
-
-        return StartMeetingResponse.of(players);
+        return MeetingStartResponse.newBaseResponse(curGame.getGameCharacters());
     }
 
     public BaseResponse<VotedResponse> vote(String roomId, VoteRequest voteRequest) {
-        GameData gameData = curGame.getGameData();          //TODO
+        GameData gameData = gameRepository.findById(UUID.fromString(roomId));
         int remainingVoteTicket = gameData.vote(voteRequest.getFrom(), voteRequest.getTo());
         if (remainingVoteTicket == 0) {
             publisher.publishEvent(new VotingEndEvent(roomId));
         }
-        return VotedResponse.of(voteRequest.getFrom(), remainingVoteTicket);
+        return VotedResponse.newBaseResponse(voteRequest.getFrom(), remainingVoteTicket);
     }
 
 }

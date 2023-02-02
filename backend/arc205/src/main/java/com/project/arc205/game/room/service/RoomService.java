@@ -5,13 +5,12 @@ import com.project.arc205.game.room.dto.response.RoomListItemResponse;
 import com.project.arc205.game.room.dto.response.RoomResponse;
 import com.project.arc205.game.room.model.entity.Room;
 import com.project.arc205.game.room.repository.RoomRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class RoomService {
         UUID uuidRoomId = UUID.fromString(id);
         Room room = roomRepository.findById(uuidRoomId);
 
-        List<RoomResponse.Player> playerResponseList = room.getPlayers().stream().map(
+        List<RoomResponse.Player> playerResponseList = room.getPlayers().values().stream().map(
                 player -> RoomResponse.Player.of(player.getId())
         ).collect(Collectors.toList());
 
