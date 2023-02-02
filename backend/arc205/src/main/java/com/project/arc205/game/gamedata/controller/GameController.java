@@ -37,7 +37,7 @@ public class GameController {
 
         GameSetting response = gameService.updateSetting(UUID.fromString(roomId), gameSetting);
 
-        return BaseResponse.of(Type.GAME, GameOperation.START, response);
+        return BaseResponse.of(Type.GAME, GameOperation.SETTING_UPDATE, response);
     }
 
 }
