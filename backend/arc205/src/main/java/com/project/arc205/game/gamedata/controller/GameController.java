@@ -4,6 +4,7 @@ import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.GameOperation;
 import com.project.arc205.game.gamedata.dto.response.GameStartResponse;
+import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.gamedata.service.GameService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,16 @@ public class GameController {
 
         return BaseResponse.of(Type.GAME, GameOperation.START, response);
     }
-    
+
+    @MessageMapping("/room/{room-id}/game/setting/update")
+    @SendTo("/sub/room/{room-id}")
+    public BaseResponse<GameSetting> updateSetting(@DestinationVariable("room-id") String roomId,
+            GameSetting gameSetting) {
+
+        GameSetting response = gameService.updateSetting(UUID.fromString(roomId), gameSetting);
+
+        return BaseResponse.of(Type.GAME, GameOperation.START, response);
+    }
+
 }
 
