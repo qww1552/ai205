@@ -24,8 +24,6 @@ function createEventChannel(client, roomId, player) {
 
 function* startStomp(action) {
 
-
-  console.log(action)
   const stompClient = yield call(createClient)
   stompClient.debug = null;
 
@@ -33,7 +31,8 @@ function* startStomp(action) {
 
   const channel = yield call(createEventChannel, stompClient, action.payload.roomId, stateMe.player);
 
-  yield fork(sendChannel, stompClient, action.payload);
+  // 채널 전송하는 함수들 묶음
+  yield fork(sendChannel, stompClient, action.payload.roomId);
 
   while (true) {
 
@@ -108,28 +107,30 @@ const channelHandling = {
 /////////////////////////////////
 /////////////////// 클라이언트 -> 서버 소켓 전송
 function* sendChannel(client, roomId) {
+
   yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client, roomId);
   yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
   yield takeEvery("VOTE_REQUEST", vote, client, roomId)
 }
 
 // 이동 정보 전송 요청
-function* locationSend(client, action) {
+function* locationSend(client, roomId, action) {
+
   const stateMe = yield select(state => state.me);
-  yield put({type : "me/changeLocation", payload: action.payload})
-  yield call(send, client, "move", action.roomId, stateMe)
+  yield put({type : "me/changeLocation", payload : action.payload})
+  yield call(send, client, "move", roomId, stateMe)
 }
 
 // 미팅 시작 요청
-function* startMeeting(client, action) {
-  yield call(send, client, "meeting/start", action.roomId)
+function* startMeeting(client, roomId, action) {
+  yield call(send, client, "meeting/start", roomId)
 }
 
 // 투표 요청
-function* vote(client, action) {
+function* vote(client, roomId, action) {
   const stateMe = yield select(state => state.me);
   yield put({type: "me/setPlayer", payload: {...stateMe.player, isVoted: true}})
-  yield call(send, client, "meeting/vote", action.roomId, {from : stateMe.player.id, to : action.payload})
+  yield call(send, client, "meeting/vote", roomId, {from : stateMe.player.id, to : action.payload})
 }
 
 function* mySaga() {
