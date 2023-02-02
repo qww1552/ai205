@@ -8,6 +8,7 @@ import com.project.arc205.game.meeting.dto.response.StartMeetingResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
 import com.project.arc205.game.meeting.event.VotingEndEvent;
+import com.project.arc205.game.meeting.exception.AlreadyInMeetingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class MeetingService {
     private final DummyGame curGame;  //TODO: change game repo
 
     public BaseResponse<StartMeetingResponse> startMeeting(String roomId) {
+        if (!curGame.getGameData().meetingStart())
+            throw new AlreadyInMeetingException();
+
         publisher.publishEvent(new MeetingEvent(roomId));
 
         //TODO: Get curGame from GameData

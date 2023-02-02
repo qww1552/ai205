@@ -1,36 +1,29 @@
-import React, { Component, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import { Avatar, List, Input, Divider } from "antd";
 import { selectMyUserName, selectMainUser } from "app/videoInfo";
-// import IconButton from '@material-ui/core/IconButton';
-// import Fab from '@material-ui/core/Fab';
-// import HighlightOff from '@material-ui/icons/HighlightOff';
-// import Send from '@material-ui/icons/Send';
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import "./ChatComponent.css";
-// import { Tooltip } from "@material-ui/core";
-
-export default function ChatComponent(props) {
+const App = () => {
   const mainuser = useSelector(selectMainUser);
   const myUserName = useSelector(selectMyUserName);
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
+  const chatScroll = useRef();
 
-  const chatScroll = React.createRef();
+  useEffect(() => {}, []);
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      try {
+        chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
+      } catch (err) {}
+    }, 20);
+  };
 
   useEffect(() => {
     mainuser.getStreamManager().stream.session.on("signal:chat", (event) => {
       const data = JSON.parse(event.data);
-      const document = window.document;
-
-      setTimeout(() => {
-        const userImg = document.getElementById("userImg-" + (messageList.length - 1));
-        const video = document.getElementById("video-" + data.streamId);
-        const avatar = userImg.getContext("2d");
-        avatar.drawImage(video, 200, 120, 285, 285, 0, 0, 60, 60);
-
-        this.props.messageReceived();
-      }, 50);
-
       setMessageList((messageList) => [
         ...messageList,
         {
@@ -73,74 +66,51 @@ export default function ChatComponent(props) {
     setMessage("");
   };
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      try {
-        chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
-      } catch (err) {}
-    }, 20);
-  };
-
-  const close = () => {
-    props.close(undefined);
-  };
-
-  const styleChat = { display: props.chatDisplay };
-
   return (
-    <div id="chatContainer">
-      <div id="chatComponent" style={styleChat}>
-        <div id="chatToolbar">
-          <span>{mainuser.streamManager.stream.session.sessionId} - CHAT</span>
-          {/* <IconButton id="closeButton" onClick={this.close}>
-              <HighlightOff color="secondary" />
-            </IconButton> */}
-        </div>
-        <div className="message-wrap" ref={chatScroll}>
-          {messageList.map((data, i) => (
-            <div
-              key={i}
-              id="remoteUsers"
-              className={
-                "message" +
-                (data.connectionId !==
-                mainuser.streamManager.stream.session.connection.connectionId
-                  ? " left"
-                  : " right")
-              }
-            >
-              <canvas id={"userImg-" + i} width="60" height="60" className="user-img" />
-              <div className="msg-detail">
-                <div className="msg-info">
-                  <p> {data.nickname}</p>
-                </div>
-                <div className="msg-content">
-                  <span className="triangle" />
-                  <p className="text">{data.message}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div id="messageInput">
-          <input
-            placeholder="Send a messge"
-            id="chatInput"
-            value={message}
-            onChange={handleChange}
-            onKeyPress={handlePressKey}
-          />
-          {/* <Tooltip title="Send message">
-               <Fab size="small" id="sendButton" onClick={this.sendMessage}>
-                <Send />
-              </Fab> 
-            </Tooltip> */}
-          <button id="sendButton" onClick={sendMessage}>
-            메세지 전송
-          </button>
-        </div>
+    <>
+      <div
+        ref={chatScroll}
+        id="scrollableDiv"
+        style={{
+          height: 400,
+          overflow: "auto",
+          padding: "0 16px",
+          border: "1px solid rgba(140, 140, 140, 0.35)",
+        }}
+      >
+        <InfiniteScroll
+          dataLength={messageList.length}
+          // next={loadMoreData}
+          hasMore={messageList.length < 50}
+          // loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+          scrollableTarget="scrollableDiv"
+        >
+          <List>
+            {messageList.map((item, i) => (
+              <List.Item key={item.nickname}>
+                <List.Item.Meta
+                  avatar={<Avatar src={"https://randomuser.me/api/portraits/men/12.jpg"} />}
+                  title={item.nickname}
+                  // description={item.email}
+                />
+                <div>{item.message}</div>
+              </List.Item>
+            ))}
+          </List>
+        </InfiniteScroll>
       </div>
-    </div>
+      <div id="messageInput">
+        <Input
+          placeholder="메세지 보내기"
+          id="chatInput"
+          value={message}
+          onChange={handleChange}
+          onKeyPress={handlePressKey}
+        />
+      </div>
+    </>
   );
-}
+};
+
+export default App;
