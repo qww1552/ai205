@@ -135,16 +135,16 @@ const Game = () => {
             //     ref.current.children[i].style.borderColor = "#1773EA";
             //   }
             // }
-            console.log(
-              "User " + event.connection.connectionId + " start speaking"
-            );
+            // console.log(
+            //   "User " + event.connection.connectionId + " start speaking"
+            // );
           });
   
         mySession.on("publisherStopSpeaking", (event) => {
             dispatch(setIsSpeakingFalse(event.connection.connectionId))
-        console.log(
-            "User " + event.connection.connectionId + " stop speaking"
-        );
+        // console.log(
+        //     "User " + event.connection.connectionId + " stop speaking"
+        // );
         // for (let i = 0; i < ref.current.children.length; i++) {
         //     if (
         //     JSON.parse(event.connection.data).clientData ===

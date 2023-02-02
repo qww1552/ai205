@@ -80,7 +80,7 @@ export const videoInfoSlice = createSlice({
       for (let i = 0; i < state.videoUsers.length; i++) {
         
         if (state.videoUsers[i].connectionId === action.payload) {
-          console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말하는중")
+          // console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말하는중")
           state.videoUsers[i] = {...state.videoUsers[i], isSpeaking : true}
         }
       }
@@ -88,7 +88,7 @@ export const videoInfoSlice = createSlice({
     setIsSpeakingFalse(state, action) {
       for (let i = 0; i < state.videoUsers.length; i++) {
         if (state.videoUsers[i].connectionId === action.payload) {
-          console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말을 멈춤")
+          // console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말을 멈춤")
           state.videoUsers[i] = {...state.videoUsers[i], isSpeaking : false}
         }
       }
