@@ -1,7 +1,11 @@
 package com.project.arc205.game.gamedata.model.entity;
 
 import com.project.arc205.common.Constant;
+import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
+import com.project.arc205.game.gamecharacter.model.entity.Player;
+import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.GameCharacterAssignStrategy;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
@@ -12,7 +16,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @AllArgsConstructor
 public class GameData {
@@ -45,7 +51,21 @@ public class GameData {
     }
 
     public static GameData of(Room room) {
-        GameData gameData = null;   //TODO: Create constructor
+        GameSetting gameSetting = room.getGameSetting();
+        Map<String, Player> players = room.getPlayers();
+
+        GameCharacterAssignStrategy strategy = new BasicGameCharacterAssignStrategy(players,
+                new Location(0.0, 0.0));
+
+        Map<String, GameCharacter> characters = strategy.getCharacters();
+
+        GameData gameData = new GameData(
+                gameSetting.getNumberOfMissions(),
+                gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias(),
+                gameSetting.getMaxPlayers(), gameSetting.getTotalConferenceTime(),
+                gameSetting.getVoteProgressTime(), characters
+        );   //TODO: 수정 필요
+
         return gameData;
     }
 
