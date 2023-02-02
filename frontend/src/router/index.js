@@ -10,34 +10,32 @@ import { createBrowserRouter, Link, Outlet } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
-    children: [
-      {
-        path: "rooms",
-        element: <RoomList />,
-      },
-      {
-        path: "rooms/:roomId/lobby",
-        element: <LobbySimple/>,
-        id: "lobby",
-        loader: async ({params}) => {
-          return params.roomId;
-        }
-      },
-      {
-        path: "rooms/:roomId/regist",
-        id: "regist",
-        element: <RegistSimple/>,
-        loader: async ({params}) => {
-          return params.roomId;
-          // return roomRequest(params.roomId);
-        },
-      },
-      {
-        path: "rooms/:roomId/game",
-        element: <Game/>,
-      },
-    ]
+    element: <MainSimple/>,
+  },
+  {
+    path: "rooms",
+    element: <RoomList />,
+  },
+  {
+    path: "rooms/:roomId/lobby",
+    element: <LobbySimple/>,
+    id: "lobby",
+    loader: async ({params}) => {
+      return params.roomId;
+    }
+  },
+  {
+    path: "rooms/:roomId/regist",
+    id: "regist",
+    element: <RegistSimple/>,
+    loader: async ({params}) => {
+      return params.roomId;
+      // return roomRequest(params.roomId);
+    },
+  },
+  {
+    path: "rooms/:roomId/game",
+    element: <Game/>,
   },
 ]);
 
