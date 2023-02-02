@@ -13,7 +13,6 @@ import {
 } from '@ant-design/icons';
 import "./style.css"
 
-
 import {
   selectMainUser,
   setMyUserName,
@@ -71,7 +70,6 @@ const WebchatMeeting = () => {
 
   return (
     <div>
-
       <Row gutter={[8, 8]}>
 
       <Col span = {8}>
