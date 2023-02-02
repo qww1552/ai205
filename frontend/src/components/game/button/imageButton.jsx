@@ -28,7 +28,9 @@ const ImageButton = () => {
       <button
         className={"imgBtnNoHover floatingComponent " + (isAdjacentMeetingBtn ? "imgBtnReady" : "")}
         id="actBtn"
-        onClick={isAdjacentMeetingBtn ? () => action('gameInfo/setInMeeting', true) : undefined}
+        onClick={isAdjacentMeetingBtn ? () => {action('START_MEETING_REQUEST')
+      console.log('전송')} : undefined}
+        
       >
         <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/>
       </button>

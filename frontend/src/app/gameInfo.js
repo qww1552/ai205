@@ -21,13 +21,16 @@ export const gameInfoSlice = createSlice({
       state.isAdjacentMeetingBtn = action.payload;
     },
     setInMeeting: (state, action) => {
+      console.log('미팅상태 변경')
       state.isInMeeting = action.payload;
     },
     setInVote: (state, action) => {
       state.isInVote = action.payload;
     },
     setInVoteResult: (state, action) => {
+      console.log('투표결과창스테이트 변경')
       state.isInVoteResult = action.payload;
+      console.log(state.isInVoteResult)
     },
     setChatOpen: (state, action) => {
       state.isChatOpen = action.payload
