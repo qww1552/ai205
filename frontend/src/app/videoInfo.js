@@ -6,7 +6,7 @@ const initialState = {
   videoOpen: false,
   chatOpen: false,
   videoUsers: [],
-  mainUser: {},
+  mainUser: undefined, // 유저 정보가 아직 들어오지 않았는지를 판별하기 위해 수정함
 };
 
 export const videoInfoSlice = createSlice({

@@ -17,8 +17,10 @@
   .imgBtn, .imgBtnNoHover {
     background-color: silver;
     right: 10px;
-    padding: 4px 0px 0px;
+    padding: 4px 0px 4px;
     opacity: 0.3;
+    font-size: 0;
+    line-height: 0;
   }
 
   .imgBtn:active, .imgBtnReady:active{
@@ -33,15 +35,15 @@
     top: 10px;
   }
 
-  /* #missionBtn {
+  #chatBtn {
     top: 130px;
-  } */
-
-  #actBtn {
-    top: 250px;
   }
 
   #killBtn {
+    top: 250px;
+  }
+
+  #actBtn {
     top: 370px;
   }
 
