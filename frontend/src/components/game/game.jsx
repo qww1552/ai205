@@ -25,12 +25,15 @@ import {
     selectMyUserName,
     selectMainUser
   } from "app/videoInfo";
+import { selectMe } from 'app/me';
 
   const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
 const Game = () => {
 
     const ref = useRef();
     const dispatch = useDispatch();
+    const stateMe = useSelector(selectMe);
+
 
 
     const mySessionId = useSelector(selectMySessionId);
@@ -199,6 +202,11 @@ const Game = () => {
         );
         return response.data; // The token
     };
+
+    useEffect(() => {
+        // action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
+        joinSession(stateMe.player.id);
+    }, [])
 
 
     useEffect(() => {
