@@ -16,7 +16,8 @@ import {
     setMySessionId,
     setMyUserName,
     addMainUser,
-    deleteVideoUsers, addVideoUsers,removeMainUser
+    deleteVideoUsers, addVideoUsers,removeMainUser,
+    setIsSpeakingFalse,setIsSpeakingTrue,
   } from "app/videoInfo";
   
   import {
@@ -106,6 +107,8 @@ const Game = () => {
             newUser.setType('remote');
             const nickname = event.stream.connection.data.split('%')[0];
             newUser.setNickname(JSON.parse(nickname).clientData);
+            // 발언자 표시를 나타내는 변수를 추가한다
+            newUser.isSpeaking=false
             dispatch(addVideoUsers(newUser));
              
         });
@@ -119,6 +122,40 @@ const Game = () => {
         mySession.on("exception", (exception) => {
             console.warn(exception);
         });
+
+        // 여기서부터 발언자표시 시험
+        mySession.on("publisherStartSpeaking", (event) => {
+            dispatch(setIsSpeakingTrue(event.connection.connectionId))
+            // for (let i = 0; i < ref.current.children.length; i++) {
+            //   if (
+            //     JSON.parse(event.connection.data).clientData ===
+            //     ref.current.children[i].innerText
+            //   ) {
+            //     ref.current.children[i].style.borderStyle = "solid";
+            //     ref.current.children[i].style.borderColor = "#1773EA";
+            //   }
+            // }
+            console.log(
+              "User " + event.connection.connectionId + " start speaking"
+            );
+          });
+  
+        mySession.on("publisherStopSpeaking", (event) => {
+            dispatch(setIsSpeakingFalse(event.connection.connectionId))
+        console.log(
+            "User " + event.connection.connectionId + " stop speaking"
+        );
+        // for (let i = 0; i < ref.current.children.length; i++) {
+        //     if (
+        //     JSON.parse(event.connection.data).clientData ===
+        //     ref.current.children[i].innerText
+        //     ) {
+        //     ref.current.children[i].style.borderStyle = "none";
+        //     }
+        // }
+        });
+        // 여기까지
+  
     };
 
     const leaveSession = () => {

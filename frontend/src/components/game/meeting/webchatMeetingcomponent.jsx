@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 
 import UserVideoComponent from "components/webchat/UserVideoComponent";
+import "./style.css"
 
 const WebchatMeetingcomponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
@@ -33,6 +34,8 @@ const WebchatMeetingcomponent = (props) => {
       className="stream-container" */}
       {/* // onClick={() => handleSound(mainUser)} */}
     {/* > */}
+    {/* 참가한 유저의 정보를 출력하기 위한 임시버튼 */}
+      {/* <button onClick={()=>{console.log(props.user)}}>clickthis</button> */}
       <UserVideoComponent user={props.user} />
       {/* </div> */}
     </Card>

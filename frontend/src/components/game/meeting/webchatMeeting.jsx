@@ -85,7 +85,7 @@ const WebchatMeeting = () => {
       {videoUsers.map((sub) => (
         // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
         // <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
-        <Col className="unvoted" span={6}>
+        <Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
         {/* <Card
           title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
         <WebchatMeetingcomponent user={sub}/>

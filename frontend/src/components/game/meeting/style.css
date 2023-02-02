@@ -115,3 +115,12 @@ figure.snip1432.hover figcaption h3:nth-of-type(2) {
   opacity: 0.5;
   text-align: center;
 }
+/* 말하고있는 클래스와 말하고 있지 않은 클래스 */
+.isSpeaking {
+  border-style: solid;
+  border-color: red green blue maroon;
+}
+.isNotSpeking {
+  border-style: solid;
+  border-color: black;
+}
