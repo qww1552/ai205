@@ -5,15 +5,18 @@ import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
+import com.project.arc205.game.room.model.entity.Room;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
 public class GameData {
+
     private int totalMissionCount;      //전체 미션 수
     private int completedMissionCount;  //현재 완료된 미션 수
     private int aliveCitizenCount;      //시민 생존자 수
@@ -25,10 +28,11 @@ public class GameData {
 
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
+    //TODO: change private
     public GameData(int totalMissionCount,
-                    int aliveCitizenCount, int aliveMafiaCount,
-                    int meetingLimitTime, int votingLimitTime,
-                    Map<String, GameCharacter> gameCharacters) {
+            int aliveCitizenCount, int aliveMafiaCount,
+            int meetingLimitTime, int votingLimitTime,
+            Map<String, GameCharacter> gameCharacters) {
         this.totalMissionCount = totalMissionCount;
         this.completedMissionCount = 0;
         this.aliveCitizenCount = aliveCitizenCount;
@@ -40,25 +44,39 @@ public class GameData {
         this.inMeeting = false;
     }
 
+    public static GameData of(Room room) {
+        GameData gameData = null;   //TODO: Create constructor
+        return gameData;
+    }
+
     public boolean meetingStart() {
-        if (inMeeting) return false;
+        if (inMeeting) {
+            return false;
+        }
         return inMeeting = true;
     }
+
     public void meetingEnd() {
         inMeeting = false;
     }
+
     public List<String> getSurvivors() {
-        return gameCharacters.entrySet().stream().filter(e -> e.getValue().getIsAlive()).map(Map.Entry::getKey).collect(Collectors.toList());
+        return gameCharacters.entrySet().stream().filter(e -> e.getValue().getIsAlive())
+                .map(Map.Entry::getKey).collect(Collectors.toList());
     }
+
     public int getSurvivorCount() {
         return aliveCitizenCount + aliveMafiaCount;
     }
+
     public void votingStart() {
         voted = new HashMap<>(getSurvivorCount());
     }
+
     public void votingEnd() {
         voted = null;
     }
+
     public int vote(String from, String to) {
         if (voted == null) {
             throw new NotVotingPeriodException();
