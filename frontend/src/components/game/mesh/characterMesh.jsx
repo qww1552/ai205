@@ -7,7 +7,7 @@ const CharacterMesh = ({ initPosition, initColor, id }) => {
     return (
         <>
             <Suspense fallback={null}>
-                <Text fontSize={0.5} font='./SeoulHangangM.woff' position={new Vector3(0, 0.2, 0)} color="black" anchorX="center" anchorY="top-baseline">
+                <Text fontSize={0.5} font='/SeoulHangangM.woff' position={new Vector3(0, 0.2, 0)} color="black" anchorX="center" anchorY="top-baseline">
                     {id}
                 </Text>
             </Suspense>

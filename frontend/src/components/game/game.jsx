@@ -16,7 +16,8 @@ import {
     setMySessionId,
     setMyUserName,
     addMainUser,
-    deleteVideoUsers, addVideoUsers,removeMainUser
+    deleteVideoUsers, addVideoUsers,removeMainUser,
+    setIsSpeakingFalse,setIsSpeakingTrue,
   } from "app/videoInfo";
   
   import {
@@ -29,7 +30,6 @@ import {
 const Game = () => {
 
     const ref = useRef();
-    const [check, setCheck] = useState(false)
     const dispatch = useDispatch();
 
 
@@ -40,8 +40,8 @@ const Game = () => {
     let OV;
 
     const onClickbtn = () => {
-        setCheck(true)
         action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
+        joinSession(ref.current.value);
     }
 
      //비디오
@@ -50,7 +50,7 @@ const Game = () => {
     };
 
 
-    const joinSession = () => {
+    const joinSession = (name) => {
         window.addEventListener("beforeunload", onbeforeunload);
     
         OV = new OpenVidu();
@@ -60,7 +60,7 @@ const Game = () => {
 
 
         const localUser = new createUser();
-        localUser.setNickname("Participant" + Math.floor(Math.random() * 100));
+        localUser.setNickname(name);
         getToken().then((token) => {
       
         mySession
@@ -105,6 +105,8 @@ const Game = () => {
             newUser.setType('remote');
             const nickname = event.stream.connection.data.split('%')[0];
             newUser.setNickname(JSON.parse(nickname).clientData);
+            // 발언자 표시를 나타내는 변수를 추가한다
+            newUser.isSpeaking=false
             dispatch(addVideoUsers(newUser));
              
         });
@@ -118,6 +120,40 @@ const Game = () => {
         mySession.on("exception", (exception) => {
             console.warn(exception);
         });
+
+        // 여기서부터 발언자표시 시험
+        mySession.on("publisherStartSpeaking", (event) => {
+            dispatch(setIsSpeakingTrue(event.connection.connectionId))
+            // for (let i = 0; i < ref.current.children.length; i++) {
+            //   if (
+            //     JSON.parse(event.connection.data).clientData ===
+            //     ref.current.children[i].innerText
+            //   ) {
+            //     ref.current.children[i].style.borderStyle = "solid";
+            //     ref.current.children[i].style.borderColor = "#1773EA";
+            //   }
+            // }
+            // console.log(
+            //   "User " + event.connection.connectionId + " start speaking"
+            // );
+          });
+  
+        mySession.on("publisherStopSpeaking", (event) => {
+            dispatch(setIsSpeakingFalse(event.connection.connectionId))
+        // console.log(
+        //     "User " + event.connection.connectionId + " stop speaking"
+        // );
+        // for (let i = 0; i < ref.current.children.length; i++) {
+        //     if (
+        //     JSON.parse(event.connection.data).clientData ===
+        //     ref.current.children[i].innerText
+        //     ) {
+        //     ref.current.children[i].style.borderStyle = "none";
+        //     }
+        // }
+        });
+        // 여기까지
+  
     };
 
     const leaveSession = () => {
@@ -166,7 +202,7 @@ const Game = () => {
 
 
     useEffect(() => {
-        joinSession();
+        
         return () => {
         leaveSession();
         };
@@ -175,7 +211,7 @@ const Game = () => {
 
     return (
         <>
-            {check && <div>
+            <div>
                 <GameCanvas/>
                 <div className="missionComponent floatingComponent">
                     <MissionProgress/>
@@ -183,13 +219,15 @@ const Game = () => {
                 </div>
                 <ImageButton/>
                 <ModalMeeting/>
-            </div>}
-            {!check && <div>
-                {/* 로딩 스피너 필요시 import 후 다음과 같이 사용하면 됩니다. */}
-                <LoadingSpinner/>
-                <input ref={ref} type="text" name="" id="" />
-                <button onClick={onClickbtn}>확인</button>
-            </div>}
+            </div>
+            {
+            // !check && <div>
+            //     {/* 로딩 스피너 필요시 import 후 다음과 같이 사용하면 됩니다. */}
+            //     <LoadingSpinner/>
+            //     <input ref={ref} type="text" name="" id="" />
+            //     <button onClick={onClickbtn}>확인</button>
+            // </div>
+            }
 
         </>
     )

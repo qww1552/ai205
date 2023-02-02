@@ -75,6 +75,25 @@ export const videoInfoSlice = createSlice({
         ];
       }
     },
+    // 발언자 표시를 수정할 함수
+    setIsSpeakingTrue(state, action) {
+      for (let i = 0; i < state.videoUsers.length; i++) {
+        
+        if (state.videoUsers[i].connectionId === action.payload) {
+          // console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말하는중")
+          state.videoUsers[i] = {...state.videoUsers[i], isSpeaking : true}
+        }
+      }
+    },
+    setIsSpeakingFalse(state, action) {
+      for (let i = 0; i < state.videoUsers.length; i++) {
+        if (state.videoUsers[i].connectionId === action.payload) {
+          // console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말을 멈춤")
+          state.videoUsers[i] = {...state.videoUsers[i], isSpeaking : false}
+        }
+      }
+    }
+    // 여기까지
   },
 });
 
@@ -89,6 +108,8 @@ export const {
   removeMainUser,
   mutedSound,
   mutedVideo,
+  setIsSpeakingFalse,
+  setIsSpeakingTrue,
 } = videoInfoSlice.actions;
 
 export const selectMySessionId = (state) => state.videoInfo.mySessionId;
