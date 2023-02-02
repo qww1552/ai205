@@ -2,10 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { selectOhterPlayers } from '../../../app/others';
-import WebchatMeetingcomponent from './webchatMeetingcomponent';
+import WebchatMeetingComponent from './webchatMeetingComponent';
 import { selectMe } from '../../../app/me';
 import { selectGameInfo } from '../../../app/gameInfo';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { action } from "app/store"
 import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import {
@@ -74,7 +73,7 @@ const WebchatMeeting = () => {
 
       <Col span = {8}>
         {/* <Card title={me.id}> */}
-      <WebchatMeetingcomponent user={mainUser} userinfo={me}/>
+      <WebchatMeetingComponent user={mainUser} userinfo={me}/>
       {/* </Card> */}
       </Col>
       <Col span = {16}>
@@ -86,7 +85,7 @@ const WebchatMeeting = () => {
         <Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
         {/* <Card
           title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
-        <WebchatMeetingcomponent user={sub}/>
+        <WebchatMeetingComponent user={sub}/>
         {/* </Card> */}
         </Col>    
       ))}

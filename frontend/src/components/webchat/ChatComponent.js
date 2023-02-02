@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import { Avatar, List, Input, Divider } from "antd";
+import { Avatar, List, Input, Divider, Modal } from "antd";
+import { selectGameInfo } from "app/gameInfo"
 import { selectMyUserName, selectMainUser } from "app/videoInfo";
+import { action } from "app/store"
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const App = () => {
+  const isChatOpen = useSelector(selectGameInfo).isChatOpen
   const mainuser = useSelector(selectMainUser);
   const myUserName = useSelector(selectMyUserName);
   const [messageList, setMessageList] = useState([]);
@@ -67,7 +70,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <Modal title="Chatting Modal" open={isChatOpen} onCancel={() => action('gameInfo/setChatOpen', false)} footer={[]}>
       <div
         ref={chatScroll}
         id="scrollableDiv"
@@ -109,7 +112,7 @@ const App = () => {
           onKeyPress={handlePressKey}
         />
       </div>
-    </>
+    </Modal>
   );
 };
 

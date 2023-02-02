@@ -10,7 +10,7 @@ import {
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 import "./style.css"
 
-const WebchatMeetingcomponent = (props) => {
+const WebchatMeetingComponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   
   return (
@@ -43,4 +43,4 @@ const WebchatMeetingcomponent = (props) => {
   );
 };
 
-export default WebchatMeetingcomponent;
+export default WebchatMeetingComponent;
