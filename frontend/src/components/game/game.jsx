@@ -29,7 +29,6 @@ import {
 const Game = () => {
 
     const ref = useRef();
-    const [check, setCheck] = useState(false)
     const dispatch = useDispatch();
 
 
@@ -40,7 +39,6 @@ const Game = () => {
     let OV;
 
     const onClickbtn = () => {
-        setCheck(true)
         action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
         joinSession(ref.current.value);
     }
@@ -176,7 +174,7 @@ const Game = () => {
 
     return (
         <>
-            {check && <div>
+            <div>
                 <GameCanvas/>
                 <div className="missionComponent floatingComponent">
                     <MissionProgress/>
@@ -184,13 +182,15 @@ const Game = () => {
                 </div>
                 <ImageButton/>
                 <ModalMeeting/>
-            </div>}
-            {!check && <div>
-                {/* 로딩 스피너 필요시 import 후 다음과 같이 사용하면 됩니다. */}
-                <LoadingSpinner/>
-                <input ref={ref} type="text" name="" id="" />
-                <button onClick={onClickbtn}>확인</button>
-            </div>}
+            </div>
+            {
+            // !check && <div>
+            //     {/* 로딩 스피너 필요시 import 후 다음과 같이 사용하면 됩니다. */}
+            //     <LoadingSpinner/>
+            //     <input ref={ref} type="text" name="" id="" />
+            //     <button onClick={onClickbtn}>확인</button>
+            // </div>
+            }
 
         </>
     )
