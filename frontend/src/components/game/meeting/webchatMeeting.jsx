@@ -5,7 +5,6 @@ import { selectOhterPlayers } from '../../../app/others';
 import WebchatMeetingcomponent from './webchatMeetingcomponent';
 import { selectMe } from '../../../app/me';
 import { selectGameInfo } from '../../../app/gameInfo';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { action } from "app/store"
 import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import {
