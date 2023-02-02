@@ -10,6 +10,9 @@ const initialState = {
   isInVote: false,
   // 투표가 끝났는지 체크하는 변수
   isInVoteResult: false,
+
+  // 게임 시작했는지 체크하는 변수
+  isInGame: false,
 }
 
 export const gameInfoSlice = createSlice({
@@ -28,6 +31,9 @@ export const gameInfoSlice = createSlice({
     setInVoteResult: (state, action) => {
       state.isInVoteResult = action.payload;
     },
+    setInGame: (state, action) => {
+      state.isInGame = action.payload;
+    }
   },
 });
 
