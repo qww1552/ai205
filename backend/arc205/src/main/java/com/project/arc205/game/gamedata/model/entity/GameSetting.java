@@ -10,8 +10,8 @@ public class GameSetting {
     private Integer maxPlayers = 6;
     private Integer numberOfMafias = 1;
     private Integer numberOfMissions = 1;
-    private Integer visionRange = 1;
-    private Integer playerSpeed = 1;
+    private Double visionRange = 1.0;
+    private Double playerSpeed = 1.0;
     private Integer totalConferenceTime = 20;
     private Integer voteProgressTime = 10;
 

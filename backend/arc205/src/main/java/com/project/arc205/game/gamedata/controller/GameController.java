@@ -7,6 +7,7 @@ import com.project.arc205.game.gamedata.dto.response.GameStartResponse;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.gamedata.service.GameService;
 import java.util.UUID;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -33,7 +34,7 @@ public class GameController {
     @MessageMapping("/room/{room-id}/game/setting/update")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<GameSetting> updateSetting(@DestinationVariable("room-id") String roomId,
-            GameSetting gameSetting) {
+            @Valid GameSetting gameSetting) {
 
         GameSetting response = gameService.updateSetting(UUID.fromString(roomId), gameSetting);
 

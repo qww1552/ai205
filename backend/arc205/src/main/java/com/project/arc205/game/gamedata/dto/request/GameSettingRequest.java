@@ -4,6 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 @Getter
 @Setter
@@ -18,12 +19,16 @@ public class GameSettingRequest {
     @NotNull
     private Integer numberOfMissions;
     @NotNull
-    private Integer visionRange;
+    @Range(min = 1, max = 5)
+    private Double visionRange;
     @NotNull
-    private Integer playerSpeed;
+    @Range(min = 1, max = 3)
+    private Double playerSpeed;
     @NotNull
+    @Range(min = 0, max = 120)
     private Integer totalConferenceTime;
     @NotNull
+    @Range(min = 0, max = 300)
     private Integer voteProgressTime;
 
 }
