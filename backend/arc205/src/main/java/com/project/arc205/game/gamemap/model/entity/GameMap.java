@@ -17,10 +17,12 @@ import lombok.Setter;
 @Table(name = "gamemap")
 public class GameMap extends BaseEntity {
 
+    @Column(unique = true, nullable = false)
+    private String title;
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "x", column = @Column(name = "start_location_x")),
-            @AttributeOverride(name = "y", column = @Column(name = "start_location_y"))
+            @AttributeOverride(name = "x", column = @Column(name = "start_location_x", nullable = false)),
+            @AttributeOverride(name = "y", column = @Column(name = "start_location_y", nullable = false))
     })
     private Location startLocation;
 }
