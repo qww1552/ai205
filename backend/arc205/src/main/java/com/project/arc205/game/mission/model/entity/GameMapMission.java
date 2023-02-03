@@ -1,11 +1,11 @@
 package com.project.arc205.game.mission.model.entity;
 
 import com.project.arc205.common.model.Location;
+import com.project.arc205.common.model.entity.BaseEntity;
 import com.project.arc205.game.gamemap.model.entity.GameMap;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,19 +17,17 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table(name = "gamemap_mission")
-@IdClass(GameMapMissionId.class)
-public class GameMapMission {
+@Table(name = "gamemap_mission", indexes = @Index(name = "idx_gamemap_id", columnList = "gamemap_id"))
+public class GameMapMission extends BaseEntity {
 
-    @Id
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "gamemap_id", nullable = false)
+    private GameMap gamemap;
+
+    @ManyToOne
+    @JoinColumn(name = "mission_id", nullable = false)
     private Mission mission;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private GameMap gamemap;
 
     @Embedded
     private Location location;
