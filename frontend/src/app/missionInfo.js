@@ -25,7 +25,7 @@ export const missionInfoSlice = createSlice({
 
     setMissionById: (state, action) => {
         const idx = state.myMissionList.findIndex(v => v.id === action.payload.id)
-        state.myMissionList[idx] = {...state.myMissionList[idx], solved : action.payload.value}
+        state.myMissionList[idx] = {...state.myMissionList[idx], solved : action.payload.solved}
     }
     
   },
