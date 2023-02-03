@@ -3,9 +3,8 @@ package com.project.arc205.game.gamecharacter.model.entity;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.common.model.Role;
 import com.project.arc205.game.mission.ActiveMission;
-import lombok.Getter;
-
 import java.util.Map;
+import lombok.Getter;
 
 @Getter
 public abstract class GameCharacter {
@@ -16,9 +15,9 @@ public abstract class GameCharacter {
 
     protected Map<String, ActiveMission> missions;
 
-    protected GameCharacter(Location location, Map<String, ActiveMission> missions) {
+    protected GameCharacter(Map<String, ActiveMission> missions) {
         this.isAlive = true;
-        this.location = location;
+        this.location = new Location(0.0, 0.0);
         this.missions = missions;
     }
 
