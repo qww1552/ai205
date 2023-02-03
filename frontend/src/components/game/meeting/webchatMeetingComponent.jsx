@@ -10,18 +10,20 @@ import {
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 import "./style.css"
 
-const WebchatMeetingcomponent = (props) => {
+const WebchatMeetingComponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   
   return (
     // props.userinfo.key 로 가져온다
-    <Card title={props.user.nickname} size="small"
-    extra={[
-      <CheckSquareTwoTone twoToneColor='LimeGreen' style={{ fontSize: '20px'}}/>," ",
-      <CustomerServiceTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>," ",
-      <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>, " ",
-      <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px'}}/>
-  ]}> 
+    <Card key={props.user.nickname} title={props.user.nickname} size="small"
+    // Todo: key값을 안줘서 문제가 발생했음 나중에 고칠것
+  //   extra={[
+  //     <CheckSquareTwoTone twoToneColor='LimeGreen' style={{ fontSize: '20px'}}/>," ",
+  //     <CustomerServiceTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>," ",
+  //     <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px'}}/>, " ",
+  //     <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px'}}/>
+  // ]}
+  > 
       
       {/* <div>{props.userinfo.id}</div> */}
       {/* 자바스크립트에서 true false는 출력이 안된다 */}
@@ -43,4 +45,4 @@ const WebchatMeetingcomponent = (props) => {
   );
 };
 
-export default WebchatMeetingcomponent;
+export default WebchatMeetingComponent;

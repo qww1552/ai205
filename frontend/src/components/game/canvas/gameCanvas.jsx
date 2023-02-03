@@ -35,7 +35,7 @@ const GameCanvas = () => {
                         {players.map((data) => 
                             <OtherCharacter initPosition={[0, -0.5, 0]} id={data.player.id} key={data.player.id} location={{x : data.location.x, y : data.location.y, z : 0}} initColor="blue" />
                         )}
-                        <Obstacle />
+                        {/* <Obstacle /> */}
                         <SimpleMap/>
                     </Physics>
                     <OrthographicCamera />
