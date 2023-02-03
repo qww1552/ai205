@@ -6,6 +6,7 @@ import resultReducer from 'app/result'
 import gamesetReducer from './gameset';
 import mySaga from './saga/sgags';
 import gameInfoReducer from 'app/gameInfo'
+import missionInfoReducer from 'app/missionInfo'
 import voteReducer from 'app/voteInfo'
 import videoReducer from 'app/videoInfo'
 import { persistReducer } from 'redux-persist';
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   me: meReducer,
   others: othersReducer,
   gameInfo: gameInfoReducer,
+  missionInfo: missionInfoReducer,
   result: resultReducer,
   gameset: gamesetReducer,
   voteInfo: voteReducer,
