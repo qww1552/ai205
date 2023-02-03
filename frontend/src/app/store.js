@@ -19,7 +19,7 @@ const persistConfig = {
   key: 'root',
   storage : storageSession,
   // whitelist: ['user'] // 해당 reducer만 저장
-  // blacklist: [''] // 해당 reducer만 제외
+  blacklist: ['me', 'others'] // 해당 reducer만 제외
 };
 
 const reducers = combineReducers({
