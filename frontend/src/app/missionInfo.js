@@ -1,14 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	// 전체 미션 진행도 (백분율)
-	totalMissionProgress : 0,
-    // 미션에 인접해 있는지 체크
-    isAdjacentMissionBtn  : false,
-	// 내 미션 리스트
-	myMissionList : [
-	],
-	
+  // 전체 미션 진행도 (백분율)
+  totalMissionProgress: 0,
+  // 미션에 인접해 있는지 체크
+  isAdjacentMissionBtn: false,
+  // 내 미션 리스트
+  myMissionList: [
+  ],
+
 }
 
 export const missionInfoSlice = createSlice({
@@ -16,18 +16,18 @@ export const missionInfoSlice = createSlice({
   initialState,
   reducers: {
     setTotalMissionProgress: (state, action) => {
-        state.totalMissionProgress = action.payload;
+      state.totalMissionProgress = action.payload;
     },
 
-    setAdjacentMissionBtn : (state, action) => {
-        state.isAdjacentMissionBtn = action.payload;
+    setAdjacentMissionBtn: (state, action) => {
+      state.isAdjacentMissionBtn = action.payload;
     },
 
     setMissionById: (state, action) => {
-        const idx = state.myMissionList.findIndex(v => v.id === action.payload.id)
-        state.myMissionList[idx] = {...state.myMissionList[idx], solved : action.payload.solved}
+      const idx = state.myMissionList.findIndex(v => v.id === action.payload.id)
+      state.myMissionList[idx] = { ...state.myMissionList[idx], solved: action.payload.solved }
     }
-    
+
   },
 });
 
