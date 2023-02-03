@@ -13,6 +13,9 @@ const MissionComponent = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      // TODO: 이 부분에 미션 완료 요청이 들어가야 함!
+      // action('missionInfo/setMissionById', {id : "missionId", solved : true}))
+      console.log('미션 완료 요청')
       action('gameInfo/setMissionModalOpen', false)
     }, 5000);
   }
