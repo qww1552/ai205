@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Controller;
 public class GameCharacterController {
 
     private final GameCharacterService gameCharacterService;
+    private final SimpMessagingTemplate template;
 
     @MessageMapping("/room/{room-id}/move")
     @SendTo("/sub/room/{room-id}")
@@ -42,6 +44,9 @@ public class GameCharacterController {
         log.info("전달 받은 kill : {}", killRequest);
         String mafiaSessionId = accessor.getSessionId();
         gameCharacterService.kill(UUID.fromString(roomId), mafiaSessionId, killRequest.getTo());
+
+        template.convertAndSendToUser(killRequest.getTo(), "/user/queue",
+                BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE));
 
         return BaseResponse.of(Type.CHARACTER, CharacterOperation.KILL);
     }
