@@ -48,9 +48,11 @@ public class GameData {
 
     public static GameData of(GameSetting gameSetting, Map<String, GameCharacter> gameCharacters) {
 
+        int citizenCount = gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias();
+        
         return GameData.builder()
-                .totalMissionCount(gameSetting.getNumberOfMissions())
-                .aliveCitizenCount(gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias())
+                .totalMissionCount(gameSetting.getNumberOfMissions() * citizenCount)
+                .aliveCitizenCount(citizenCount)
                 .aliveMafiaCount(gameSetting.getNumberOfMafias())
                 .meetingLimitTime(gameSetting.getMeetingLimitTime())
                 .votingLimitTime(gameSetting.getVoteLimitTime())
