@@ -71,7 +71,6 @@ const channelHandling = {
     }
   },
   MEETING: function* (operation, data) {
-    console.log('receive', operation)
     
     switch (operation) {
       // 미팅 시작 알림 받음
@@ -103,6 +102,15 @@ const channelHandling = {
       default:
         break;
     }
+  },
+  MISSION : function*(operation, data) {
+    switch(operation) {
+      case 'PROGRESS':
+        yield put({type : "missionInfo/setTotalMissionProgress", payload: data.progress})
+        break;
+      default:
+        break;
+    }
   }
 }
 
@@ -113,6 +121,7 @@ function* sendChannel(client, roomId) {
   yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client, roomId);
   yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
   yield takeEvery("VOTE_REQUEST", vote, client, roomId)
+  yield takeEvery("MISSION_REQUEST", mission, client, roomId)
 }
 
 // 이동 정보 전송 요청
@@ -125,7 +134,6 @@ function* locationSend(client, roomId, action) {
 
 // 미팅 시작 요청
 function* startMeeting(client, roomId, action) {
-  console.log('send')
   yield call(send, client, "meeting/start", roomId)
 }
 
@@ -134,6 +142,11 @@ function* vote(client, roomId, action) {
   const stateMe = yield select(state => state.me);
   yield put({type: "me/setPlayer", payload: {...stateMe.player, isVoted: true}})
   yield call(send, client, "meeting/vote", roomId, {from : stateMe.player.id, to : action.payload})
+}
+
+// 미션 완료 전송 요청
+function* mission(client, roomId, action) {
+  yield call(send, client, "meeting/complete", roomId, action.payload)
 }
 
 function* mySaga() {
