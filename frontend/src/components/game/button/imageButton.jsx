@@ -5,9 +5,9 @@ import { selectGameInfo } from "app/gameInfo"
 // import { selectMissionInfo } from "app/missionInfo"
 import { useSelector } from "react-redux"
 import { action } from "app/store"
-
+import { selectMe } from 'app/me'
 const ImageButton = () => {
-  
+
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
 
   return (
@@ -34,7 +34,6 @@ const ImageButton = () => {
         id="actBtn"
         onClick={isAdjacentMeetingBtn ? () => {action('START_MEETING_REQUEST')
       console.log('전송')} : undefined}
-        
       >
         <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/>
       </button>

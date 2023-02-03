@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 import { Avatar, List, Input, Divider, Modal } from "antd";
 import { selectGameInfo } from "app/gameInfo"
 import { selectMyUserName, selectMainUser } from "app/videoInfo";
+import { selectMe } from "app/me";
 import { action } from "app/store"
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const App = () => {
   const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
-  const mainuser = useSelector(selectMainUser);
+  const mainuser = useSelector(selectMe);
   const myUserName = useSelector(selectMyUserName);
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
@@ -25,7 +26,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    mainuser.getStreamManager().stream.session.on("signal:chat", (event) => {
+    mainuser.streamManager.stream.session.on("signal:chat", (event) => {
       const data = JSON.parse(event.data);
       setMessageList((messageList) => [
         ...messageList,

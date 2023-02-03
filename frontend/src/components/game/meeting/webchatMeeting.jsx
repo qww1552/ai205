@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { selectOhterPlayers } from '../../../app/others';
-import WebchatMeetingComponent from './webchatMeetingComponent';
+import WebchatMeetingcomponent from './webchatMeetingComponent';
 import { selectMe } from '../../../app/me';
 import { selectGameInfo } from '../../../app/gameInfo';
 import { action } from "app/store"
@@ -30,21 +30,20 @@ const WebchatMeeting = () => {
   const isInVote= useSelector(selectGameInfo).isInVote
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const [VoteduserInfo, setVoteduserinfo] = useState('')
-  const me = useSelector(selectMe).player
-  const otherPlayers = [{id:1, isAlive:true,isVote:true,},{id:2, isAlive:true,isVote:true,},{id:3, isAlive:true,isVote:true,},{id:'fd', isAlive:true,isVote:true,}];
+  const me = useSelector(selectMe)
+  const otherPlayers = useSelector(selectOhterPlayers);
   // const me = {id:'myid', isAlive:true, isVote:true}
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
   // const voteResult = useSelector(selectVoteInfo).voteResult
   const voteResult = {1:['a','b','c'],2:['a','b','c'],3:['a','b','c'],4:['a','b','c'],5:['a','b','c'],6:['a','b','c'],7:['a','b','c'],8:['a','b','c'],'skip':['3535k']}
-
   const VoteEvent = (voteduserInfo) => {
-    // 일단 others와 연결이 안되서 테스트용으로 주석처리
-    // Todo: 여기서 살아있는조건을 추가해야함~~
-    if (VoteduserInfo === voteduserInfo) {
-      setVoteduserinfo("")
+    if (voteduserInfo.isAlive) {
+      console.log(me)
+      console.log(voteduserInfo.id)
+      console.log('에게투표함?')
+      console.log(isInVote)
+      setVoteduserinfo(voteduserInfo)
     }
-    else{setVoteduserinfo(voteduserInfo)}
-    // 
   }
 
   const videoUsers = useSelector(selectVideoUsers);
@@ -74,28 +73,27 @@ const WebchatMeeting = () => {
 
       <Col span = {8}>
         {/* <Card title={me.id}> */}
-      <WebchatMeetingComponent user={mainUser} userinfo={me}/>
+     <WebchatMeetingcomponent user={me} userinfo={me}/>
       {/* </Card> */}
       </Col>
       <Col span = {16}>
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
-      {videoUsers.map((sub) => (
+      {otherPlayers.map((sub) => (
         // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
         // <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
-        <Col key={sub.nickname} className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
+        <Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
         {/* <Card
           title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
-          <div className={sub.nickname === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.nickname)}}>
-        <WebchatMeetingComponent key={sub.nickname} user={sub}/>
-        </div>
+        {sub.streamManager!==undefined && ( <WebchatMeetingcomponent user={sub}/>) }
+       
         {/* </Card> */}
         </Col>    
       ))}
       {/* 스킵한 유저의 결과창을 보일곳 */}
       {isInVoteResult === true&&
         <Col span={24}>
-          <Card key='skip' size="small">
+          <Card size="small">
           <Button id="voteSkipIcon" onClick={() => console.log("투표 skip")}>
           <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
           </Button>

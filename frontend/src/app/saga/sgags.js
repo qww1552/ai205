@@ -129,7 +129,7 @@ function* locationSend(client, roomId, action) {
 
   const stateMe = yield select(state => state.me);
   yield put({type : "me/changeLocation", payload : action.payload})
-  yield call(send, client, "move", roomId, stateMe)
+  yield call(send, client, "move", roomId, { player: stateMe.player, location : stateMe.location})
 }
 
 // 미팅 시작 요청
