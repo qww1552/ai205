@@ -1,9 +1,9 @@
-INSERT INTO arc.gamemap (title, start_location_x, start_location_y)
+INSERT INTO arc.gamemap (id, title, start_location_x, start_location_y)
 VALUES
-  ("basic map", 0.0, 0.0)
+  (1, "basic map", 0.0, 0.0)
 ;
 
-INSERT INTO arc.mission (title)
+INSERT INTO arc.mission (id, title)
 VALUES
 	(1, "m1"),
 	(2, "m2"),
