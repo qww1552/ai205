@@ -3,24 +3,22 @@ package com.project.arc205.game.gamedata.model.entity;
 import com.project.arc205.common.Constant;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
-import com.project.arc205.game.gamecharacter.model.entity.Player;
-import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrategy;
-import com.project.arc205.game.gamedata.strategy.GameCharacterAssignStrategy;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
-import com.project.arc205.game.room.model.entity.Room;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameData {
 
     private int totalMissionCount;      //전체 미션 수
@@ -34,8 +32,8 @@ public class GameData {
 
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
-    //TODO: change private
-    public GameData(int totalMissionCount, int aliveCitizenCount, int aliveMafiaCount,
+    @Builder
+    private GameData(int totalMissionCount, int aliveCitizenCount, int aliveMafiaCount,
             int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters) {
         this.totalMissionCount = totalMissionCount;
         this.completedMissionCount = 0;
@@ -48,22 +46,16 @@ public class GameData {
         this.inMeeting = false;
     }
 
-    public static GameData of(Room room) {
-        GameSetting gameSetting = room.getGameSetting();
-        Map<String, Player> players = room.getPlayers();
+    public static GameData of(GameSetting gameSetting, Map<String, GameCharacter> gameCharacters) {
 
-        GameCharacterAssignStrategy strategy = new BasicGameCharacterAssignStrategy(players,
-                new Location(0.0, 0.0));
-
-        Map<String, GameCharacter> characters = strategy.getCharacters();
-
-        GameData gameData = new GameData(gameSetting.getNumberOfMissions(),
-                gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias(),
-                gameSetting.getNumberOfMafias(),
-                gameSetting.getMeetingLimitTime(),
-                gameSetting.getVoteLimitTime(), characters);   //TODO: 수정 필요
-
-        return gameData;
+        return GameData.builder()
+                .totalMissionCount(gameSetting.getNumberOfMissions())
+                .aliveCitizenCount(gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias())
+                .aliveMafiaCount(gameSetting.getNumberOfMafias())
+                .meetingLimitTime(gameSetting.getMeetingLimitTime())
+                .votingLimitTime(gameSetting.getVoteLimitTime())
+                .gameCharacters(gameCharacters)
+                .build();
     }
 
     public boolean meetingStart() {
@@ -106,5 +98,11 @@ public class GameData {
         }
         voted.put(from, to);
         return getSurvivorCount() - voted.size();      //return remainingVotingTicket
+    }
+
+    public void moveGameCharactersTo(Location location) {
+        for (GameCharacter gameCharacter : gameCharacters.values()) {
+            gameCharacter.setLocation(location);
+        }
     }
 }
