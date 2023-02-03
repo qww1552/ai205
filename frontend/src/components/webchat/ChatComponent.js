@@ -58,7 +58,7 @@ const App = () => {
         const data = {
           message: newMessage,
           nickname: myUserName,
-          stream: mainuser.getStreamManager().stream.streamId,
+          stream: mainuser.streamManager.stream.streamId,
         };
 
         mainuser.streamManager.stream.session.signal({
