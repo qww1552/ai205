@@ -12,8 +12,8 @@ public class GameSetting {
     private Integer numberOfMissions = 1;
     private Double visionRange = 1.0;
     private Double playerSpeed = 1.0;
-    private Integer totalConferenceTime = 20;
-    private Integer voteProgressTime = 10;
+    private Integer totalMeetingTime = 20;
+    private Integer voteLimitTime = 10;
 
     public void update(GameSetting incoming) {
         if (incoming.maxPlayers != null) {
@@ -31,11 +31,11 @@ public class GameSetting {
         if (incoming.playerSpeed != null) {
             this.playerSpeed = incoming.getPlayerSpeed();
         }
-        if (incoming.totalConferenceTime != null) {
-            this.totalConferenceTime = incoming.getTotalConferenceTime();
+        if (incoming.totalMeetingTime != null) {
+            this.totalMeetingTime = incoming.getTotalMeetingTime();
         }
-        if (incoming.voteProgressTime != null) {
-            this.voteProgressTime = incoming.getVoteProgressTime();
+        if (incoming.voteLimitTime != null) {
+            this.voteLimitTime = incoming.getVoteLimitTime();
         }
     }
 }
