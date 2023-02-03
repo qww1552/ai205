@@ -6,6 +6,7 @@ import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
+import com.project.arc205.game.gamedata.model.exception.GameAlreadyExistException;
 import com.project.arc205.game.gamedata.model.exception.GameNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,11 +41,11 @@ public class GameRepository {
         gameStorage.put(UUID.fromString(Constant.TEMP_ROOM_ID), tmpGame);
     }
 
-    public GameData create(UUID roomId, GameSetting gameSetting,
-            Map<String, GameCharacter> gameCharacters) {
-        GameData game = GameData.of(gameSetting, gameCharacters);
-        gameStorage.put(roomId, game);
-        return game;
+    public void save(UUID roomId, GameData gameData) {
+        if (gameStorage.containsKey(roomId)) {
+            throw new GameAlreadyExistException(roomId.toString());
+        }
+        gameStorage.put(roomId, gameData);
     }
 
     public GameData findById(UUID id) {
