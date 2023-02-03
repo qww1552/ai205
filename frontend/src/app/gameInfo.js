@@ -9,6 +9,8 @@ const initialState = {
   isInVote: false,
   // 투표가 끝났는지 체크하는 변수
   isInVoteResult: false,
+  // 게임 시작했는지 체크하는 변수
+  isInGame: false,
   // 채팅창을 열어야 하는지 체크하는 변수
   isChatModalOpen: false,
   // 미션창을 열어야 하는지 체크하는 변수
@@ -37,9 +39,12 @@ export const gameInfoSlice = createSlice({
     setChatModalOpen: (state, action) => {
       state.isChatModalOpen = action.payload
     },
+    setInGame: (state, action) => {
+      state.isInGame = action.payload;
+    },
     setMissionModalOpen: (state, action) => {
       state.isMissionModalOpen = action.payload
-    }
+    },
   },
 });
 

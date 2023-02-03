@@ -1,18 +1,22 @@
+import { useSelect } from '@react-three/drei';
 import { roomRequest } from 'api';
+import { selectGameInfo } from 'app/gameInfo';
 import { action } from 'app/store';
 import React, { useState, useEffect } from 'react';
-import { Link, useRouteLoaderData } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import {  useNavigate, useRouteLoaderData } from 'react-router-dom';
+
 
 const LobbySimple = () => {
-  const [playerName, setPlayerName] = useState('');
 
-  // const players = [
-  //   { id : "player1" },
-  //   { id : "player2" }, 
-  // ]
+  let isInGame = useSelector(selectGameInfo).isInGame;
 
+  const gameStartBtn = () => {
+    action('GAME_START_REQUEST');
+  }
 
   const [players, setPlayers] = useState([])
+  const navigate = useNavigate();
 
   const roomId = useRouteLoaderData("lobby");
 
@@ -38,6 +42,12 @@ const LobbySimple = () => {
     return () => clearInterval(timer);
   },[]);
 
+  useEffect(() => {
+    if(isInGame) {
+      navigate(`/rooms/${roomId}/game`)
+    }
+  },[isInGame])
+
   return (
     <div className="waiting-room">
       <h1>Waiting Room</h1>
@@ -48,7 +58,7 @@ const LobbySimple = () => {
         ))}
       </ul>
       {players.length >= 2 && (
-        <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
+        <button onClick={gameStartBtn}>Start Game</button>
       )}
     </div>
   );

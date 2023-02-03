@@ -55,6 +55,19 @@ function* personalChannel(client) {
 
   const channel = yield call(createEventChannel, client, `/user/queue`)
 
+  // 게임 시작 알림 받기 전까지 대기
+  while(true) {
+    const res = yield take(channel);
+    const body = JSON.parse(res.body);
+    
+    if(body.type === 'GAME' && body.operation === 'START') {
+      yield put({type : "gameInfo/setInGame", payload: true})
+      break;
+    }
+    
+  }
+
+
   while (true) {
 
     try {
@@ -66,7 +79,9 @@ function* personalChannel(client) {
     } catch (e) {
       console.error("Sagas recive error!!")
       console.error(e.message);
-    }
+      channel.close();
+
+    } 
   }
 }
 
@@ -160,11 +175,16 @@ const channelHandling = {
 /////////////////////////////////
 /////////////////// 클라이언트 -> 서버 소켓 전송
 function* sendChannel(client, roomId) {
-
+  yield takeEvery("GAME_START_REQUEST", gameStart, client, roomId);
   yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client, roomId);
   yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
   yield takeEvery("VOTE_REQUEST", vote, client, roomId)
   yield takeEvery("MISSION_REQUEST", mission, client, roomId)
+}
+
+// 게임 시작 요청
+function* gameStart(client, roomId, action) {
+  yield call(send, client, "game/start", roomId)
 }
 
 // 이동 정보 전송 요청
