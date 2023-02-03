@@ -22,7 +22,7 @@ export const videoInfoSlice = createSlice({
     setVideoOpen(state, action) {
       state.videoOpen = action.payload;
     },
-    setChatOpen(state, action) {
+    setChatModalOpen(state, action) {
       state.chatOpen = action.payload;
     },
     addVideoUsers(state, action) {
@@ -101,7 +101,7 @@ export const {
   setMySessionId,
   setMyUserName,
   setVideoOpen,
-  setChatOpen,
+  setChatModalOpen,
   addVideoUsers,
   deleteVideoUsers,
   addMainUser,

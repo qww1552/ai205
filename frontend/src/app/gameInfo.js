@@ -10,7 +10,9 @@ const initialState = {
   // 투표가 끝났는지 체크하는 변수
   isInVoteResult: false,
   // 채팅창을 열어야 하는지 체크하는 변수
-  isChatOpen: false,
+  isChatModalOpen: false,
+  // 미션창을 열어야 하는지 체크하는 변수
+  isMissionModalOpen: false,
 }
 
 export const gameInfoSlice = createSlice({
@@ -32,13 +34,18 @@ export const gameInfoSlice = createSlice({
       state.isInVoteResult = action.payload;
       console.log(state.isInVoteResult)
     },
-    setChatOpen: (state, action) => {
-      state.isChatOpen = action.payload
+    setChatModalOpen: (state, action) => {
+      state.isChatModalOpen = action.payload
+    },
+    setMissionModalOpen: (state, action) => {
+      state.isMissionModalOpen = action.payload
     }
   },
 });
 
-export const { setAdjacentMeetingBtn, setInMeeting, setInVote, setInVoteResult, setChatOpen } = gameInfoSlice.actions;
+export const {
+  setAdjacentMeetingBtn, setInMeeting, setInVote, setInVoteResult, setChatModalOpen, setMissionModalOpen
+} = gameInfoSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

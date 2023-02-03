@@ -54,7 +54,7 @@ const VoteMeeting = () => {
         {/* {isInVote === true ? <TimerMeeting sec={time}/>:<div>아직투표시간이 아님</div>} */}
         {/* <button onClick={clickevent}>시간이벤트</button> */}
         <Col span={2}>  
-          <Button block id="chatBtnIcon" onClick={() => action('gameInfo/setChatOpen', true)}>
+          <Button block id="chatBtnIcon" onClick={() => action('gameInfo/setChatModalOpen', true)}>
             <MessageTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
           </Button>
         </Col>
