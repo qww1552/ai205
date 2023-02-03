@@ -35,10 +35,8 @@ public class GameData {
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
     //TODO: change private
-    public GameData(int totalMissionCount,
-            int aliveCitizenCount, int aliveMafiaCount,
-            int meetingLimitTime, int votingLimitTime,
-            Map<String, GameCharacter> gameCharacters) {
+    public GameData(int totalMissionCount, int aliveCitizenCount, int aliveMafiaCount,
+            int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters) {
         this.totalMissionCount = totalMissionCount;
         this.completedMissionCount = 0;
         this.aliveCitizenCount = aliveCitizenCount;
@@ -59,12 +57,11 @@ public class GameData {
 
         Map<String, GameCharacter> characters = strategy.getCharacters();
 
-        GameData gameData = new GameData(
-                gameSetting.getNumberOfMissions(),
+        GameData gameData = new GameData(gameSetting.getNumberOfMissions(),
                 gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias(),
-                gameSetting.getMaxPlayers(), gameSetting.getTotalConferenceTime(),
-                gameSetting.getVoteProgressTime(), characters
-        );   //TODO: 수정 필요
+                gameSetting.getNumberOfMafias(),
+                gameSetting.getTotalMeetingTime() - gameSetting.getVoteLimitTime(),
+                gameSetting.getVoteLimitTime(), characters);   //TODO: 수정 필요
 
         return gameData;
     }
