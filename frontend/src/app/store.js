@@ -10,7 +10,7 @@ import voteReducer from 'app/voteInfo'
 import videoReducer from 'app/videoInfo'
 import { persistReducer } from 'redux-persist';
 import persistStore from 'redux-persist/es/persistStore';
-
+import missionInfoReducer from 'app/missionInfo'
 // import storage from 'redux-persist/lib/storage'; // 로컬 스토리지
 import storageSession from 'redux-persist/lib/storage/session' // 세션 스토리지
 
@@ -28,7 +28,8 @@ const reducers = combineReducers({
   result: resultReducer,
   gameset: gamesetReducer,
   voteInfo: voteReducer,
-  videoInfo: videoReducer
+  videoInfo: videoReducer,
+  missionInfo : missionInfoReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers);
