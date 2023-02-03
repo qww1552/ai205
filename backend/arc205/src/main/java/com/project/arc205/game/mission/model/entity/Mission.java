@@ -16,7 +16,7 @@ import lombok.Setter;
 @Table(name = "mission")
 public class Mission extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String title;
 
 }
