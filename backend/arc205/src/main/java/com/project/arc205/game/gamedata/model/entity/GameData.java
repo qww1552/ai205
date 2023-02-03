@@ -60,7 +60,7 @@ public class GameData {
         GameData gameData = new GameData(gameSetting.getNumberOfMissions(),
                 gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias(),
                 gameSetting.getNumberOfMafias(),
-                gameSetting.getTotalMeetingTime() - gameSetting.getVoteLimitTime(),
+                gameSetting.getMeetingLimitTime(),
                 gameSetting.getVoteLimitTime(), characters);   //TODO: 수정 필요
 
         return gameData;
