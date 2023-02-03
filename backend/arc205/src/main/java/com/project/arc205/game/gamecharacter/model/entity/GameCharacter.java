@@ -2,7 +2,7 @@ package com.project.arc205.game.gamecharacter.model.entity;
 
 import com.project.arc205.common.model.Location;
 import com.project.arc205.common.model.Role;
-import com.project.arc205.game.mission.ActiveMission;
+import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.Map;
 import lombok.Getter;
 

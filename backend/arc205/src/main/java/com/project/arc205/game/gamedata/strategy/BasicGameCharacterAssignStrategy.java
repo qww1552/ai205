@@ -4,7 +4,7 @@ import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
-import com.project.arc205.game.mission.BasicActiveMission;
+import com.project.arc205.game.mission.model.BasicActiveMission;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

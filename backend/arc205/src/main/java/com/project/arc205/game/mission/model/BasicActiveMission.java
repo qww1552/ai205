@@ -1,4 +1,4 @@
-package com.project.arc205.game.mission;
+package com.project.arc205.game.mission.model;
 
 public class BasicActiveMission extends ActiveMission {
 
