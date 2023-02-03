@@ -3,7 +3,7 @@ VALUES
   ("basic map", 0.0, 0.0)
 ;
 
-INSERT INTO arc.mission (id, title)
+INSERT INTO arc.mission (title)
 VALUES
 	(1, "m1"),
 	(2, "m2"),
