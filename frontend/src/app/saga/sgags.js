@@ -80,20 +80,31 @@ function* startStomp(action) {
 
 const channelHandling = {
   CHARACTER: function* (operation, data) {
+    const stateMe = yield select(state => state.me);
     switch (operation) {
       case 'MOVE':
-
-        const stateMe = yield select(state => state.me);
-
         if (stateMe.player.id !== data.player.id) {
           const otherPlayerData = {
-            player: { id: data.player.id, isVoted: false, isAlive: true },
+            player: {...stateMe.player, id: data.player.id, isVoted: false, isAlive: true },
             location: data.location
           }
           yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
         }
         break;
+      case 'DIE':
+        if (stateMe.player.id !== data.player.id) {
+          const otherPlayerData = {
+            player: {...stateMe.player, id: data.player.id, isAlive: false },
+            location: data.location
+          }
+          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
+        }
+        break;
+      case 'YOU_DIED':
+        const payload = {...stateMe, player : {...stateMe.player, isAlive : false}}
+        yield put({ type: "me/setPlayer", payload })
 
+        break;
       default:
         break;
     }
@@ -150,6 +161,7 @@ function* sendChannel(client, roomId) {
   yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
   yield takeEvery("VOTE_REQUEST", vote, client, roomId)
   yield takeEvery("MISSION_REQUEST", mission, client, roomId)
+  yield takeEvery("KILL_REQUEST", kill, client, roomId)
 }
 
 // 게임 시작 요청
@@ -180,6 +192,11 @@ function* vote(client, roomId, action) {
 // 미션 완료 전송 요청
 function* mission(client, roomId, action) {
   yield call(send, client, "meeting/complete", roomId, action.payload)
+}
+
+// 살해 요청
+function* kill(client, roomId, action) {
+  yield call(send, client, "character/kill", roomId, action.payload)
 }
 
 function* mySaga() {
