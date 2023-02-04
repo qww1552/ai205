@@ -31,15 +31,15 @@
     opacity: 1;
   }
 
-  #settingBtn {
+  #chatBtn {
     top: 10px;
   }
-
-  #chatBtn {
+  
+  #killBtn {
     top: 130px;
   }
-
-  #killBtn {
+  
+  #reportBtn {
     top: 250px;
   }
 
