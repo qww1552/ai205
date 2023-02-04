@@ -1,15 +1,19 @@
 import { roomRequest } from 'api';
+import { selectGameInfo } from 'app/gameInfo';
 import { selectMe } from 'app/me';
 import { action } from 'app/store';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useRouteLoaderData } from 'react-router-dom';
+import { Link, useNavigate, useRouteLoaderData } from 'react-router-dom';
 
 const LobbySimple = () => {
 
   const [otherPlayers, setotherPlayers] = useState([])
   const roomId = useRouteLoaderData("lobby");
+
   const me = useSelector(selectMe);
+  const navigate = useNavigate();
+  let isInGame = useSelector(selectGameInfo).isInGame;
 
   useEffect(()=> {
     action('SOCKET_CONNECT_REQUEST', {roomId})
@@ -36,6 +40,16 @@ const LobbySimple = () => {
     return () => clearInterval(timer);
   },[]);
 
+  useEffect(() => {
+    if(isInGame) {
+      navigate(`/rooms/${roomId}/game`)
+    }
+  },[isInGame])
+
+  const gameStartBtn = () => {
+    action('GAME_START_REQUEST');
+  }
+
   return (
     <div className="waiting-room">
       <h1>Waiting Room</h1>
@@ -48,7 +62,8 @@ const LobbySimple = () => {
         ))}
       </ul>
       {otherPlayers.length >= 1 && (
-        <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
+        <button onClick={gameStartBtn}>Start Game</button>
+        // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
       )}
     </div>
   );

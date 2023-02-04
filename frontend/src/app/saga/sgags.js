@@ -42,6 +42,27 @@ function* startStomp(action) {
 
   const channel = yield call(createEventChannel, stompClient, topics, stateMe.player)
 
+
+  // while(true) {
+  //   try {
+  //     const res = yield take(channel);
+  //     const body = JSON.parse(res.body);
+  
+  //     console.log(res, body)
+      
+  //     if(body.type === 'GAME' && body.operation === 'START') {
+  //       yield put({type : "gameInfo/setInGame", payload: true})
+  //       break;
+  //     }
+  //   } catch (e) {
+  //     console.error("Sagas recive error!!")
+  //     console.error(e.message);
+  //   } 
+
+    
+  // }
+
+
   while (true) {
     try {
       const res = yield take(channel);
@@ -124,16 +145,21 @@ const channelHandling = {
 /////////////////////////////////
 /////////////////// 클라이언트 -> 서버 소켓 전송
 function* sendChannel(client, roomId) {
-
+  yield takeEvery("GAME_START_REQUEST", gameStart, client, roomId);
   yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client, roomId);
   yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
   yield takeEvery("VOTE_REQUEST", vote, client, roomId)
   yield takeEvery("MISSION_REQUEST", mission, client, roomId)
 }
 
+// 게임 시작 요청
+function* gameStart(client, roomId, action) {
+  yield call(send, client, "game/start", roomId)
+}
+
+
 // 이동 정보 전송 요청
 function* locationSend(client, roomId, action) {
-
   const stateMe = yield select(state => state.me);
   yield put({ type: "me/changeLocation", payload: action.payload })
   yield call(send, client, "move", roomId, { player: stateMe.player, location: stateMe.location })
