@@ -2,10 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { selectOhterPlayers } from '../../../app/others';
-import WebchatMeetingcomponent from './webchatMeetingcomponent';
+import WebchatMeetingcomponent from './webchatMeetingComponent';
 import { selectMe } from '../../../app/me';
 import { selectGameInfo } from '../../../app/gameInfo';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { action } from "app/store"
 import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import {
@@ -31,8 +30,8 @@ const WebchatMeeting = () => {
   const isInVote= useSelector(selectGameInfo).isInVote
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const [VoteduserInfo, setVoteduserinfo] = useState('')
-  const me = useSelector(selectMe).player
-  const otherPlayers = [{id:1, isAlive:true,isVote:true,},{id:2, isAlive:true,isVote:true,},{id:3, isAlive:true,isVote:true,},{id:'fd', isAlive:true,isVote:true,}];
+  const me = useSelector(selectMe)
+  const otherPlayers = useSelector(selectOhterPlayers);
   // const me = {id:'myid', isAlive:true, isVote:true}
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
   // const voteResult = useSelector(selectVoteInfo).voteResult
@@ -74,19 +73,20 @@ const WebchatMeeting = () => {
 
       <Col span = {8}>
         {/* <Card title={me.id}> */}
-      <WebchatMeetingcomponent user={mainUser} userinfo={me}/>
+     <WebchatMeetingcomponent user={me} userinfo={me}/>
       {/* </Card> */}
       </Col>
       <Col span = {16}>
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
-      {videoUsers.map((sub) => (
+      {otherPlayers.map((sub) => (
         // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
         // <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
         <Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
         {/* <Card
           title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
-        <WebchatMeetingcomponent user={sub}/>
+        {sub.streamManager!==undefined && ( <WebchatMeetingcomponent user={sub}/>) }
+       
         {/* </Card> */}
         </Col>    
       ))}

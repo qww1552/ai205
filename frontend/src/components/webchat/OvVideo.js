@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 export default function OpenViduVideoComponent(props) {
   const videoRef = useRef();
 
@@ -13,7 +13,8 @@ export default function OpenViduVideoComponent(props) {
   }, [props.streamManager]);
 
   return (
-    <div style={makeStyle()}>
+    // <div style={makeStyle()}>
+    <div>
       <video autoPlay={true} muted={props.mutedSound} ref={videoRef} />
     </div>
   );

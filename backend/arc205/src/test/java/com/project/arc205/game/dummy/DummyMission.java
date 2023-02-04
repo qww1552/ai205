@@ -1,6 +1,6 @@
 package com.project.arc205.game.dummy;
 
-import com.project.arc205.game.mission.ActiveMission;
+import com.project.arc205.game.mission.model.ActiveMission;
 
 public class DummyMission extends ActiveMission {
 

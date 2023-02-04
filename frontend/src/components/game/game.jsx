@@ -10,7 +10,7 @@ import ModalMeeting from 'components/game/meeting/modalMeeting'
 import LoadingSpinner from 'components/loadingSpinner'
 import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
-
+import { addPlayerVideo, removePlayerVideo } from 'app/me'
 
 import {
     setMySessionId,
@@ -25,8 +25,8 @@ import {
     selectMyUserName,
     selectMainUser
   } from "app/videoInfo";
-import { selectMe } from 'app/me';
-
+import { selectMe, setConnectionId, setStreamManager, setSession} from 'app/me';
+import { setOtherPlayerVideoInfo } from 'app/others'
   const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
 const Game = () => {
 
@@ -83,12 +83,15 @@ const Game = () => {
 
             mySession.publish(publisher);
             
-            
+            // dispatch(setConnectionId(mySession.connection.connectionId))
+            // dispatch(setStreamManager(publisher))
+            // dispatch(setSession(mySession))
             localUser.setConnectionId(mySession.connection.connectionId);
             localUser.setScreenShareActive(false);
             localUser.setStreamManager(publisher);
             localUser.setSession(mySession)
-            dispatch(addMainUser(localUser));
+            
+            dispatch(addPlayerVideo(localUser));
 
 
             })
@@ -109,8 +112,9 @@ const Game = () => {
             const nickname = event.stream.connection.data.split('%')[0];
             newUser.setNickname(JSON.parse(nickname).clientData);
             // 발언자 표시를 나타내는 변수를 추가한다
-            newUser.isSpeaking=false
-            dispatch(addVideoUsers(newUser));
+            newUser.isSpeaking = false
+            dispatch(setOtherPlayerVideoInfo(newUser));
+            // dispatch(addVideoUsers(newUser));
              
         });
 
@@ -161,16 +165,17 @@ const Game = () => {
 
     const leaveSession = () => {
         window.removeEventListener("beforeunload", onbeforeunload);
-        const mySession = mainUser;
+        const mySession = stateMe.player.session;
         
         if (mySession) {
         mySession.disconnect();
         }
 
         OV = null;
-        dispatch(removeMainUser());
+        dispatch(removePlayerVideo());
+        // dispatch(removeMainUser());
         dispatch(setMySessionId("SessionA"));
-        dispatch(setMyUserName("Participant" + Math.floor(Math.random() * 100)));
+        // dispatch(setMyUserName("Participant" + Math.floor(Math.random() * 100)));
     };
 
 
@@ -225,8 +230,10 @@ const Game = () => {
                     <MissionProgress/>
                     <MissionList/>
                 </div>
-                <ImageButton/>
-                <ModalMeeting/>
+                {/* joinSession을 실행하는데 시간이 오래 걸려서, openVidu와 관련된 컴포넌트를 먼저 렌더링하려고 시도하면
+                mainUser에 아직 값이 없어 에러가 발생함 */}
+                {stateMe.streamManager!==undefined &&(<ImageButton/>)}
+                {stateMe.streamManager!==undefined &&(<ModalMeeting/>)}
             </div>
             {
             // !check && <div>
@@ -238,6 +245,7 @@ const Game = () => {
             }
 
         </>
+
     )
 
 }

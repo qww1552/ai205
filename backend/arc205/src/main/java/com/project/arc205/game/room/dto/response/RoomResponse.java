@@ -1,25 +1,17 @@
 package com.project.arc205.game.room.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
 public class RoomResponse {
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class Player {
-        private String id;
-
-        public static Player of(String id) {
-            return new Player(id);
-        }
-    }
 
     @JsonProperty("roomId")
     private String id;
@@ -34,5 +26,17 @@ public class RoomResponse {
         this.title = title;
         this.players = players;
         this.amountOfPlayers = players.size();
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Player {
+
+        private String id;
+
+        public static Player of(String id) {
+            return new Player(id);
+        }
     }
 }

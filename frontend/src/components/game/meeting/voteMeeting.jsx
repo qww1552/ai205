@@ -1,9 +1,11 @@
+import ChatComponent from 'components/webchat/ChatComponent'
 import { selectGameset } from 'app/gameset';
 import { selectResult } from 'app/result';
 import React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import ResultMeeting from './resultMeeting';
+import { action } from "app/store"
 import TimerMeeting from './timerMeeting';
 import WebchatMeeting from './webchatMeeting';
 import { selectGameInfo } from '../../../app/gameInfo';
@@ -45,28 +47,25 @@ const VoteMeeting = () => {
     <div>
       <div id="usercontent">
       </div>
-      {/* Todo: 게임방 세팅에서 회의시간 저장한것 받아오기 */}
-      {/* Todo: TimerMeeting sec에서 시간정보 받아오기 */}
-      {isInMeeting === true ? <TimerMeeting sec={time} getRestTime={getRestTime}/>:<div>아직회의시간이 아님</div>}
-      {/* {isInVote === true ? <TimerMeeting sec={time}/>:<div>아직투표시간이 아님</div>} */}
-      {/* <button onClick={clickevent}>시간이벤트</button> */}
       <Row gutter={[8,8]}>
-      {/* <Col span={22}>
-        <Progress percent={time/restTime} success={{ percent: 50 }} showInfo={false} strokeWidth={20}/>
-      </Col> */}
-      <Col span={1}>  
-        <Button id="chatBtnIcon" onClick={() => console.log("채팅 open")}>
-          <MessageTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-        </Button>
-      </Col>
-      <Col span={1}>  
-        <Button id="settingBtnIcon" onClick={() => console.log("채팅 open")}>
-          <SettingTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-        </Button>
-      </Col>
+        {/* Todo: 게임방 세팅에서 회의시간 저장한것 받아오기 */}
+        {/* Todo: TimerMeeting sec에서 시간정보 받아오기 */}
+        {isInMeeting === true ? <TimerMeeting sec={time} getRestTime={getRestTime}/>:<div>아직회의시간이 아님</div>}
+        {/* {isInVote === true ? <TimerMeeting sec={time}/>:<div>아직투표시간이 아님</div>} */}
+        {/* <button onClick={clickevent}>시간이벤트</button> */}
+        <Col span={2}>  
+          <Button block id="chatBtnIcon" onClick={() => action('gameInfo/setChatModalOpen', true)}>
+            <MessageTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
+          </Button>
+        </Col>
+        <Col span={2}>  
+          <Button block id="settingBtnIcon" onClick={() => console.log("설정")}>
+            <SettingTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
+          </Button>
+        </Col>
       </Row>
+      <ChatComponent/>
       <WebchatMeeting/>
-    
     </div>
   );
 };

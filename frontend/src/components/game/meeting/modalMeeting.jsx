@@ -29,6 +29,9 @@ const ModalMeeting = () => {
   useEffect(() => {
     if (isInMeeting &&(isInVoteResult)) {
       setTimeout(()=>setSeeNextResult(true), 5000)
+      setTimeout(()=>{
+        action('gameInfo/setInMeeting', false)
+      },10000)
     }
   },[isInMeeting,isInVoteResult])
   
@@ -41,11 +44,21 @@ const ModalMeeting = () => {
   // 대충 미팅시작할때랑 끝날때 변수를 변화시키는 내용
   // isInMeeting에 연결되었기때문에 문제생길수 있을듯...?
   useEffect(() => {
+    // 모달창이 닫히면 변수를 모두 초기화한다
     if (isInMeeting === false) {
+      console.log('미팅창 비활성화')
+      action('gameInfo/setInVoteResult', false)
+      action('gameInfo/setInVote', false)
       setCompleteNoticeMeet(false)
+      setSeeNextResult(false)
     }
     if (isInMeeting === true) {
+      console.log('미팅창 활성화')
       setTimeout(()=>setCompleteNoticeMeet(true),5000)
+      action('gameInfo/setInVoteResult', false)
+      action('gameInfo/setInVote', false)
+      setCompleteNoticeMeet(false)
+      setSeeNextResult(false)
     }
   },[isInMeeting])
   return (
@@ -53,18 +66,19 @@ const ModalMeeting = () => {
       {/* 현재 게임 화면하단의 컴포넌트 + 회의때의 모달로 기능이 2가지로 분리되어 있는데도 불구,
       meeting(회의)/modalMeeeting 파일 하나에 2가지 기능이 몰려 있음
       -> redux를 이용해서 기능을 분화해야 함 */}
-      {/* <VideoComponent /> */}7
+      {/* <VideoComponent /> */}
 
       <Modal 
         title="AI는 누구인가?"
         open={isInMeeting}
-        width={1000}
+        width={1920}
         closable={false}
         footer={[
+          // TODO:닫기버튼을 누르면 회의시작버튼이 씹히는 상황이 발생함 일단 없애놓음
           // 추후 닫기 버튼을 제거하고 회의 완료 요청을 받으면 action이 수행되도록 수정 필요
-          <Button key="back" onClick={() => action('gameInfo/setInMeeting', !isInMeeting)}>
-            닫기
-          </Button>
+          // <Button key="back" onClick={() => action('gameInfo/setInMeeting', !isInMeeting)}>
+          //   닫기
+          // </Button>
         ]}
       >
         {completeNoticeMeet === false?<NoticeMeeting/>:isInMeeting &&(!seeNextResult)?<VoteMeeting/>:<ResultMeeting/>}
@@ -77,6 +91,10 @@ const ModalMeeting = () => {
             투표시작
         </Button>
         {/* ※여기까지 */}
+        {/* 페이지전환을 위한 변수를 띄움 */}
+        {/* <div>{isInMeeting?'미팅임':'미팅아님'}</div>
+        <div>{seeNextResult?'다음결과true':'다음결과false'}</div>
+        <div>{isInVoteResult?'투표결과보이는중':'투표결과안보이는중'}</div> */}
       </Modal>
       
     </>

@@ -1,17 +1,15 @@
 package com.project.arc205.game.gamecharacter;
 
-import com.project.arc205.common.model.Location;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.project.arc205.game.dummy.DummyMission;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
-import com.project.arc205.game.mission.ActiveMission;
+import com.project.arc205.game.mission.model.ActiveMission;
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CitizenTests {
 
@@ -31,7 +29,7 @@ public class CitizenTests {
         String missionId = "test";
         HashMap<String, ActiveMission> missionMap = new HashMap<>();
         missionMap.put(missionId, dummyMission);
-        gameCharacter = new Citizen(new Location(0.0, 0.0), missionMap);
+        gameCharacter = new Citizen(missionMap);
         gameCharacter.interaction(missionId);
         assertTrue(dummyMission.isSolved());
     }
