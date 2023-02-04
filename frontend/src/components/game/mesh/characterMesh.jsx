@@ -1,23 +1,28 @@
 import { Text } from "@react-three/drei";
 import { Suspense } from "react";
-import { Vector3 } from 'three';
+import { Vector3 } from "three";
 
 const CharacterMesh = ({ initPosition, initColor, id }) => {
-
-    return (
-        <>
-            <Suspense fallback={null}>
-                <Text fontSize={0.5} font='/SeoulHangangM.woff' position={new Vector3(0, 0.2, 0)} color="black" anchorX="center" anchorY="top-baseline">
-                    {id}
-                </Text>
-            </Suspense>
-
-            <mesh position={initPosition}>
-                <boxGeometry args={[1, 1, 0.1]} />
-                <meshStandardMaterial color={initColor} />
-            </mesh>
-        </>
-    )
-}
+  return (
+    <>
+      <Suspense fallback={null}>
+        <Text
+          fontSize={0.5}
+          font="/SeoulHangangM.woff"
+          position={new Vector3(0, 0.8, 0)}
+          color="black"
+          anchorX="center"
+          anchorY="top-baseline"
+        >
+          {id}
+        </Text>
+      </Suspense>
+      <mesh position={initPosition}>
+        <boxGeometry args={[1, 1, 0.1]} />
+        <meshStandardMaterial color={initColor} />
+      </mesh>
+    </>
+  );
+};
 
 export default CharacterMesh;
