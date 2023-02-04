@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take, takeLatest, select, fork } from 'redux-saga/effects'
+import { call, put, takeEvery, take, takeLatest, select, fork, all } from 'redux-saga/effects'
 import { eventChannel, buffers } from 'redux-saga'
 import { createClient, send, connectClient } from 'api';
 
@@ -9,12 +9,19 @@ function* initializeStompChannel(action) {
   yield call(startStomp, action);
 }
 
-function createEventChannel(client, roomId, player) {
+function createEventChannel(client, topics, player) {
 
   return eventChannel(emit => {
-    const onReceivedMessage = (message) => {emit(message);}
-    
-    connectClient(client, roomId, player, onReceivedMessage);
+    const onReceivedMessage = (message) => { emit(message); }
+
+    client.connect(
+      { playerId: player.id },
+      () => {
+        topics.forEach(topic => { client.subscribe(topic, onReceivedMessage, { playerId: player.id }); })
+      },
+      () => {
+        client.unsubscribe();
+      })
 
     return () => {
       client.unsubscribe();
@@ -29,13 +36,13 @@ function* startStomp(action) {
 
   const stateMe = yield select(state => state.me);
 
-  const channel = yield call(createEventChannel, stompClient, action.payload.roomId, stateMe.player);
+  yield fork(sendChannel, stompClient, action.payload.roomId)
 
-  // 채널 전송하는 함수들 묶음
-  yield fork(sendChannel, stompClient, action.payload.roomId);
+  const topics = [`/user/queue`, `/sub/room/${action.payload.roomId}`]
+
+  const channel = yield call(createEventChannel, stompClient, topics, stateMe.player)
 
   while (true) {
-
     try {
       const res = yield take(channel);
       const body = JSON.parse(res.body)
@@ -54,59 +61,59 @@ const channelHandling = {
   CHARACTER: function* (operation, data) {
     switch (operation) {
       case 'MOVE':
-        
+
         const stateMe = yield select(state => state.me);
 
-        if(stateMe.player.id !== data.player.id) {
+        if (stateMe.player.id !== data.player.id) {
           const otherPlayerData = {
-            player : {id : data.player.id, isVoted : false, isAlive : true}, 
-            location : data.location
+            player: { id: data.player.id, isVoted: false, isAlive: true },
+            location: data.location
           }
-          yield put({type : "others/setOtherPlayer", payload: otherPlayerData})
+          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
         }
         break;
-    
+
       default:
         break;
     }
   },
   MEETING: function* (operation, data) {
-    
+
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
-        yield put({type : "gameInfo/setInMeeting", payload: true})
+        yield put({ type: "gameInfo/setInMeeting", payload: true })
         break;
       // 투표 시작 알림 받음 
       case 'START_VOTING':
-        yield put({type : "gameInfo/setInVote", payload: true})
+        yield put({ type: "gameInfo/setInVote", payload: true })
         break;
       // 투표 알림 받음
       case 'VOTE':
-        yield put({type: "others/setVote", payload: {id : data.playerId, value : true}})
+        yield put({ type: "others/setVote", payload: { id: data.playerId, value: true } })
         break;
       // 회의 종료
       case 'END':
-        yield put({type : "voteInfo/setVoteResult", payload: data})
-        yield put({type : "gameInfo/setInVote", payload: false})
-        yield put({type : "gameInfo/setInVoteResult", payload: true})
+        yield put({ type: "voteInfo/setVoteResult", payload: data })
+        yield put({ type: "gameInfo/setInVote", payload: false })
+        yield put({ type: "gameInfo/setInVoteResult", payload: true })
 
         // 투표 관련 초기화
 
         const stateMe = yield select(state => state.me);
 
-        yield put({type : "others/setAllVoteFalse"})
-        yield put({type : "me/setPlayer", payload: {...stateMe.player, isVoted: false}})
+        yield put({ type: "others/setAllVoteFalse" })
+        yield put({ type: "me/setPlayer", payload: { ...stateMe.player, isVoted: false } })
 
         break;
       default:
         break;
     }
   },
-  MISSION : function*(operation, data) {
-    switch(operation) {
+  MISSION: function* (operation, data) {
+    switch (operation) {
       case 'PROGRESS':
-        yield put({type : "missionInfo/setTotalMissionProgress", payload: data.progress})
+        yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
         break;
       default:
         break;
@@ -128,8 +135,8 @@ function* sendChannel(client, roomId) {
 function* locationSend(client, roomId, action) {
 
   const stateMe = yield select(state => state.me);
-  yield put({type : "me/changeLocation", payload : action.payload})
-  yield call(send, client, "move", roomId, { player: stateMe.player, location : stateMe.location})
+  yield put({ type: "me/changeLocation", payload: action.payload })
+  yield call(send, client, "move", roomId, { player: stateMe.player, location: stateMe.location })
 }
 
 // 미팅 시작 요청
@@ -140,8 +147,8 @@ function* startMeeting(client, roomId, action) {
 // 투표 요청
 function* vote(client, roomId, action) {
   const stateMe = yield select(state => state.me);
-  yield put({type: "me/setPlayer", payload: {...stateMe.player, isVoted: true}})
-  yield call(send, client, "meeting/vote", roomId, {from : stateMe.player.id, to : action.payload})
+  yield put({ type: "me/setPlayer", payload: { ...stateMe.player, isVoted: true } })
+  yield call(send, client, "meeting/vote", roomId, { from: stateMe.player.id, to: action.payload })
 }
 
 // 미션 완료 전송 요청
