@@ -1,3 +1,4 @@
+import GameCanvas from "components/game/canvas/gameCanvas";
 import { Link, Outlet } from "react-router-dom";
 
 const MainSimple = () => {
@@ -8,6 +9,7 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
+            <GameCanvas/>
         </div>
     </>)
 }
