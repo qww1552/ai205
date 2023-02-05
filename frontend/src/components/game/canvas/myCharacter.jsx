@@ -24,6 +24,9 @@ const MyCharacter = ({ initPosition, initColor }) => {
   // ref.current.charState = "IDLE";
   // ref.current.charDir = "RIGHT";
 
+  const [charState, setCharState] = useState("IDLE")
+  const [charDir, setCharDir] = useState("RIGHT")
+
   useEffect(() => {
     const timer = setInterval(() => {
       action("LOCAITION_SEND_REQUEST", {
@@ -48,12 +51,18 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
     const { forward, backward, left, right } = get();
 
-    ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
+    // ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
     
+    // if(left)
+    //   ref.current.charDir = 'LEFT'
+    // else if(right)
+    //   ref.current.charDir = 'RIGHT'
+
+    setCharState(forward || backward || left || right ? "DASH" : "IDLE")
     if(left)
-      ref.current.charDir = 'LEFT'
+      setCharDir('LEFT')
     else if(right)
-      ref.current.charDir = 'RIGHT'
+      setCharDir('RIGHT')
 
     frontVector.set(0, forward - backward, 0);
     sideVector.set(left - right, 0, 0);
@@ -71,10 +80,9 @@ const MyCharacter = ({ initPosition, initColor }) => {
       <RigidBody restitution={0} ref={ref} type="dynamic" lockRotations={true}>
         <Suspense>
           <CharacterMesh
-            initPosition={initPosition}
-            initColor={initColor}
             id={me.player.id}
-            ref={ref}
+            charState={charState}
+            charDir={charDir}
           />
         </Suspense>
 

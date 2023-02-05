@@ -1,5 +1,5 @@
 import { Text, useTexture } from "@react-three/drei";
-import { forwardRef, Suspense, useRef } from "react";
+import { forwardRef, memo, Suspense, useCallback, useRef, useState } from "react";
 import { useFrame } from "react-three-fiber";
 import { Vector3, RepeatWrapping } from "three";
 
@@ -12,7 +12,7 @@ const MOTION = {
 };
 const FPS = 10;
 
-const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
+const CharacterMesh = memo(({id, charState, charDir }) => {
   // 텍스쳐 설정
   // const texture = useTexture('/player/players_blue_x1.png')
   const texture = useTexture(
@@ -26,26 +26,17 @@ const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
   const ref = useRef();
   let cnt = 0;
 
-  useFrame(() => {
-    const charState = paramRef.current.charState
-      ? paramRef.current.charState
-      : "IDLE";
-    const charDir = paramRef.current.charDir
-      ? paramRef.current.charDir
-      : "RIGHT";
+  useState(() => {
+    cnt = 0;
+  }, [charState]);
 
-    // 상태 변화
-    if (ref.current.stateSum != `${charState} ${charDir}`) {
-      cnt = 0;
+  useState(() => {
+    cnt = 0;
+    if (charDir === "RIGHT") texture.offset.x = 0;
+    else if (charDir === "LEFT") texture.offset.x = 1 / TEXTURE_WIDTH;
+  }, [charDir]);
 
-      if (charDir === 'RIGHT')
-        texture.offset.x = 0;
-      else if (charDir === 'LEFT') 
-        texture.offset.x = 1 / TEXTURE_WIDTH;
-    }
-
-    ref.current.stateSum = `${charState} ${charDir}`;
-
+  const temp = useCallback(() => {
     texture.offset.y = (1 / TEXTRUE_HEIGHT) * MOTION[charState].idx;
 
     if (charDir === "RIGHT") {
@@ -60,21 +51,38 @@ const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
       if (texture.offset.x >= (1 / TEXTURE_WIDTH) * MOTION[charState].frame) {
         texture.offset.x = 0;
       }
-
     } else if (charDir === "LEFT") {
-      texture.repeat.x = - 1 / TEXTURE_WIDTH;
-      
+      texture.repeat.x = -1 / TEXTURE_WIDTH;
+
       cnt += 1;
       if (cnt === FPS) {
         texture.offset.x += 1 / TEXTURE_WIDTH;
         cnt = 0;
       }
 
-      if (texture.offset.x >= (1 / TEXTURE_WIDTH) * (MOTION[charState].frame + 1)) {
+      if (
+        texture.offset.x >=
+        (1 / TEXTURE_WIDTH) * (MOTION[charState].frame + 1)
+      ) {
         texture.offset.x = 1 / TEXTURE_WIDTH;
       }
-
     }
+  },[charState, charDir])
+
+  useFrame(() => {
+    // console.log(`${charState} ${charDir}`)
+
+    // 상태 변화
+    // if (ref.current.stateSum != `${charState} ${charDir}`) {
+    //   cnt = 0;
+
+    //   if (charDir === "RIGHT") texture.offset.x = 0;
+    //   else if (charDir === "LEFT") texture.offset.x = 1 / TEXTURE_WIDTH;
+    // }
+
+    // ref.current.stateSum = `${charState} ${charDir}`;
+    temp();
+  
   });
 
   return (
@@ -91,11 +99,11 @@ const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
           {id}
         </Text>
       </Suspense>
-      <mesh position={initPosition}>
-        {/* <boxGeometry args={[1, 1, 0.1]} /> */}
-        <planeGeometry args={[1, 1]} attach="geometry" />
-        <meshStandardMaterial ref={ref} map={texture} transparent={true} />
-      </mesh>
+        <mesh>
+          {/* <boxGeometry args={[1, 1, 0.1]} /> */}
+          <planeGeometry args={[1, 1]} attach="geometry" />
+          <meshStandardMaterial ref={ref} map={texture} transparent={true} />
+        </mesh>
     </>
   );
 });
