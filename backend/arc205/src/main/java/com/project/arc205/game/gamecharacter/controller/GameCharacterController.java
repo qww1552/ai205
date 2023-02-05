@@ -29,7 +29,7 @@ public class GameCharacterController {
     private final GameCharacterService gameCharacterService;
     private final SimpMessagingTemplate template;
 
-    @MessageMapping("/room/{room-id}/move")
+    @MessageMapping("/room/{room-id}/character/move")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<MoveResponse> move(MoveRequest moveRequest) {
         return BaseResponse.of(Type.CHARACTER, CharacterOperation.MOVE,
