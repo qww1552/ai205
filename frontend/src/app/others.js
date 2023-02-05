@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
   // 다른 플레이어 수
   otherPlayersCnt: 0,
@@ -77,7 +76,8 @@ export const othersSlice = createSlice({
   },
 });
 
-export const { setOtherPlayer, setOtherPlayerVideoInfo } = othersSlice.actions;
+export const { setOtherPlayer, setOtherPlayerVideoInfo, removeOtherPlayerVideoInfo } =
+  othersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

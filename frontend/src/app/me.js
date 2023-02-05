@@ -15,13 +15,14 @@ export const meSlice = createSlice({
   initialState,
   reducers: {
     changeLocation: (state, action) => {
-      state.location = {...state.location, x : action.payload.x, y : action.payload.y};
+      state.location = { ...state.location, x: action.payload.x, y: action.payload.y };
     },
     setPlayer: (state, action) => {
       state.player = action.payload;
     },
     addPlayerVideo: (state, action) => {
-      return  {
+      console.log("player 추가!!!!!!!!!!!!");
+      return {
         ...state,
         connectionId: action.payload.connectionid,
         streamManager: action.payload.streamManager,

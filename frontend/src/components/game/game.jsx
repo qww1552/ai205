@@ -7,11 +7,13 @@ import MissionProgress from 'components/game/mission/missionProgress'
 import MissionList from 'components/game/mission/missionList'
 import ImageButton from 'components/game/button/imageButton'
 import ModalMeeting from 'components/game/meeting/modalMeeting'
+import WebchatMeetingcomponent from 'components/game/meeting/webchatMeetingComponent'
 import LoadingSpinner from 'components/loadingSpinner'
 import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
-
+import { removeOtherPlayerVideoInfo, selectOhterPlayers } from 'app/others'
+import { Col } from 'antd'
 import {
     setMySessionId,
     setMyUserName,
@@ -27,7 +29,7 @@ import {
   } from "app/videoInfo";
 import { selectMe, setConnectionId, setStreamManager, setSession} from 'app/me';
 import { setOtherPlayerVideoInfo } from 'app/others'
-  const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+const APPLICATION_SERVER_URL = "https://192.168.219.105/api/v1/";
 const Game = () => {
 
     const ref = useRef();
@@ -35,7 +37,7 @@ const Game = () => {
     const stateMe = useSelector(selectMe);
 
 
-
+    const otherPlayers = useSelector(selectOhterPlayers);
     const mySessionId = useSelector(selectMySessionId);
     const myUserName = useSelector(selectMyUserName);
     const mainUser = useSelector(selectMainUser);
@@ -90,7 +92,7 @@ const Game = () => {
             localUser.setScreenShareActive(false);
             localUser.setStreamManager(publisher);
             localUser.setSession(mySession)
-            
+            console.log()
             dispatch(addPlayerVideo(localUser));
 
 
@@ -104,7 +106,10 @@ const Game = () => {
         });
 
         mySession.on("streamCreated", (event) => {
-            var subscriber =  mySession.subscribe(event.stream, undefined);
+            var subscriber = mySession.subscribe(event.stream, undefined);
+              subscriber.on('streamPlaying', function (event) {
+            console.log('구독자 플레이중!!')
+             });
             const newUser = new createUser();
             newUser.setStreamManager(subscriber);
             newUser.setConnectionId(event.stream.connection.connectionId);
@@ -114,13 +119,21 @@ const Game = () => {
             // 발언자 표시를 나타내는 변수를 추가한다
             newUser.isSpeaking = false
             dispatch(setOtherPlayerVideoInfo(newUser));
-            // dispatch(addVideoUsers(newUser));
+            
              
         });
-
+        mySession.on('streamPlaying', function (event) {
+            console.log('stream 플레이중!!')
+        });
       
-        mySession.on("streamDestroyed",  (event) => {
-            dispatch(deleteVideoUsers(event.stream)); 
+        mySession.on("streamDestroyed", (event) => {
+            // const nick = event.stream.connection.data.split('%')[0];
+            // const data = {
+            //     nickname: JSON.parse(nick).clientData
+            // };
+            
+            // dispatch(removeOtherPlayerVideoInfo(data));
+             dispatch(deleteVideoUsers(event.stream)); 
         });
         
 
@@ -129,8 +142,8 @@ const Game = () => {
         });
 
         // 여기서부터 발언자표시 시험
-        mySession.on("publisherStartSpeaking", (event) => {
-            dispatch(setIsSpeakingTrue(event.connection.connectionId))
+        // mySession.on("publisherStartSpeaking", (event) => {
+        //     dispatch(setIsSpeakingTrue(event.connection.connectionId))
             // for (let i = 0; i < ref.current.children.length; i++) {
             //   if (
             //     JSON.parse(event.connection.data).clientData ===
@@ -143,10 +156,10 @@ const Game = () => {
             // console.log(
             //   "User " + event.connection.connectionId + " start speaking"
             // );
-          });
+        //   });
   
-        mySession.on("publisherStopSpeaking", (event) => {
-            dispatch(setIsSpeakingFalse(event.connection.connectionId))
+        // mySession.on("publisherStopSpeaking", (event) => {
+        //     dispatch(setIsSpeakingFalse(event.connection.connectionId))
         // console.log(
         //     "User " + event.connection.connectionId + " stop speaking"
         // );
@@ -158,7 +171,7 @@ const Game = () => {
         //     ref.current.children[i].style.borderStyle = "none";
         //     }
         // }
-        });
+        // });
         // 여기까지
   
     };
@@ -230,6 +243,17 @@ const Game = () => {
                     <MissionProgress/>
                     <MissionList/>
                 </div>
+                   {otherPlayers.map((sub) => (
+                    // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
+                    // <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
+                    <Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
+                    {/* <Card
+                    title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
+                    {sub.streamManager!==undefined && ( <WebchatMeetingcomponent user={sub}/>) }
+                
+                    {/* </Card> */}
+                    </Col>    
+                ))}
                 {/* joinSession을 실행하는데 시간이 오래 걸려서, openVidu와 관련된 컴포넌트를 먼저 렌더링하려고 시도하면
                 mainUser에 아직 값이 없어 에러가 발생함 */}
                 {stateMe.streamManager!==undefined &&(<ImageButton/>)}
