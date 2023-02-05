@@ -1,7 +1,7 @@
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, Suspense, createRef } from "react";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { selectMe } from "../../../app/me";
 import { useSelector } from "react-redux";
@@ -19,8 +19,10 @@ const MyCharacter = ({ initPosition, initColor }) => {
   const direction = new Vector3();
   const cameraVec = new Vector3();
 
-  const speed = 6.3;
+  const speed = 6.0;
 
+  // ref.current.charState = "IDLE";
+  // ref.current.charDir = "RIGHT";
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,7 +31,6 @@ const MyCharacter = ({ initPosition, initColor }) => {
         y: ref.current.translation().y,
       });
     }, 300);
-
     return () => {
       clearInterval(timer);
     };
@@ -47,6 +48,13 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
     const { forward, backward, left, right } = get();
 
+    ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
+    
+    if(left)
+      ref.current.charDir = 'LEFT'
+    else if(right)
+      ref.current.charDir = 'RIGHT'
+
     frontVector.set(0, forward - backward, 0);
     sideVector.set(left - right, 0, 0);
 
@@ -60,26 +68,23 @@ const MyCharacter = ({ initPosition, initColor }) => {
 
   return (
     <>
-      <RigidBody
-        restitution={0}
-        ref={ref}
-        type="dynamic"
-        lockRotations={true}
-      >
-        <CharacterMesh
-          initPosition={initPosition}
-          initColor={initColor}
-          id={me.player.id}
-        />
+      <RigidBody restitution={0} ref={ref} type="dynamic" lockRotations={true}>
+        <Suspense>
+          <CharacterMesh
+            initPosition={initPosition}
+            initColor={initColor}
+            id={me.player.id}
+            ref={ref}
+          />
+        </Suspense>
+
         <CuboidCollider
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
             // console.log(e.colliderObject.name ? e.colliderObject.name : null);
           }}
-          onIntersectionExit={() => {
-
-          }}
+          onIntersectionExit={() => {}}
         />
       </RigidBody>
     </>

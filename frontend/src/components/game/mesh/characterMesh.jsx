@@ -1,48 +1,51 @@
 import { Text, useTexture } from "@react-three/drei";
-import { Suspense, useEffect, useRef } from "react";
+import { forwardRef, Suspense, useEffect, useRef, useState } from "react";
 import { useFrame, useLoader } from "react-three-fiber";
 import { Vector3 } from "three";
-import { TextureLoader } from 'three/src/loaders/TextureLoader'
 
-const CharacterMesh = ({ initPosition, initColor, id }) => {
+const TEXTURE_WIDTH = 8;
+const TEXTRUE_HEIGHT = 9;
+const MOTION = {
+  IDLE :  { idx : 8, frame : 2},
+  WALK :  { idx : 6, frame : 4},
+  DASH :  { idx : 5, frame : 8},
+}
 
+const CharacterMesh = forwardRef(({ initPosition, id}, paramRef) => {
+
+  // 텍스쳐 설정
   const texture = useTexture('/player/AnimationSheet_Character.png')
   // const texture = useTexture('/player/players_blue_x1.png')
-  texture.repeat.x = 1 / 8;
-  texture.repeat.y = 1 / 9;
+  texture.repeat.x = 1 / TEXTURE_WIDTH;
+  texture.repeat.y = 1 / TEXTRUE_HEIGHT;
 
-  texture.offset.y = (1 / 9) * 5
+  // texture.repeat.set(-1, 1)
+  // texture.center.set(0.5, 0.5)
 
-  // texture.offset.x = 0.1;
-  // texture.offset.y = 0.2;
-
-  // texture.
-
-  // texture.center.x = 0.5
-  // texture.center.y = 0.5
-  
-  // useEffect(() => {
-
-  //   // console.log(ref.current.map)
-
-  //   // ref.current.map.repeat.x += 1 / 9;
-  //   // ref.current.map.repeat.y = 1 / 5;
-
-  //   // ref.current.map.offset.y += 1 / 10;
-
-  // },[])
   const ref = useRef();
-
   let cnt = 0;
+
   useFrame(() => {
+
+    const charState = paramRef.current.charState
+    const charDir = paramRef.current.charDir
+
+    if(!charState) return
+
+    // console.log(texture.matrix.elements[8])
+
+    // texture.repeat.x = 1 / TEXTURE_WIDTH;
+    // texture.repeat.y = - 1 / TEXTRUE_HEIGHT;
+
+    texture.offset.y = (1 / 9) * MOTION[charState].idx
 
     cnt += 1;
     if(cnt === 10) {
-      ref.current.map.offset.x += 1 / 8;
+      ref.current.map.offset.x += 1 / TEXTURE_WIDTH;
       cnt = 0;
     }
 
-    if(ref.current.map.offset.x >= 1.0) {
+    if(ref.current.map.offset.x >= (1 / TEXTURE_WIDTH) * MOTION[charState].frame) {
       ref.current.map.offset.x = 0;
     }
   
@@ -69,6 +72,6 @@ const CharacterMesh = ({ initPosition, initColor, id }) => {
       </mesh>
     </>
   );
-};
+});
 
 export default CharacterMesh;
