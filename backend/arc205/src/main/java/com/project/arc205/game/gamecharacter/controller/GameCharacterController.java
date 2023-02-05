@@ -5,6 +5,7 @@ import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.CharacterOperation;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
+import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import java.util.UUID;
@@ -31,23 +32,25 @@ public class GameCharacterController {
     @MessageMapping("/room/{room-id}/move")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<MoveResponse> move(MoveRequest moveRequest) {
-        log.info("전달 받은 move : {}", moveRequest);
         return BaseResponse.of(Type.CHARACTER, CharacterOperation.MOVE,
                 gameCharacterService.move(moveRequest));
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
     @SendTo("/sub/room/{room-id}")
-    public BaseResponse<?> kill(@DestinationVariable("room-id") String roomId,
+    public BaseResponse<KillBroadcastResponse> kill(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor, KillRequest killRequest) {
-        // TODO: 2023-02-03 specify response body type
         log.info("전달 받은 kill : {}", killRequest);
         String mafiaSessionId = accessor.getSessionId();
-        gameCharacterService.kill(UUID.fromString(roomId), mafiaSessionId, killRequest.getTo());
+
+        KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
+                UUID.fromString(roomId),
+                mafiaSessionId,
+                killRequest.getTo());
 
         template.convertAndSendToUser(killRequest.getTo(), "/user/queue",
-                BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE));
+                BaseResponse.of(Type.CHARACTER, CharacterOperation.YOU_DIED));
 
-        return BaseResponse.of(Type.CHARACTER, CharacterOperation.KILL);
+        return BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE, killBroadcastResponse);
     }
 }

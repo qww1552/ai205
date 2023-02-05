@@ -2,8 +2,10 @@ package com.project.arc205.game.gamecharacter.service;
 
 import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
+import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.dto.response.PlayerResponse;
+import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
@@ -29,17 +31,23 @@ public class GameCharacterService {
         return new MoveResponse(playerResponse, location);
     }
 
-    public void kill(UUID uuid, String mafiaSessionId, String to) {
+    public KillBroadcastResponse kill(UUID uuid, String mafiaSessionId, String to) {
         GameData gameData = gameRepository.findById(uuid);
         Map<String, GameCharacter> gameCharacters = gameData.getGameCharacters();
 
         GameCharacter gameCharacter = gameCharacters.get(mafiaSessionId);
 
-        if (!(gameCharacter instanceof Mafia))
-            throw new RuntimeException(); // TODO: 2023-02-03 define exception
+        if (!(gameCharacter instanceof Mafia)) {
+            throw new OnlyMafiaCanKillException();
+        }
 
         Mafia mafia = (Mafia) gameCharacter;
         Citizen citizen = (Citizen) gameCharacters.get(to);
         mafia.kill(citizen);
+
+        KillBroadcastResponse.Player of = KillBroadcastResponse.Player.of(to,
+                citizen.getRole().name(), citizen.getIsAlive());
+
+        return new KillBroadcastResponse(of, citizen.getLocation());
     }
 }
