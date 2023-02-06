@@ -49,7 +49,7 @@ const GameCanvas = () => {
                 initColor="blue"
                 id={data.player.id}
                 key={`${data.player.id}${idx}`}
-                location={{ x: data.location.x, y: data.location.y, z: 0 }}
+                location={data.location}
               />
             ))}
             <SimpleMap />

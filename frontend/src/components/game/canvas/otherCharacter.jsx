@@ -8,10 +8,30 @@ import CharacterMesh from "../mesh/characterMesh";
 
 const OtherCharacter = ({ location, initColor, initPosition, id }) => {
   const ref = useRef();
-  const [nextPos, setNextPos] = useState(new Vector2(2, 0));
+  const [nextPos, setNextPos] = useState(new Vector2(0, 0));
+
+  const minusVector = new Vector2();
+  // ref.current.charState = "IDLE"
+  // ref.current.charDir = "RIGHT"
 
   useEffect(() => {
-    setNextPos(new Vector2(location.x, location.y));
+
+    minusVector.subVectors(nextPos, location).normalize();
+    
+    setNextPos(location);
+
+    if(minusVector.x === 0 && minusVector.y === 0) {
+      ref.current.charState = "IDLE"
+    } else {
+      ref.current.charState = "DASH"
+    }
+
+    if(minusVector.x < 0) {
+      ref.current.charDir = "RIGHT"
+    } else {
+      ref.current.charDir = "LEFT"
+    }
+    
   }, [location]);
 
   const lerpConst = 0.035;
@@ -41,6 +61,7 @@ const OtherCharacter = ({ location, initColor, initPosition, id }) => {
           initPosition={initPosition}
           initColor={initColor}
           id={id}
+          ref={ref}
         />
         <CuboidCollider
           args={[0.5, 0.5, 0.1]}

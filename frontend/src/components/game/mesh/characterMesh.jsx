@@ -1,5 +1,5 @@
 import { Text, useTexture } from "@react-three/drei";
-import { forwardRef, Suspense, useRef } from "react";
+import { forwardRef, Suspense, useMemo, useRef } from "react";
 import { useFrame } from "react-three-fiber";
 import { Vector3, RepeatWrapping } from "three";
 
@@ -15,22 +15,26 @@ const FPS = 10;
 const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
   // 텍스쳐 설정
   // const texture = useTexture('/player/players_blue_x1.png')
-  const texture = useTexture(
+
+  const originTexture = useTexture(
     "/player/AnimationSheet_Character.png",
     (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping;
     }
-  );
+  ); 
+
+  const texture = useMemo(() => originTexture.clone(), [originTexture]);
+  
   texture.repeat.y = 1 / TEXTRUE_HEIGHT;
 
   const ref = useRef();
   let cnt = 0;
 
   useFrame(() => {
-    const charState = paramRef.current.charState
+    const charState = paramRef?.current?.charState
       ? paramRef.current.charState
       : "IDLE";
-    const charDir = paramRef.current.charDir
+    const charDir = paramRef?.current?.charDir
       ? paramRef.current.charDir
       : "RIGHT";
 
