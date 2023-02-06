@@ -3,14 +3,7 @@ import { forwardRef, Suspense, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "react-three-fiber";
 import { Vector3, RepeatWrapping } from "three";
 
-const TEXTURE_WIDTH = 8;
-const TEXTRUE_HEIGHT = 9;
-const MOTION = {
-  IDLE: { idx: 8, frame: 2 },
-  WALK: { idx: 6, frame: 4 },
-  DASH: { idx: 5, frame: 8 },
-};
-const FPS = 10;
+import { TEXTURE_WIDTH, TEXTRUE_HEIGHT, FPS, MOTION } from "config/texture";
 
 const CharacterMesh = forwardRef(({ id, isAlive=true }, paramRef) => {
   // 텍스쳐 설정

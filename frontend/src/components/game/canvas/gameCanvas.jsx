@@ -1,5 +1,5 @@
 import { OrthographicCamera, OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber"
+import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "../canvas/myCharacter";
 import OtherCharacter from "../canvas/otherCharacter";
@@ -10,11 +10,24 @@ import { selectOhterPlayers } from "app/others";
 import { useSelector } from "react-redux";
 import SimpleMap from "./simpleMap";
 import { selectGameInfo } from "app/gameInfo";
+import DeadMesh from "../mesh/deadMesh";
 
 const GameCanvas = () => {
   const players = useSelector(selectOhterPlayers);
   const gameInfo = useSelector(selectGameInfo);
-
+  const deadList = [
+    {
+      player: {
+        id: "asdfadsf",
+        role: "mafia",
+        isAlive: false,
+      },
+      location: {
+        y: 1,
+        x: 1,
+      },
+    },
+  ];
   return (
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
@@ -27,10 +40,7 @@ const GameCanvas = () => {
             paused={gameInfo.isInMeeting}
           >
             {/* <Debug /> */}
-            <MyCharacter 
-              initPosition={[0, 0, 0]} 
-              initColor="red" 
-            />
+            <MyCharacter initPosition={[0, 0, 0]} initColor="red" />
             {players.map((data, idx) => (
               <OtherCharacter
                 initPosition={[0, 0, 0]}
@@ -38,6 +48,12 @@ const GameCanvas = () => {
                 id={data.player.id}
                 key={`${data.player.id}${idx}`}
                 location={data.location}
+              />
+            ))}
+            {deadList.map((data, idx) => (
+              <DeadMesh
+                location={data.location}
+                key={`${data.player.id}${idx}`}
               />
             ))}
             <SimpleMap />
