@@ -62,8 +62,8 @@ const LobbySimple = () => {
         ))}
       </ul>
       {otherPlayers.length >= 1 && (
-        // <button onClick={gameStartBtn}>Start Game</button>
-        <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
+        <button onClick={gameStartBtn}>Start Game</button>
+        // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
       )}
     </div>
   );

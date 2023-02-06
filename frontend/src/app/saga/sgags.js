@@ -79,6 +79,15 @@ function* startStomp(action) {
 
 
 const channelHandling = {
+  GAME: function*(operation, data) {
+    switch(operation) {
+      case 'START':
+        yield put({type : "gameInfo/setInGame", payload: true})
+        break;
+      default:
+        break;
+    }
+  },
   CHARACTER: function* (operation, data) {
     const stateMe = yield select(state => state.me);
     switch (operation) {
@@ -150,6 +159,9 @@ const channelHandling = {
       default:
         break;
     }
+  },
+  EXCEPTION: function* (operation, data) {
+    return
   }
 }
 
@@ -174,7 +186,7 @@ function* gameStart(client, roomId, action) {
 function* locationSend(client, roomId, action) {
   const stateMe = yield select(state => state.me);
   yield put({ type: "me/changeLocation", payload: action.payload })
-  yield call(send, client, "move", roomId, { player: stateMe.player, location: stateMe.location })
+  yield call(send, client, "character/move", roomId, { player: stateMe.player, location: stateMe.location })
 }
 
 // 미팅 시작 요청
