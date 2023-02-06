@@ -1,9 +1,5 @@
-import {
-  KeyboardControls,
-  OrthographicCamera,
-  OrbitControls,
-} from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+import { OrthographicCamera, OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber"
 import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "../canvas/myCharacter";
 import OtherCharacter from "../canvas/otherCharacter";
@@ -20,15 +16,7 @@ const GameCanvas = () => {
   const gameInfo = useSelector(selectGameInfo);
 
   return (
-    <KeyboardControls
-      map={[
-        { name: "forward", keys: ["ArrowUp", "w", "W"] },
-        { name: "backward", keys: ["ArrowDown", "s", "S"] },
-        { name: "left", keys: ["ArrowLeft", "a", "A"] },
-        { name: "right", keys: ["ArrowRight", "d", "D"] },
-        { name: "jump", keys: ["Space"] },
-      ]}
-    >
+    <>
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas flat linear>
           <ambientLight intensity={0.1} />
@@ -58,7 +46,7 @@ const GameCanvas = () => {
           {/* <OrbitControls /> */}
         </Canvas>
       </div>
-    </KeyboardControls>
+    </>
   );
 };
 

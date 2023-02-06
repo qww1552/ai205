@@ -1,4 +1,4 @@
-import { useState,useRef,useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { useDispatch,useSelector } from 'react-redux'
@@ -11,6 +11,7 @@ import LoadingSpinner from 'components/loadingSpinner'
 import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
+import { KeyboardControls } from "@react-three/drei";
 
 import {
     setMySessionId,
@@ -28,6 +29,7 @@ import {
 import { selectMe, setConnectionId, setStreamManager, setSession} from 'app/me';
 import { setOtherPlayerVideoInfo } from 'app/others'
   const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+
 const Game = () => {
 
     const ref = useRef();
@@ -223,7 +225,19 @@ const Game = () => {
         
 
     return (
-        <>
+        <KeyboardControls
+        map={[
+            { name: "forward", keys: ["ArrowUp", "w", "W"] },
+            { name: "backward", keys: ["ArrowDown", "s", "S"] },
+            { name: "left", keys: ["ArrowLeft", "a", "A"] },
+            { name: "right", keys: ["ArrowRight", "d", "D"] },
+            { name: "mapKey", keys: ["Tab"] },
+            { name: "chatKey", keys: ["C", "c"] },
+            { name: "reportKey", keys: ["R", "r"] },
+            { name: "killKey", keys: ["Q", "q"] },
+            { name: "actKey", keys: ["E", "e", "Space"] },
+            { name: "escKey", keys: ["Esc"] },
+        ]}>
             <div>
                 <GameCanvas/>
                 <div className="missionComponent floatingComponent">
@@ -244,10 +258,8 @@ const Game = () => {
             // </div>
             }
 
-        </>
-
+        </KeyboardControls>
     )
-
 }
 
 export default Game;
