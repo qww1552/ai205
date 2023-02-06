@@ -14,11 +14,11 @@ const createClient = () => {
   return stomp_client;
 }
 
-const connectClient = (client, roomId, player, callback) => {
+const connectClient = (client, topic, player, callback) => {
   console.log("--connectClient")
   client.connect({playerId : player.id}, 
   () => {
-    client.subscribe(`${SUBSCRIBE_URL}/${roomId}`, callback, {playerId : player.id});
+    client.subscribe(topic, callback, {playerId : player.id});
   }, 
   () => {
     client.unsubscribe();

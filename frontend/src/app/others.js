@@ -19,10 +19,7 @@ export const othersSlice = createSlice({
     setOtherPlayer: (state, action) => {
       // 이미 존재하면
       for (const idx of state.players.keys()) {
-        if (
-          state.players[idx]?.player.id === action.payload.player.id &&
-          action.payload.player.id != "master"
-        ) {
+        if (state.players[idx]?.player.id === action.payload.player.id) {
           state.players[idx].location = action.payload.location;
           return;
         }
