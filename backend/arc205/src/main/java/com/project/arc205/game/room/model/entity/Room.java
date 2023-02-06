@@ -22,7 +22,7 @@ public class Room {
     private UUID id;
     private String title;
     private Player master;
-    private Map<String, Player> players;
+    private Map<String, Player> players;    //key: sessionId, value: Player
     private GameSetting gameSetting;
 
     public static Room create(String title, Player master) {
