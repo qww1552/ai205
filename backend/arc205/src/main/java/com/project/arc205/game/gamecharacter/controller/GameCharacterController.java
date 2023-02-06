@@ -3,6 +3,7 @@ package com.project.arc205.game.gamecharacter.controller;
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.CharacterOperation;
+import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Controller;
 public class GameCharacterController {
 
     private final GameCharacterService gameCharacterService;
+    private final PlayerSessionMappingService mappingService;
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/room/{room-id}/character/move")
@@ -41,14 +43,18 @@ public class GameCharacterController {
     public BaseResponse<KillBroadcastResponse> kill(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor, KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
+        UUID roomUuid = UUID.fromString(roomId);
         String mafiaSessionId = accessor.getSessionId();
 
-        KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
-                UUID.fromString(roomId),
-                mafiaSessionId,
+        String citizenSessionId = mappingService.convertPlayerIdToSessionIdInRoom(roomUuid,
                 killRequest.getTo());
 
-        template.convertAndSendToUser(killRequest.getTo(), "/user/queue",
+        KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
+                roomUuid,
+                mafiaSessionId,
+                citizenSessionId);
+
+        template.convertAndSendToUser(citizenSessionId, "/user/queue",
                 BaseResponse.of(Type.CHARACTER, CharacterOperation.YOU_DIED));
 
         return BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE, killBroadcastResponse);
