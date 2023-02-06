@@ -44,12 +44,12 @@ public class GameCharacterServiceTests {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
         Mafia mafia = new Mafia(null);
         Citizen citizen = new Citizen(null);
-        gameCharacterMap.put("p1", mafia);
-        gameCharacterMap.put("p2", citizen);
+        gameCharacterMap.put("mafiaSessionId", mafia);
+        gameCharacterMap.put("citizenSessionId", citizen);
         when(gameRepository.findById(any()))
                 .thenReturn(GameData.of(new GameSetting(), gameCharacterMap));
 
-        gameCharacterService.kill(UUID.randomUUID(), "p1", "p2");
+        gameCharacterService.kill(UUID.randomUUID(), "mafiaSessionId", "citizenSessionId");
 
         assertFalse(citizen.getIsAlive());
         assertThat(mafia.getKillCount(), equalTo(1));
@@ -59,15 +59,16 @@ public class GameCharacterServiceTests {
     @DisplayName("마피아가 아닌 GameCharacter는 상대방을 살해할 수 없다.")
     void onlyMafiaCanKill() {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
-        Mafia mafia = new Mafia(null);
-        Citizen citizen = new Citizen(null);
-        gameCharacterMap.put("p1", mafia);
-        gameCharacterMap.put("p2", citizen);
+        Citizen citizen1 = new Citizen(null);
+        Citizen citizen2 = new Citizen(null);
+        gameCharacterMap.put("citizen1SessionId", citizen1);
+        gameCharacterMap.put("citizen2SessionId", citizen2);
         when(gameRepository.findById(any()))
                 .thenReturn(GameData.of(new GameSetting(), gameCharacterMap));
 
         assertThrows(OnlyMafiaCanKillException.class, () ->
-                gameCharacterService.kill(UUID.randomUUID(), "p2", "p1")
+                gameCharacterService.kill(UUID.randomUUID(), "citizen1SessionId",
+                        "citizen2SessionId")
         );
     }
 
