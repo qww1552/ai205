@@ -29,11 +29,11 @@ public class Room {
         Room room = new Room();
         room.id = UUID.randomUUID();
         room.title = title;
-        room.master = master;
+//        room.master = master;
         Map<String, Player> players = new HashMap<>();
-        players.put(master.getSessionId(), master);
+//        players.put(master.getSessionId(), master);
         room.players = players;
-        master.setRoom(room);
+//        master.setRoom(room);
         room.gameSetting = new GameSetting();
         return room;
     }
