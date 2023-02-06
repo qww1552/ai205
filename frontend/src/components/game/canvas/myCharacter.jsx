@@ -8,8 +8,9 @@ import { useSelector } from "react-redux";
 import { action } from "app/store";
 import CharacterMesh from "../mesh/characterMesh";
 
-const MyCharacter = ({ initPosition, initColor }) => {
-  const me = useSelector(selectMe);
+const MyCharacter = () => {
+
+  const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
   const [intersecting, setIntersection] = useState(false);
@@ -49,10 +50,10 @@ const MyCharacter = ({ initPosition, initColor }) => {
     const { forward, backward, left, right } = get();
 
     ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
-    
-    if(left)
+
+    if (left)
       ref.current.charDir = 'LEFT'
-    else if(right)
+    else if (right)
       ref.current.charDir = 'RIGHT'
 
     frontVector.set(0, forward - backward, 0);
@@ -71,10 +72,9 @@ const MyCharacter = ({ initPosition, initColor }) => {
       <RigidBody restitution={0} ref={ref} type="dynamic" lockRotations={true}>
         <Suspense>
           <CharacterMesh
-            initPosition={initPosition}
-            initColor={initColor}
-            id={me.player.id}
+            id={stateMe.player.id}
             ref={ref}
+            isAlive={stateMe.player.isAlive}
           />
         </Suspense>
 
@@ -84,7 +84,7 @@ const MyCharacter = ({ initPosition, initColor }) => {
           onIntersectionEnter={(e) => {
             // console.log(e.colliderObject.name ? e.colliderObject.name : null);
           }}
-          onIntersectionExit={() => {}}
+          onIntersectionExit={() => { }}
         />
       </RigidBody>
     </>

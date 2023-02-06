@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   // 내 플레이어 정보
-  player: { id: "player1" },
+  player: { id: "player1" , isAlive: true},
 
   location: {
     y: 0,
@@ -14,6 +14,9 @@ export const meSlice = createSlice({
   name: "me",
   initialState,
   reducers: {
+    DIE_SUCCESS: (state, actions) => {
+      state.player.isAlive = false;
+    },
     changeLocation: (state, action) => {
       state.location = {...state.location, x : action.payload.x, y : action.payload.y};
     },

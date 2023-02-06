@@ -1,5 +1,5 @@
 import { Text, useTexture } from "@react-three/drei";
-import { forwardRef, Suspense, useMemo, useRef } from "react";
+import { forwardRef, Suspense, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "react-three-fiber";
 import { Vector3, RepeatWrapping } from "three";
 
@@ -12,7 +12,7 @@ const MOTION = {
 };
 const FPS = 10;
 
-const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
+const CharacterMesh = forwardRef(({ id, isAlive=true }, paramRef) => {
   // 텍스쳐 설정
   // const texture = useTexture('/player/players_blue_x1.png')
 
@@ -31,6 +31,7 @@ const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
   let cnt = 0;
 
   useFrame(() => {
+
     const charState = paramRef?.current?.charState
       ? paramRef.current.charState
       : "IDLE";
@@ -95,10 +96,10 @@ const CharacterMesh = forwardRef(({ initPosition, id }, paramRef) => {
           {id}
         </Text>
       </Suspense>
-      <mesh position={initPosition}>
+      <mesh>
         {/* <boxGeometry args={[1, 1, 0.1]} /> */}
         <planeGeometry args={[1, 1]} attach="geometry" />
-        <meshStandardMaterial ref={ref} map={texture} transparent={true} />
+        <meshStandardMaterial ref={ref} map={texture} transparent={true} opacity={isAlive ? 1.0 : 0.2}/>
       </mesh>
     </>
   );
