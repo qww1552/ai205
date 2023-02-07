@@ -1,5 +1,5 @@
 import { selectGameInfo } from 'app/gameInfo';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ResultMeeting from './resultMeeting';
 import { Row, Col, Card, Button, Modal, Progress } from "antd"
@@ -9,12 +9,28 @@ import {
 
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 import "./style.css"
+import { selectVoteInfo } from 'app/voteInfo';
 
 const WebchatMeetingcomponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
+  // const voteInfo = useSelector(selectVoteInfo).voteResult
+  const voteInfo = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
+  const [from,setFrom] = useState('')
+  useEffect(()=>{
+    if (isInVoteResult) {
+    for (let i = 0; i < voteInfo.length; i++) {
+      if (props.user.player.id === voteInfo[i].id) {
+        setFrom(voteInfo[i].from);
+        break;
+      }
+      else (
+        setFrom('null')
+      )
+    }
+  }},[isInVoteResult])
 
   return (
-    // props.userinfo.key 로 가져온다
+    // props.user.key 로 가져온다
     <>
         {props.user.player.id && <Card title={props.user.player.id} size="small"
       extra={[
@@ -25,12 +41,13 @@ const WebchatMeetingcomponent = (props) => {
       ]}>
 
       <UserVideoComponent user={props.user} />
-
+      {isInVoteResult === true?<div>{from}</div>:<div>'대충 투표여부'</div>}
+      {/* <div>{typeof(props.voteResult)}</div> */}
     </Card>}
     </>
 
 
-  );
+  )
 };
 
 export default WebchatMeetingcomponent;

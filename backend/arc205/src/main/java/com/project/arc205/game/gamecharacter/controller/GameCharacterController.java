@@ -1,7 +1,6 @@
 package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.CharacterOperation;
 import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
@@ -42,7 +41,7 @@ public class GameCharacterController {
         MoveResponse moveResponse = gameCharacterService.move(roomUuid,
                 playerId, moveRequest.getLocation());
 
-        return BaseResponse.of(Type.CHARACTER, CharacterOperation.MOVE, moveResponse);
+        return BaseResponse.character(CharacterOperation.MOVE).data(moveResponse);
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
@@ -60,11 +59,11 @@ public class GameCharacterController {
                 roomUuid,
                 mafiaPlayerId,
                 citizenPlayerId);
-
+        // TODO: 2023-02-07 citizen의 playerId를 이용해 sessionId를 얻어와서 처리해야 함
         template.convertAndSendToUser(citizenPlayerId, "/user/queue",
-                BaseResponse.of(Type.CHARACTER, CharacterOperation.YOU_DIED));
+                BaseResponse.character(CharacterOperation.YOU_DIED).build());
 
-        return BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE, killBroadcastResponse);
+        return BaseResponse.character(CharacterOperation.DIE).data(killBroadcastResponse);
     }
 
     private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {

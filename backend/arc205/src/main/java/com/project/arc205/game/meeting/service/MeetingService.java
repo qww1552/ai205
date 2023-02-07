@@ -1,6 +1,5 @@
 package com.project.arc205.game.meeting.service;
 
-import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
 import com.project.arc205.game.meeting.dto.request.VoteRequest;
@@ -21,22 +20,22 @@ public class MeetingService {
     private final ApplicationEventPublisher publisher;
     private final GameRepository gameRepository;
 
-    public BaseResponse<MeetingStartResponse> meetingStart(String roomId) {
+    public MeetingStartResponse meetingStart(String roomId) {
         GameData curGame = gameRepository.findById(UUID.fromString(roomId));
         if (!curGame.meetingStart()) {
             throw new AlreadyInMeetingException();
         }
         publisher.publishEvent(new MeetingEvent(roomId));
-        return MeetingStartResponse.newBaseResponse(curGame.getGameCharacters());
+        return MeetingStartResponse.of(curGame.getGameCharacters());
     }
 
-    public BaseResponse<VotedResponse> vote(String roomId, VoteRequest voteRequest) {
+    public VotedResponse vote(String roomId, VoteRequest voteRequest) {
         GameData gameData = gameRepository.findById(UUID.fromString(roomId));
         int remainingVoteTicket = gameData.vote(voteRequest.getFrom(), voteRequest.getTo());
         if (remainingVoteTicket == 0) {
             publisher.publishEvent(new VotingEndEvent(roomId));
         }
-        return VotedResponse.newBaseResponse(voteRequest.getFrom(), remainingVoteTicket);
+        return VotedResponse.of(voteRequest.getFrom(), remainingVoteTicket);
     }
 
 }
