@@ -2,7 +2,6 @@ package com.project.arc205.game.meeting.event.handler;
 
 import com.project.arc205.common.Constant;
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.MeetingOperation;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
@@ -49,7 +48,7 @@ public class MeetingEventHandler {
         //schedule voting start
         taskScheduler.schedule(() -> {
             log.info("{}: voting start", destination);
-            BaseResponse<?> response = BaseResponse.of(Type.MEETING, MeetingOperation.START_VOTING);
+            BaseResponse<?> response = BaseResponse.meeting(MeetingOperation.START_VOTING).build();
             simpMessagingTemplate.convertAndSend(destination, response);
             curGame.votingStart();
 
@@ -96,9 +95,9 @@ public class MeetingEventHandler {
         }
 
         //broadcast voting result
-        BaseResponse<VoteResultResponse> response = VoteResultResponse.newBaseResponse(voteResults,
-                elected);
-        simpMessagingTemplate.convertAndSend(destination, response);
+        VoteResultResponse response = VoteResultResponse.of(voteResults, elected);
+        simpMessagingTemplate.convertAndSend(destination,
+                BaseResponse.meeting(MeetingOperation.END).data(response));
         curGame.votingEnd();
         curGame.meetingEnd();
     }
