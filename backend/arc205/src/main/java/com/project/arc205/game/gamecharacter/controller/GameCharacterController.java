@@ -1,7 +1,6 @@
 package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.CharacterOperation;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
@@ -32,8 +31,8 @@ public class GameCharacterController {
     @MessageMapping("/room/{room-id}/character/move")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<MoveResponse> move(MoveRequest moveRequest) {
-        return BaseResponse.of(Type.CHARACTER, CharacterOperation.MOVE,
-                gameCharacterService.move(moveRequest));
+        return BaseResponse.character(CharacterOperation.MOVE)
+                .data(gameCharacterService.move(moveRequest));
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
@@ -49,8 +48,8 @@ public class GameCharacterController {
                 killRequest.getTo());
 
         template.convertAndSendToUser(killRequest.getTo(), "/user/queue",
-                BaseResponse.of(Type.CHARACTER, CharacterOperation.YOU_DIED));
+                BaseResponse.character(CharacterOperation.YOU_DIED).build());
 
-        return BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE, killBroadcastResponse);
+        return BaseResponse.character(CharacterOperation.DIE).data(killBroadcastResponse);
     }
 }

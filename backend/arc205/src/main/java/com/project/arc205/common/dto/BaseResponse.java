@@ -25,16 +25,6 @@ public class BaseResponse<T> {
         this.data = null;
     }
 
-    @Deprecated
-    public static <T> BaseResponse<T> of(Type type, Operation operation, T data) {
-        return new BaseResponse<>(type, operation, data);
-    }
-
-    @Deprecated
-    public static BaseResponse<?> of(Type type, Operation operation) {
-        return new BaseResponse<>(type, operation);
-    }
-
     public static BodyBuilder game(GameOperation operation) {
         return new Builder(Type.GAME, operation);
     }
