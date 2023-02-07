@@ -43,11 +43,11 @@ public class MafiaGameService implements GameService {
         Map<String, GameCharacter> gameCharacters = gameRepository.findById(roomId)
                 .getGameCharacters();
 
-        AtomicInteger indexHolder = new AtomicInteger();        //for color idx
+        AtomicInteger colorIdx = new AtomicInteger();
         List<GameStartPersonalResponse> responses = new ArrayList<>(gameCharacters.size());
         gameCharacters.forEach((sessionId, gameCharacter) -> responses.add(
                 GameStartPersonalResponse.of(sessionId, gameCharacter,
-                        indexHolder.getAndIncrement())));
+                        colorIdx.getAndIncrement())));
         return responses;
     }
 
