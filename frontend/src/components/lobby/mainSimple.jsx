@@ -95,13 +95,15 @@ const MainSimple = () => {
     }
 
     const loop = async () => {
-        console.log(webcam, model)
         if(webcam) {
+            console.log(webcam.canvas)
             webcam.update();
+            ctx.drawImage(webcam.canvas, 0, 0);
+
         }
-        if(model) {
-            await predict();
-        }
+        // if(model) {
+        //     await predict();
+        // }
         requestRef.current = requestAnimationFrame(loop);
     }
 
