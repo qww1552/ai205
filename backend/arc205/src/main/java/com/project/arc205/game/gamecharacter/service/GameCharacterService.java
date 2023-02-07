@@ -31,23 +31,24 @@ public class GameCharacterService {
         return new MoveResponse(playerResponse, location);
     }
 
-    public KillBroadcastResponse kill(UUID uuid, String mafiaSessionId, String to) {
+    public KillBroadcastResponse kill(UUID uuid, String mafiaPlayerId, String citizenPlayerId) {
         GameData gameData = gameRepository.findById(uuid);
         Map<String, GameCharacter> gameCharacters = gameData.getGameCharacters();
 
-        GameCharacter gameCharacter = gameCharacters.get(mafiaSessionId);
+        GameCharacter gameCharacter = gameCharacters.get(mafiaPlayerId);
 
         if (!(gameCharacter instanceof Mafia)) {
             throw new OnlyMafiaCanKillException();
         }
 
         Mafia mafia = (Mafia) gameCharacter;
-        Citizen citizen = (Citizen) gameCharacters.get(to);
+        Citizen citizen = (Citizen) gameCharacters.get(citizenPlayerId);
         mafia.kill(citizen);
 
-        KillBroadcastResponse.Player of = KillBroadcastResponse.Player.of(to,
+        KillBroadcastResponse.Player playerResponse = KillBroadcastResponse.Player.of(
+                citizenPlayerId,
                 citizen.getRole().name(), citizen.getIsAlive());
 
-        return new KillBroadcastResponse(of, citizen.getLocation());
+        return new KillBroadcastResponse(playerResponse, citizen.getLocation());
     }
 }
