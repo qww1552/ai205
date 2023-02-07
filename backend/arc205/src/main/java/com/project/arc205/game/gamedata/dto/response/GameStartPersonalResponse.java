@@ -31,6 +31,6 @@ public class GameStartPersonalResponse {
 
     public static BaseResponse<GameStartPersonalResponse> newBaseResponse(
             GameStartPersonalResponse gameStartPersonalResponse) {
-        return BaseResponse.of(Type.GAME, GameOperation.START_INFO, gameStartPersonalResponse);
+        return BaseResponse.of(Type.GAME, GameOperation.START_PERSONAL, gameStartPersonalResponse);
     }
 }
