@@ -25,4 +25,14 @@ public class PlayerSessionMappingService {
         throw new NoMatchingSessionException();
     }
 
+    public String convertPlayerIdToSessionIdInRoom(UUID roomId, String playerId) {
+        Room room = roomRepository.findById(roomId);
+        for (Player player : room.getPlayers().values()) {
+            if (player.getId().equals(playerId)) {
+                return player.getSessionId();
+            }
+        }
+        throw new NoMatchingSessionException();
+    }
+
 }
