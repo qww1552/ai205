@@ -18,42 +18,48 @@ import {
   selectVideoUsers,mutedSound,mutedVideo
 } from "app/videoInfo";
 import { useEffect } from 'react';
+import { json } from 'react-router-dom';
+import { selectVoteInfo } from 'app/voteInfo';
 
 // Todo: voteInfo에서 정보를 받아옴
 // import { selectVoteInfo } from '../../../app/voteInfo';
 
 // 화상채팅컴포넌트만 모아놓은 컴포넌트
 const WebchatMeeting = () => {
-  // const P = useSelector(selectOhterPlayers).players
-  // const me = useSelector(selectMe)
   const isInMeeting = useSelector(selectGameInfo).isInMeeting
   const isInVote= useSelector(selectGameInfo).isInVote
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
-  const [VoteduserInfo, setVoteduserinfo] = useState('')
+  const [VoteduserInfo, setVoteduserinfo] = useState('skip')
   const me = useSelector(selectMe)
   const otherPlayers = useSelector(selectOhterPlayers);
-  // const me = {id:'myid', isAlive:true, isVote:true}
+  const [skipinfo, setSkipInfo] = useState([])
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
-  // const voteResult = useSelector(selectVoteInfo).voteResult
-  const voteResult = {1:['a','b','c'],2:['a','b','c'],3:['a','b','c'],4:['a','b','c'],5:['a','b','c'],6:['a','b','c'],7:['a','b','c'],8:['a','b','c'],'skip':['3535k']}
+
+  
+  // 투표결과를 id로 접근할수 있도록 객체화 시킴
+  const voteResult = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
+
   const VoteEvent = (voteduserInfo) => {
     if (voteduserInfo.isAlive) {
-      console.log(me)
       console.log(voteduserInfo.id)
       console.log('에게투표함?')
-      console.log(isInVote)
-      setVoteduserinfo(voteduserInfo)
+      if (VoteduserInfo === voteduserInfo) {
+        setVoteduserinfo('skip')
+      }
+      else{setVoteduserinfo(voteduserInfo)}
     }
+
   }
 
   const videoUsers = useSelector(selectVideoUsers);
-  const  mainUser = useSelector(selectMainUser);
+  const mainUser = useSelector(selectMainUser);
   const dispatch = new useDispatch();
+
   
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
     console.log({VoteduserInfo},'한테 대충 제출하는 이벤트')
-    action('VOTE', { to: "id"})
+    action('VOTE_REQUEST', { to: VoteduserInfo})
   }
 
   const handleSound = (user) => {
@@ -67,8 +73,20 @@ const WebchatMeeting = () => {
    
   }
 
+  useEffect(()=>{
+    if (isInVoteResult===true) {
+    for (let i = 0; i < voteResult.length; i++) {
+      if ('skip' === voteResult[i].id) {
+        setSkipInfo([...skipinfo, voteResult[i].from])
+        break;
+      }   
+    }
+  }},[isInVoteResult])
+  // 투표결과를 unpack하는 함수
+
   return (
     <div>
+      {/* <div>{voteResult.voteResult[0].from}</div> */}
       <Row gutter={[8, 8]}>
 
       <Col span = {8}>
@@ -79,25 +97,22 @@ const WebchatMeeting = () => {
       <Col span = {16}>
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
-      {otherPlayers.map((sub) => (
+      {/* sub.player.(id) 이런식으로 접근함  */}
+      {otherPlayers.map((sub) => {     
         // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
-        // <Col onClick={()=>{VoteEvent(otherplayer)}} span={6}>
-        <Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
-        {/* <Card
-          title={otherplayer.id} onClick={()=>{VoteEvent(otherplayer)}}> */}
+        return (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
+          {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
+        <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.player)}}>
         {sub.streamManager!==undefined && ( <WebchatMeetingcomponent user={sub}/>) }
-       
-        {/* </Card> */}
-        </Col>    
-      ))}
+        </div>
+        </Col>)    
+})}
       {/* 스킵한 유저의 결과창을 보일곳 */}
       {isInVoteResult === true&&
         <Col span={24}>
           <Card size="small">
-          <Button id="voteSkipIcon" onClick={() => console.log("투표 skip")}>
           <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-          </Button>
-          {voteResult.skip === []?"기권한 사람이 없는 경우 보일 메세지":voteResult.skip}
+          {voteResult.skip === []?"기권한 사람이 없는 경우 보일 메세지":<div>{skipinfo}</div>}
         </Card>
         </Col>}
       </Row>
@@ -105,7 +120,10 @@ const WebchatMeeting = () => {
       
       {/* isInVote가 실행되면 활성화 */}
       {/* 죽은 경우에는 투표를 못하니까 표시안함 */}
-      {(me.isAlive&&!me.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>제출</button>}
+      {/* 선택된 유저가 없는 경우 skip 아이콘 보이게 처리 */}
+      {/* Todo: voteSkipIcon css 추가 */}
+      {/* Todo: 지금 me 객체의 isAlive, isVoted값이 없어서 작동이 안됨 나중에 초기화를 하던가 할듯 */}
+      {(me.isAlive&&!me.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
       
     </div>
     
