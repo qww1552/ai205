@@ -37,14 +37,6 @@ public class MoveResponse {
         String id;
         Role role;
         Boolean isAlive;
-
-//        static Player of(String id, Role role, boolean isAlive) {
-//            Player newPlayer = new Player();
-//            newPlayer.id = id;
-//            newPlayer.role = role;
-//            newPlayer.isAlive = isAlive;
-//            return newPlayer;
-//        }
     }
 }
 
