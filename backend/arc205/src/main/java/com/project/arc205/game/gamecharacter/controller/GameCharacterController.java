@@ -43,18 +43,19 @@ public class GameCharacterController {
     public BaseResponse<KillBroadcastResponse> kill(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor, KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
-        UUID roomUuid = UUID.fromString(roomId);
-        String mafiaSessionId = accessor.getSessionId();
 
-        String citizenSessionId = mappingService.convertPlayerIdToSessionIdInRoom(roomUuid,
-                killRequest.getTo());
+        UUID roomUuid = UUID.fromString(roomId);
+
+        String mafiaPlayerId = mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
+                accessor.getSessionId());
+        String citizenPlayerId = killRequest.getTo();
 
         KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
                 roomUuid,
-                mafiaSessionId,
-                citizenSessionId);
+                mafiaPlayerId,
+                citizenPlayerId);
 
-        template.convertAndSendToUser(citizenSessionId, "/user/queue",
+        template.convertAndSendToUser(citizenPlayerId, "/user/queue",
                 BaseResponse.of(Type.CHARACTER, CharacterOperation.YOU_DIED));
 
         return BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE, killBroadcastResponse);
