@@ -12,6 +12,7 @@ const ImageButton = () => {
 
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
+  const adjustPlayer = useSelector(selectMe).adjustPlayer
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
@@ -27,6 +28,9 @@ const ImageButton = () => {
   const closeButtonActivate = () => {
     action('gameInfo/setChatModalOpen', false)
   }
+  const killButtonActivate = () => {
+    action('KILL_REQUEST', {to : adjustPlayer})
+  }
 
   const [, get] = useKeyboardControls()
   const { actKey, killKey, reportKey, escKey, chatKey } = get()
@@ -37,7 +41,7 @@ const ImageButton = () => {
   } else if (escKey) {
     closeButtonActivate()
   } else if (killKey) {
-    //killButtonActivate()
+    killButtonActivate()
   } else if (reportKey) {
     //reportButtonActivate()
   }
@@ -70,6 +74,7 @@ const ImageButton = () => {
       <button
         className="imgBtn floatingComponent"
         id="killBtn"
+        onClick={killButtonActivate}
       >
         <img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해"/>
       </button>

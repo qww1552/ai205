@@ -17,6 +17,21 @@ const GameCanvas = () => {
   const players = useSelector(selectOhterPlayers);
   const gameInfo = useSelector(selectGameInfo);
   const deadList = useSelector(selectDead).deadList;
+
+  // const players = [
+  //   {
+  //     player: {
+  //       id: "asdfadsf",
+  //       role: "mafia",
+  //       isAlive: false,
+  //     },
+  //     location: {
+  //       y: 1,
+  //       x: 1,
+  //     },
+  //   },
+  // ];
+
   // const deadList = [
   //   {
   //     player: {
@@ -50,6 +65,7 @@ const GameCanvas = () => {
                 id={data.player.id}
                 key={`${data.player.id}${idx}`}
                 location={data.location}
+                isAlive={data.player.isAlive}
               />
             ))}
             {deadList.map((data, idx) => (

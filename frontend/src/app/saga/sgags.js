@@ -101,18 +101,18 @@ const channelHandling = {
         }
         break;
       case 'DIE':
-        if (stateMe.player.id !== data.player.id) {
-          const otherPlayerData = {
-            player: {...stateMe.player, id: data.player.id, isAlive: false },
-            location: data.location
-          }
-          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
-        }
+        // if (stateMe.player.id !== data.player.id) {
+        //   const otherPlayerData = {
+        //     player: {...stateMe.player, id: data.player.id, isAlive: false },
+        //     location: data.location
+        //   }
+        //   yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
+        // }
+        yield put({ type: "dead/addDeadList", payload : data })
         break;
       case 'YOU_DIED':
         const payload = {...stateMe, player : {...stateMe.player, isAlive : false}}
         yield put({ type: "me/setPlayer", payload })
-
         break;
       default:
         break;
