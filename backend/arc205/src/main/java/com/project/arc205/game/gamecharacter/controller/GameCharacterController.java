@@ -33,9 +33,16 @@ public class GameCharacterController {
 
     @MessageMapping("/room/{room-id}/character/move")
     @SendTo("/sub/room/{room-id}")
-    public BaseResponse<MoveResponse> move(MoveRequest moveRequest) {
-        return BaseResponse.of(Type.CHARACTER, CharacterOperation.MOVE,
-                gameCharacterService.move(moveRequest));
+    public BaseResponse<MoveResponse> move(@DestinationVariable("room-id") String roomId,
+            StompHeaderAccessor accessor, MoveRequest moveRequest) {
+        UUID roomUuid = UUID.fromString(roomId);
+
+        String playerId = getPlayerIdFromHeader(accessor, roomUuid);
+
+        MoveResponse moveResponse = gameCharacterService.move(roomUuid,
+                playerId, moveRequest.getLocation());
+
+        return BaseResponse.of(Type.CHARACTER, CharacterOperation.MOVE, moveResponse);
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
@@ -46,8 +53,7 @@ public class GameCharacterController {
 
         UUID roomUuid = UUID.fromString(roomId);
 
-        String mafiaPlayerId = mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
-                accessor.getSessionId());
+        String mafiaPlayerId = getPlayerIdFromHeader(accessor, roomUuid);
         String citizenPlayerId = killRequest.getTo();
 
         KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
@@ -59,5 +65,10 @@ public class GameCharacterController {
                 BaseResponse.of(Type.CHARACTER, CharacterOperation.YOU_DIED));
 
         return BaseResponse.of(Type.CHARACTER, CharacterOperation.DIE, killBroadcastResponse);
+    }
+
+    private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {
+        return mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
+                accessor.getSessionId());
     }
 }

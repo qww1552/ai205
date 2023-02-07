@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.project.arc205.common.model.Location;
+import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
@@ -72,5 +74,22 @@ public class GameCharacterServiceTests {
         );
     }
 
+    @Test
+    @DisplayName("GameChacterService의 move 호출 시 해당 캐릭터가 이동한다.")
+    void gameCharacterCanMove() {
+        Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
+        Citizen citizen = new Citizen(null);
+        String citizenPlayerId = "citizenPlayerId";
+        gameCharacterMap.put(citizenPlayerId, citizen);
+        citizen.setLocation(new Location(0.0, 0.0));
+        when(gameRepository.findById(any()))
+                .thenReturn(GameData.of(new GameSetting(), gameCharacterMap));
 
+        MoveRequest moveRequest = new MoveRequest();
+        Location newLocation = new Location(1.1, 1.1);
+        moveRequest.setLocation(newLocation);
+        gameCharacterService.move(UUID.randomUUID(), citizenPlayerId, moveRequest.getLocation());
+
+        assertThat(citizen.getLocation(), equalTo(newLocation));
+    }
 }
