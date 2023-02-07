@@ -2,6 +2,7 @@ package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
+import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Controller;
 public class GameCharacterController {
 
     private final GameCharacterService gameCharacterService;
+    private final PlayerSessionMappingService mappingService;
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/room/{room-id}/character/move")
@@ -40,12 +42,17 @@ public class GameCharacterController {
     public BaseResponse<KillBroadcastResponse> kill(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor, KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
-        String mafiaSessionId = accessor.getSessionId();
+
+        UUID roomUuid = UUID.fromString(roomId);
+
+        String mafiaPlayerId = mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
+                accessor.getSessionId());
+        String citizenPlayerId = killRequest.getTo();
 
         KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
-                UUID.fromString(roomId),
-                mafiaSessionId,
-                killRequest.getTo());
+                roomUuid,
+                mafiaPlayerId,
+                citizenPlayerId);
 
         template.convertAndSendToUser(killRequest.getTo(), "/user/queue",
                 BaseResponse.character(CharacterOperation.YOU_DIED).build());

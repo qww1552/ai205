@@ -22,10 +22,11 @@ public class BasicGameCharacterAssignStrategy implements
         Map<String, GameCharacter> initialGameCharacters = new HashMap<>();
         String mafiaId = "";
 
-        for (String id : players.keySet()) {
-            initialGameCharacters.put(id, new Citizen(Map.of(
+        for (Player player : players.values()) {
+            String playerId = player.getId();
+            initialGameCharacters.put(playerId, new Citizen(Map.of(
                     UUID.randomUUID().toString(), new BasicActiveMission())));
-            mafiaId = id;
+            mafiaId = playerId;
         }
 
         initialGameCharacters.put(mafiaId, new Mafia(Map.of(
