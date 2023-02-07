@@ -9,6 +9,7 @@ import gameInfoReducer from 'app/gameInfo'
 import missionInfoReducer from 'app/missionInfo'
 import voteReducer from 'app/voteInfo'
 import videoReducer from 'app/videoInfo'
+import deadReducer from 'app/dead'
 import { persistReducer } from 'redux-persist';
 import persistStore from 'redux-persist/es/persistStore';
 
@@ -30,7 +31,8 @@ const reducers = combineReducers({
   result: resultReducer,
   gameset: gamesetReducer,
   voteInfo: voteReducer,
-  videoInfo: videoReducer
+  videoInfo: videoReducer,
+  dead: deadReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers);

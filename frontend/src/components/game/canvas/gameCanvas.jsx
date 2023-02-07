@@ -11,23 +11,25 @@ import { useSelector } from "react-redux";
 import SimpleMap from "./simpleMap";
 import { selectGameInfo } from "app/gameInfo";
 import DeadMesh from "../mesh/deadMesh";
+import { selectDead } from "app/dead";
 
 const GameCanvas = () => {
   const players = useSelector(selectOhterPlayers);
   const gameInfo = useSelector(selectGameInfo);
-  const deadList = [
-    {
-      player: {
-        id: "asdfadsf",
-        role: "mafia",
-        isAlive: false,
-      },
-      location: {
-        y: 1,
-        x: 1,
-      },
-    },
-  ];
+  const deadList = useSelector(selectDead).deadList;
+  // const deadList = [
+  //   {
+  //     player: {
+  //       id: "asdfadsf",
+  //       role: "mafia",
+  //       isAlive: false,
+  //     },
+  //     location: {
+  //       y: 1,
+  //       x: 1,
+  //     },
+  //   },
+  // ];
   return (
     <>
       <div style={{ width: "100vw", height: "100vh" }}>

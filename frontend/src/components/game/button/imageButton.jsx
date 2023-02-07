@@ -42,10 +42,6 @@ const ImageButton = () => {
     //reportButtonActivate()
   }
 
-  const killBtn = () => {
-    action("me/DIE_SUCCESS");
-  }
-
   return (
     <>
       {/* 버튼의 가로세로 비율은 8:5로 지정할 것 (원본 560x350px) */}
@@ -74,7 +70,6 @@ const ImageButton = () => {
       <button
         className="imgBtn floatingComponent"
         id="killBtn"
-        onClick={killBtn}
       >
         <img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해"/>
       </button>
