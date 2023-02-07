@@ -30,7 +30,7 @@ class PlayerSessionMappingServiceTest {
     }
 
     @Test
-    @DisplayName("playerId는 PlayerSessionMappingService를 통해 sessionId로 변환된다.")
+    @DisplayName("sessionId는 PlayerSessionMappingService를 통해 playerId로 변환된다.")
     void convertPlayerIdToSessionIdInRoom() {
         Player player = Player.create("player", "playerSessionId");
         Room testRoom = DummyRoom.createEmptyTestRoom("testRoom");
@@ -40,7 +40,8 @@ class PlayerSessionMappingServiceTest {
                 .thenReturn(testRoom);
 
         assertThat(
-                mappingService.convertPlayerIdToSessionIdInRoom(UUID.randomUUID(), player.getId()),
-                equalTo(player.getSessionId()));
+                mappingService.convertSessionIdToPlayerIdInRoom(UUID.randomUUID(),
+                        player.getSessionId()),
+                equalTo(player.getId()));
     }
 }

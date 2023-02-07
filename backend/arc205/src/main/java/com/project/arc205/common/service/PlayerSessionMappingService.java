@@ -15,11 +15,11 @@ public class PlayerSessionMappingService {
 
     private final RoomRepository roomRepository;
 
-    public String convertPlayerIdToSessionIdInRoom(UUID roomId, String playerId) {
+    public String convertSessionIdToPlayerIdInRoom(UUID roomId, String sessionId) {
         Room room = roomRepository.findById(roomId);
         for (Player player : room.getPlayers().values()) {
-            if (player.getId().equals(playerId)) {
-                return player.getSessionId();
+            if (player.getSessionId().equals(sessionId)) {
+                return player.getId();
             }
         }
         throw new NoMatchingSessionException();
