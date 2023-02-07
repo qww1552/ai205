@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/arc?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://i8a205.p.ssafy.io:3306/arc?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ssafy
-    password: ssafy
+    password: mafia
     data: classpath:data.sql
     initialization-mode: always
 
@@ -41,7 +41,7 @@ logging:
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
-OPENVIDU_URL: http://localhost:4443/
+OPENVIDU_URL: https://i8a205.p.ssafy.io:8443/
 OPENVIDU_SECRET: MY_SECRET
 
-allowed-origins: "http://localhost:3000"
+allowed-origins: "https://i8a205.p.ssafy.io"

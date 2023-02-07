@@ -27,7 +27,7 @@ import {
   } from "app/videoInfo";
 import { selectMe, setConnectionId, setStreamManager, setSession} from 'app/me';
 import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue, } from 'app/others'
-  const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+  const APPLICATION_SERVER_URL = "https://i8a205.p.ssafy.io/api/v1/";
 
 const Game = () => {
 
