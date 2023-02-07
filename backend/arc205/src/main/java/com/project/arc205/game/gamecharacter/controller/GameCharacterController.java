@@ -32,9 +32,16 @@ public class GameCharacterController {
 
     @MessageMapping("/room/{room-id}/character/move")
     @SendTo("/sub/room/{room-id}")
-    public BaseResponse<MoveResponse> move(MoveRequest moveRequest) {
-        return BaseResponse.character(CharacterOperation.MOVE)
-                .data(gameCharacterService.move(moveRequest));
+    public BaseResponse<MoveResponse> move(@DestinationVariable("room-id") String roomId,
+            StompHeaderAccessor accessor, MoveRequest moveRequest) {
+        UUID roomUuid = UUID.fromString(roomId);
+
+        String playerId = getPlayerIdFromHeader(accessor, roomUuid);
+
+        MoveResponse moveResponse = gameCharacterService.move(roomUuid,
+                playerId, moveRequest.getLocation());
+
+        return BaseResponse.character(CharacterOperation.MOVE).data(moveResponse);
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
@@ -45,18 +52,22 @@ public class GameCharacterController {
 
         UUID roomUuid = UUID.fromString(roomId);
 
-        String mafiaPlayerId = mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
-                accessor.getSessionId());
+        String mafiaPlayerId = getPlayerIdFromHeader(accessor, roomUuid);
         String citizenPlayerId = killRequest.getTo();
 
         KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
                 roomUuid,
                 mafiaPlayerId,
                 citizenPlayerId);
-
-        template.convertAndSendToUser(killRequest.getTo(), "/user/queue",
+        // TODO: 2023-02-07 citizen의 playerId를 이용해 sessionId를 얻어와서 처리해야 함
+        template.convertAndSendToUser(citizenPlayerId, "/user/queue",
                 BaseResponse.character(CharacterOperation.YOU_DIED).build());
 
         return BaseResponse.character(CharacterOperation.DIE).data(killBroadcastResponse);
+    }
+
+    private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {
+        return mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
+                accessor.getSessionId());
     }
 }

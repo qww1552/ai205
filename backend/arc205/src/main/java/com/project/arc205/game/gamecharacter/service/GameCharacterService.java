@@ -1,10 +1,8 @@
 package com.project.arc205.game.gamecharacter.service;
 
 import com.project.arc205.common.model.Location;
-import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
-import com.project.arc205.game.gamecharacter.dto.response.PlayerResponse;
 import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
@@ -24,11 +22,18 @@ public class GameCharacterService {
 
     private final GameRepository gameRepository;
 
-    public MoveResponse move(MoveRequest moveRequest) {
-        String playerId = moveRequest.getPlayerRequest().getId();
-        PlayerResponse playerResponse = new PlayerResponse(playerId);
-        Location location = moveRequest.getLocation();
-        return new MoveResponse(playerResponse, location);
+    public MoveResponse move(UUID roomId, String playerId, Location location) {
+        GameData gameData = gameRepository.findById(roomId);
+
+        GameCharacter gameCharacter = gameData.getGameCharacters().get(playerId);
+        gameCharacter.setLocation(location);
+
+        return MoveResponse.builder()
+                .playerId(playerId)
+                .role(gameCharacter.getRole())
+                .isAlive(gameCharacter.getIsAlive())
+                .location(gameCharacter.getLocation())
+                .build();
     }
 
     public KillBroadcastResponse kill(UUID uuid, String mafiaPlayerId, String citizenPlayerId) {
