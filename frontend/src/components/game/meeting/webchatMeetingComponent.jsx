@@ -10,6 +10,7 @@ import {
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 import "./style.css"
 import { selectVoteInfo } from 'app/voteInfo';
+import me from 'app/me';
 
 const WebchatMeetingcomponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
@@ -32,6 +33,8 @@ const WebchatMeetingcomponent = (props) => {
   return (
     // props.user.key 로 가져온다
     <>
+
+    {/* Todo: 죽은 사람인 경우 유령이미지 보이는 css 추가 */}
         {props.user.player.id && <Card title={props.user.player.id} size="small"
       extra={[
         <CheckSquareTwoTone twoToneColor='LimeGreen' style={{ fontSize: '20px' }} />, " ",
@@ -39,11 +42,15 @@ const WebchatMeetingcomponent = (props) => {
         <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px' }} />, " ",
         <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px' }} />
       ]}>
-
+      {props.user.player.isAlive === true ||props.user.player.isAlive===undefined?
+      <>
       <UserVideoComponent user={props.user} />
       {isInVoteResult === true?<div>{from}</div>:<div>'대충 투표여부'</div>}
       {/* <div>{typeof(props.voteResult)}</div> */}
+      </>
+      :<img className='video' src='/testImg/ghost.jpg'/>}
     </Card>}
+
     </>
 
 
