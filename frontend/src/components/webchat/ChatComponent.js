@@ -10,7 +10,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const App = () => {
   const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
   const mainuser = useSelector(selectMe);
-  const myUserName = useSelector(selectMyUserName);
+  const myUserName = useSelector(selectMe).player.id;
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const chatScroll = useRef();
@@ -94,7 +94,7 @@ const App = () => {
             {messageList.map((item, i) => (
               <List.Item key={item.nickname}>
                 <List.Item.Meta
-                  avatar={<Avatar src={"https://randomuser.me/api/portraits/men/12.jpg"} />}
+                  avatar={<Avatar src={'/testImg/mychar.PNG'} />}
                   title={item.nickname}
                   // description={item.email}
                 />
