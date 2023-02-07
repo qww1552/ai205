@@ -3,6 +3,7 @@ package com.project.arc205.common.service;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.room.model.entity.Room;
 import com.project.arc205.game.room.repository.RoomRepository;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +18,12 @@ public class PlayerSessionMappingService {
 
     public String convertSessionIdToPlayerIdInRoom(UUID roomId, String sessionId) {
         Room room = roomRepository.findById(roomId);
-        for (Player player : room.getPlayers().values()) {
-            if (player.getSessionId().equals(sessionId)) {
-                return player.getId();
-            }
+        Map<String, Player> players = room.getPlayers();
+        Player player = players.get(sessionId);
+        if (player == null) {
+            throw new NoMatchingSessionException();
         }
-        throw new NoMatchingSessionException();
+        return player.getId();
     }
 
     public String convertPlayerIdToSessionIdInRoom(UUID roomId, String playerId) {
