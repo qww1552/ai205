@@ -86,20 +86,15 @@ const WebchatMeeting = () => {
 
   return (
     <div>
-      {/* <div>{voteResult.voteResult[0].from}</div> */}
       <Row gutter={[8, 8]}>
 
       <Col span = {8}>
-        {/* <Card title={me.id}> */}
      <WebchatMeetingcomponent user={me} userinfo={me}/>
-      {/* </Card> */}
       </Col>
       <Col span = {16}>
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
-      {/* sub.player.(id) 이런식으로 접근함  */}
       {otherPlayers.map((sub) => {     
-        // Todo: 대충 props로 컴포넌트에 otherplayer정보를 넘겨준다
         return (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
           {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
         <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.player)}}>
@@ -116,14 +111,12 @@ const WebchatMeeting = () => {
         </Card>
         </Col>}
       </Row>
-      {/* Todo: 대충 props로 컴포넌트에 자기 정보를 넘겨준다 */}
-      
       {/* isInVote가 실행되면 활성화 */}
       {/* 죽은 경우에는 투표를 못하니까 표시안함 */}
       {/* 선택된 유저가 없는 경우 skip 아이콘 보이게 처리 */}
       {/* Todo: voteSkipIcon css 추가 */}
-      {/* Todo: 지금 me 객체의 isAlive, isVoted값이 없어서 작동이 안됨 나중에 초기화를 하던가 할듯 */}
-      {(me.isAlive&&!me.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
+      <button onClick={()=>{console.log(me)}}></button>
+      {(me.player.isAlive&&!me.player.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
       
     </div>
     
