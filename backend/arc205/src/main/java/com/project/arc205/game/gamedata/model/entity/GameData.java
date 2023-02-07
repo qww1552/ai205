@@ -2,6 +2,7 @@ package com.project.arc205.game.gamedata.model.entity;
 
 import com.project.arc205.common.Constant;
 import com.project.arc205.common.model.Location;
+import com.project.arc205.common.model.Role;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
@@ -49,7 +50,7 @@ public class GameData {
     public static GameData of(GameSetting gameSetting, Map<String, GameCharacter> gameCharacters) {
 
         int citizenCount = gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias();
-        
+
         return GameData.builder()
                 .totalMissionCount(gameSetting.getNumberOfMissions() * citizenCount)
                 .aliveCitizenCount(citizenCount)
@@ -106,5 +107,23 @@ public class GameData {
         for (GameCharacter gameCharacter : gameCharacters.values()) {
             gameCharacter.setLocation(location);
         }
+    }
+
+    public void kill(String playerId) {
+        GameCharacter deadCharacter = gameCharacters.get(playerId);
+        deadCharacter.die();
+        if (deadCharacter.getRole().equals(Role.CITIZEN)) {
+            this.aliveCitizenCount--;
+        } else if (deadCharacter.getRole().equals(Role.MAFIA)) {
+            this.aliveMafiaCount--;
+        }
+    }
+
+    public Role getWinRole() {
+        if (aliveMafiaCount == aliveCitizenCount)
+            return Role.MAFIA;
+        else if (aliveMafiaCount == 0 || totalMissionCount == completedMissionCount)
+            return Role.CITIZEN;
+        return null;
     }
 }

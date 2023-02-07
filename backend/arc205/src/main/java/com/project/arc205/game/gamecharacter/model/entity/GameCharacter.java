@@ -22,6 +22,7 @@ public abstract class GameCharacter {
     }
 
     public void die() {
+        //TODO: throw Exception when already dead
         this.isAlive = false;
     }
 
