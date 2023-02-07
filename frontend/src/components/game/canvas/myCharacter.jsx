@@ -69,7 +69,7 @@ const MyCharacter = () => {
 
   return (
     <>
-      <RigidBody restitution={0} ref={ref} type="dynamic" lockRotations={true}>
+      <RigidBody ref={ref} type="dynamic" lockRotations={true}>
         <Suspense>
           <CharacterMesh
             id={stateMe.player.id}
@@ -78,14 +78,15 @@ const MyCharacter = () => {
           />
         </Suspense>
 
-        <CuboidCollider
+        {stateMe.player.isAlive && <CuboidCollider
+
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
             // console.log(e.colliderObject.name ? e.colliderObject.name : null);
           }}
           onIntersectionExit={() => { }}
-        />
+        />}
       </RigidBody>
     </>
   );
