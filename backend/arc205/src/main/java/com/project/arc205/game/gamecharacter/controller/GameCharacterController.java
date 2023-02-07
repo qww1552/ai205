@@ -59,7 +59,7 @@ public class GameCharacterController {
                 roomUuid,
                 mafiaPlayerId,
                 citizenPlayerId);
-        // TODO: 2023-02-07 citizen의 playerId를 이용해 sessionId를 얻어와서 처리해야 함
+
         String citizenSessionId = mappingService.convertPlayerIdToSessionIdInRoom(roomUuid,
                 citizenPlayerId);
 
