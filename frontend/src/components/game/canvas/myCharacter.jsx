@@ -1,4 +1,4 @@
-import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
+import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
@@ -13,7 +13,6 @@ const MyCharacter = () => {
   const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
-  const light = useRef();
   const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
@@ -48,7 +47,6 @@ const MyCharacter = () => {
       0.02
     );
 
-
     const { forward, backward, left, right } = get();
 
     ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
@@ -67,14 +65,11 @@ const MyCharacter = () => {
       .multiplyScalar(speed);
 
     ref.current.setLinvel({ x: direction.x, y: direction.y, z: 0 });
-
   });
 
   return (
     <>
       <RigidBody ref={ref} type="dynamic" lockRotations={true}>
-        <pointLight distance={4} decay={0.01} position={[0,0,1]}/>
-
         <Suspense>
           <CharacterMesh
             id={stateMe.player.id}

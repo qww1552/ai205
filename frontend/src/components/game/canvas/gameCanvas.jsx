@@ -1,4 +1,4 @@
-import { OrthographicCamera, OrbitControls, SpotLight } from "@react-three/drei";
+import { OrthographicCamera, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "../canvas/myCharacter";
@@ -49,7 +49,8 @@ const GameCanvas = () => {
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas flat linear>
-          <ambientLight intensity={0.3} />
+          <ambientLight intensity={0.1} />
+          <directionalLight position={[0, 0, 5]} />
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}

@@ -5,18 +5,17 @@ import { action } from "app/store";
 import { useSelector } from "react-redux";
 
 const MeetingButton = ({ position }) => {
-
+    
     const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn;
 
     return (
         <>
-            <RigidBody colliders="cuboid" type="fixed" sensor
-                onIntersectionEnter={() => action('gameInfo/setAdjacentMeetingBtn', true)}
-                onIntersectionExit={() => action('gameInfo/setAdjacentMeetingBtn', false)}
+            <RigidBody colliders="cuboid" type="fixed" sensor 
+            onIntersectionEnter={() => action('gameInfo/setAdjacentMeetingBtn', true)} 
+            onIntersectionExit={() => action('gameInfo/setAdjacentMeetingBtn', false)}
             >
-                <mesh receiveShadow position={position}>
-                    <boxGeometry args={[1, 1, 1]} />
-                    <meshStandardMaterial color={isAdjacentMeetingBtn ? "purple" : "yellow"} />
+                <mesh position={position}>
+                    <Box args={[1, 1, 1]} material-color={isAdjacentMeetingBtn? "purple" : "yellow"} />
                     <Text fontSize={0.5} position={[0, 0, 1]} color="black" anchorX="center" >
                         Meeting
                     </Text>

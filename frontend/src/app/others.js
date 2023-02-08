@@ -71,26 +71,10 @@ export const othersSlice = createSlice({
         }
       }
     },
-    setIsSpeakingTrue(state, action) {
-      for (let i = 0; i < state.players.length; i++) {
-        
-        if (state.players[i].connectionId === action.payload) {
-          // console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말하는중")
-          state.players[i] = {...state.players[i], isSpeaking : true}
-        }
-      }
-    },
-    setIsSpeakingFalse(state, action) {
-      for (let i = 0; i < state.players.length; i++) {
-        if (state.players[i].connectionId === action.payload) {
-          state.players[i] = {...state.players[i], isSpeaking : false}
-        }
-      }
-  },
   },
 });
 
-export const { setOtherPlayer, setOtherPlayerVideoInfo,setIsSpeakingFalse, setIsSpeakingTrue  } = othersSlice.actions;
+export const { setOtherPlayer, setOtherPlayerVideoInfo } = othersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

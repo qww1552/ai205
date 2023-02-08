@@ -18,6 +18,7 @@ import {
     setMyUserName,
     addMainUser,
     deleteVideoUsers, addVideoUsers,removeMainUser,
+    setIsSpeakingFalse,setIsSpeakingTrue,
   } from "app/videoInfo";
   
   import {
@@ -26,7 +27,7 @@ import {
     selectMainUser
   } from "app/videoInfo";
 import { selectMe, setConnectionId, setStreamManager, setSession} from 'app/me';
-import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue, } from 'app/others'
+import { setOtherPlayerVideoInfo } from 'app/others'
   const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
 
 const Game = () => {

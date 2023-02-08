@@ -1,6 +1,6 @@
 package com.project.arc205.common.exception.handler;
 
-import com.project.arc205.common.dto.BaseResponse;
+import com.project.arc205.common.dto.ExceptionResponse;
 import com.project.arc205.common.exception.custom_exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,14 +15,14 @@ public class GlobalExceptionHandler {
 
     @MessageExceptionHandler(CustomException.class)
     @SendToUser("/queue")
-    public BaseResponse<?> handleException(CustomException e) {
+    public ExceptionResponse handleException(CustomException e) {
 //        log.info("exception: {}", e.getMessage());
-        return BaseResponse.exception(e);
+        return ExceptionResponse.of(e);
     }
 
     @MessageExceptionHandler(MethodArgumentNotValidException.class)
     @SendToUser("/queue")
-    public BaseResponse<?> handleArgumentNotValidException(Exception e) {
-        return BaseResponse.exception(HttpStatus.BAD_REQUEST, e.getMessage());
+    public ExceptionResponse handleArgumentNotValidException(Exception e) {
+        return ExceptionResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }

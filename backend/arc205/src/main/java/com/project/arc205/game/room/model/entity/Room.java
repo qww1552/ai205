@@ -2,7 +2,6 @@ package com.project.arc205.game.room.model.entity;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
-import com.project.arc205.game.room.model.exception.PlayerIdAlreadyExistException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,20 +29,22 @@ public class Room {
         Room room = new Room();
         room.id = UUID.randomUUID();
         room.title = title;
-//        room.master = master;
-//        players.put(master.getSessionId(), master);
-        room.players = new HashMap<>();
-//        master.setRoom(room);
+        room.master = master;
+        Map<String, Player> players = new HashMap<>();
+        players.put(master.getSessionId(), master);
+        room.players = players;
+        master.setRoom(room);
         room.gameSetting = new GameSetting();
         return room;
     }
 
-    public void enter(Player player) {
+    public boolean enter(Player player) {
         if (this.players.containsValue(player)) {
-            throw new PlayerIdAlreadyExistException(player.getId());
+            return false;
         }
         this.players.put(player.getSessionId(), player);
         player.setRoom(this); // 양방향 매핑이므로 player에도 room을 추가함
+        return true;
     }
 
 }

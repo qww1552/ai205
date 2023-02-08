@@ -12,7 +12,6 @@ const ImageButton = () => {
 
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
-  const me = useSelector(selectMe).player
   const adjustPlayer = useSelector(selectMe).adjustPlayer
 
   const chatButtonActivate = () => {
@@ -49,9 +48,6 @@ const ImageButton = () => {
 
   return (
     <>
-    {me.isAlive===true?
-    <>
-      {/* {me.isAlive === true? */}
       {/* 버튼의 가로세로 비율은 8:5로 지정할 것 (원본 560x350px) */}
       <button
         className="imgBtn floatingComponent"
@@ -75,7 +71,6 @@ const ImageButton = () => {
           <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고"/>
       </button>
       <MissionComponent/>
-      {me.role === "mafia"?
       <button
         className="imgBtn floatingComponent"
         id="killBtn"
@@ -83,9 +78,6 @@ const ImageButton = () => {
       >
         <img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해"/>
       </button>
-      :<div></div>}
-    </>
-    :<></>}
     </>
   );
 };

@@ -1,31 +1,34 @@
 package com.project.arc205.game.meeting.dto.response;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.AccessLevel;
+import com.project.arc205.common.dto.BaseResponse;
+import com.project.arc205.common.operation.Type;
+import com.project.arc205.common.operation.operation.MeetingOperation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoteResultResponse {
+    @Getter
+    @AllArgsConstructor(staticName = "of")
+    private static class VoteResult {
+        private final String id;
+        private final List<String> from;
+    }
 
     private final List<VoteResult> voteResults;
     private final String elected;
 
-    public static VoteResultResponse of(Map<String, List<String>> voteResults, String elected) {
-        List<VoteResult> results = voteResults.entrySet().stream()
+    private VoteResultResponse(Map<String, List<String>> voteResults, String elected) {
+        this.voteResults = voteResults.entrySet().stream()
                 .map(e -> VoteResultResponse.VoteResult.of(e.getKey(), e.getValue()))
                 .collect(Collectors.toList());
-        return new VoteResultResponse(results, elected);
+        this.elected = elected;
     }
-
-    @Getter
-    @AllArgsConstructor(staticName = "of")
-    private static class VoteResult {
-
-        private final String id;
-        private final List<String> from;
+    public static BaseResponse<VoteResultResponse> newBaseResponse(Map<String, List<String>> voteResults, String elected) {
+        return BaseResponse.of(Type.MEETING, MeetingOperation.END, new VoteResultResponse(voteResults, elected));
     }
 }

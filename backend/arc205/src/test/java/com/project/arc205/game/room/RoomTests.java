@@ -3,45 +3,43 @@ package com.project.arc205.game.room;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.room.model.entity.Room;
-import com.project.arc205.game.room.model.exception.PlayerIdAlreadyExistException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class RoomTests {
 
-    private Player getPlayerOf(String name) {
+    private Player getPlayer(String name) {
         return Player.create(name, name);
     }
 
-//    @Test
-//    @DisplayName("룸 생성 시 방 작성자가 players에 포함된다.")
-//    void masterIncludedInRoomWhenCreateRoomTest() {
-//        Player master = getPlayerOf("master");
-//        Room room = Room.create("test", master);
-//
-//        assertThat(room.getPlayers().containsValue(master), is(true));
-//    }
+    @Test
+    @DisplayName("룸 생성 시 방 작성자가 players에 포함된다.")
+    void masterIncludedInRoomWhenCreateRoomTest() {
+        Player master = getPlayer("master");
+        Room room = Room.create("test", master);
 
-//    @Test
-//    @DisplayName("룸 생성 시 방 작성자에 룸이 세팅된다.")
-//    void roomSetToMasterWhenCreateRoomTest() {
-//        Player master = getPlayerOf("master");
-//        Room room = Room.create("test", master);
-//
-//        assertThat(master.getRoom(), is(equalTo(room)));
-//    }
+        assertThat(room.getPlayers().containsValue(master), is(true));
+    }
+
+    @Test
+    @DisplayName("룸 생성 시 방 작성자에 룸이 세팅된다.")
+    void roomSetToMasterWhenCreateRoomTest() {
+        Player master = getPlayer("master");
+        Room room = Room.create("test", master);
+
+        assertThat(master.getRoom(), is(equalTo(room)));
+    }
 
     @Test
     @DisplayName("룸에 참가하면 관계가 양방향으로 저장된다.")
     void playerJoinRoomTest() {
-        Player master = getPlayerOf("master");
+        Player master = getPlayer("master");
         Room room = Room.create("test", master);
-        Player player = getPlayerOf("join");
+        Player player = getPlayer("join");
 
         room.enter(player);
 
@@ -50,23 +48,21 @@ public class RoomTests {
     }
 
     @Test
-    @DisplayName("룸에 이름이 중복인 사용자가 참여하면 예외를 발생한다.")
+    @DisplayName("룸에 이미 참여중인 사용자가 다시 참가하면 false를 반환한다.")
     void playerJoinRoomReturnFalseIfConflictTest() {
-        Player master = getPlayerOf("master");
+        Player master = getPlayer("master");
         Room room = Room.create("test", master);
-        String playerId = "join";
-        Player player1 = getPlayerOf(playerId);
-        Player player2 = getPlayerOf(playerId);
-        room.enter(player1);
+        Player player = getPlayer("join");
 
-        assertThrows(PlayerIdAlreadyExistException.class,
-                () -> room.enter(player2));
+        room.enter(player);
+
+        assertThat(room.enter(player), is(false));
     }
 
     @Test
     @DisplayName("게임 설정 변경")
     void gameSettingUpdate() {
-        Room room = Room.create("update setting", getPlayerOf("master"));
+        Room room = Room.create("update setting", getPlayer("master"));
         GameSetting incoming = new GameSetting();
         GameSetting gameSetting = room.getGameSetting();
         incoming.setMaxPlayers(10000000);
@@ -78,7 +74,7 @@ public class RoomTests {
     @Test
     @DisplayName("게임 설정 변경 시 값이 null일 경우 무시된다")
     void gameSettingUpdateIgnoredWhenValueIsNull() {
-        Room room = Room.create("update setting", getPlayerOf("master"));
+        Room room = Room.create("update setting", getPlayer("master"));
         GameSetting incoming = new GameSetting();
         incoming.setMaxPlayers(null);
         GameSetting gameSetting = room.getGameSetting();

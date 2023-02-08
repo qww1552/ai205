@@ -1,7 +1,6 @@
 package com.project.arc205.game.gamedata.service;
 
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
-import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamedata.dto.response.GameStartPersonalResponse;
 import com.project.arc205.game.gamedata.dto.response.GameStartResponse;
 import com.project.arc205.game.gamedata.manager.GameManager;
@@ -41,16 +40,14 @@ public class MafiaGameService implements GameService {
 
     @Override
     public List<GameStartPersonalResponse> getPersonalInfo(UUID roomId) {
-        Map<String, Player> players = roomRepository.findById(roomId).getPlayers();
         Map<String, GameCharacter> gameCharacters = gameRepository.findById(roomId)
                 .getGameCharacters();
 
-        AtomicInteger colorIdx = new AtomicInteger();   //assign gameCharacter color in order
+        AtomicInteger colorIdx = new AtomicInteger();
         List<GameStartPersonalResponse> responses = new ArrayList<>(gameCharacters.size());
-        players.forEach((sessionId, player) -> responses.add(
-                GameStartPersonalResponse.of(sessionId, gameCharacters.get(player.getId()),
-                        colorIdx.getAndIncrement()))
-        );
+        gameCharacters.forEach((sessionId, gameCharacter) -> responses.add(
+                GameStartPersonalResponse.of(sessionId, gameCharacter,
+                        colorIdx.getAndIncrement())));
         return responses;
     }
 

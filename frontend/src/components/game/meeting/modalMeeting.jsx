@@ -28,11 +28,10 @@ const ModalMeeting = () => {
   // 대충 누가 투표했는지 5초정도 보이기 위해서 띄움
   useEffect(() => {
     if (isInMeeting &&(isInVoteResult)) {
-      setTimeout(()=>{setSeeNextResult(true);
-        setTimeout(()=>{
-          action('gameInfo/setInMeeting', false)
-        },5000)}, 5000)
-
+      setTimeout(()=>setSeeNextResult(true), 5000)
+      setTimeout(()=>{
+        action('gameInfo/setInMeeting', false)
+      },10000)
     }
   },[isInMeeting,isInVoteResult])
   
@@ -93,9 +92,9 @@ const ModalMeeting = () => {
         </Button>
         {/* ※여기까지 */}
         {/* 페이지전환을 위한 변수를 띄움 */}
-        <div>{isInMeeting?'미팅임':'미팅아님'}</div>
+        {/* <div>{isInMeeting?'미팅임':'미팅아님'}</div>
         <div>{seeNextResult?'다음결과true':'다음결과false'}</div>
-        <div>{isInVoteResult?'투표결과보이는중':'투표결과안보이는중'}</div>
+        <div>{isInVoteResult?'투표결과보이는중':'투표결과안보이는중'}</div> */}
       </Modal>
       
     </>

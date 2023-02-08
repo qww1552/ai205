@@ -1,7 +1,6 @@
 package com.project.arc205.game.meeting.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.common.operation.operation.MeetingOperation;
 import com.project.arc205.game.meeting.dto.request.VoteRequest;
 import com.project.arc205.game.meeting.dto.response.MeetingStartResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
@@ -27,8 +26,7 @@ public class MeetingController {
     public BaseResponse<MeetingStartResponse> startMeeting(
             @DestinationVariable("room-id") String roomId) {
         log.info("/room/{}/meeting/start", roomId);
-        return BaseResponse.meeting(MeetingOperation.START)
-                .data(meetingService.meetingStart(roomId));
+        return meetingService.meetingStart(roomId);
     }
 
     @MessageMapping("/vote")
@@ -37,8 +35,7 @@ public class MeetingController {
             @NotNull VoteRequest voteRequest) {
         log.info("/room/{}/meeting/vote: {} voted for {}", roomId, voteRequest.getFrom(),
                 voteRequest.getTo());
-        return BaseResponse.meeting(MeetingOperation.VOTE)
-                .data(meetingService.vote(roomId, voteRequest));
+        return meetingService.vote(roomId, voteRequest);
     }
 
 }

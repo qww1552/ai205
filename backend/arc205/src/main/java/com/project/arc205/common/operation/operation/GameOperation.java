@@ -4,6 +4,5 @@ public enum GameOperation implements Operation {
 
     START,
     START_PERSONAL,
-    SETTING_UPDATE,
-    END
+    SETTING_UPDATE
 }
