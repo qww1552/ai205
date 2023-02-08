@@ -97,8 +97,15 @@ const channelHandling = {
           }
         })
         break;
+      // ※게임 종료신호 데이터 받아오기
+      case 'END':
+        yield put({ type: "gameResult/setGameResult", payload: data })
+        yield put({type : "gameInfo/setInGame", payload: false})
+        break;
+
       default:
         break;
+
     }
   },
   CHARACTER: function* (operation, data) {
