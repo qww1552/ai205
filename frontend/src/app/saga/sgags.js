@@ -211,7 +211,7 @@ function* startMeeting(client, roomId, action) {
 function* vote(client, roomId, action) {
   const stateMe = yield select(state => state.me);
   yield put({ type: "me/setPlayer", payload: { ...stateMe.player, isVoted: true } })
-  yield call(send, client, "meeting/vote", roomId, { from: stateMe.player.id, to: action.payload })
+  yield call(send, client, "meeting/vote", roomId, { from: stateMe.player.id, to: action.payload.to })
 }
 
 // 미션 완료 전송 요청
