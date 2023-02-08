@@ -59,7 +59,7 @@ const WebchatMeeting = () => {
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
     console.log({VoteduserInfo},'한테 대충 제출하는 이벤트')
-    action('VOTE_REQUEST', { to: VoteduserInfo})
+    action('VOTE_REQUEST', { to: VoteduserInfo.id})
   }
 
   const handleSound = (user) => {
