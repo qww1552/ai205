@@ -11,6 +11,7 @@ const GameResult = () => {
   const navigate = useNavigate();
   // ※렌더링 되고 10초 지난후 라우터 이동
   useEffect(()=>{
+    if (!isInGame&&gameResult) {
     setTimeout(() => {
       navigate('/rooms')
       // Todo:
@@ -18,8 +19,8 @@ const GameResult = () => {
       // 게임에 사용된 변수 초기화
       // 웹캠컴포넌트랑 채팅창 띄울까 고민중
       
-    },10000)
-  },[])
+    },10000)}
+  },[isInGame, gameResult])
   return (
     <>
     <Modal
