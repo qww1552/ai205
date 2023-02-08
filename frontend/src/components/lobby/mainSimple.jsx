@@ -1,3 +1,4 @@
+import Teachable from "components/teachable/Teachable";
 import { Link, Outlet } from "react-router-dom";
 
 const MainSimple = () => {
@@ -8,6 +9,7 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
+            {/* <Teachable/> */}
         </div>
     </>)
 }

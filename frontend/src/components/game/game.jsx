@@ -22,6 +22,7 @@ import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOthe
 import { selectGameInfo } from 'app/gameInfo';
 import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 import gameResult from 'app/gameResult';
+import Teachable from "components/teachable/Teachable";
   const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
 
 const Game = () => {
@@ -253,7 +254,8 @@ const Game = () => {
                 mainUser에 아직 값이 없어 에러가 발생함 */}
                 {stateMe.streamManager!==undefined &&(<ImageButton/>)}
                 {stateMe.streamManager!==undefined &&(<ModalMeeting/>)}
-                {stateMe.streamManager!==undefined &&(<GameResult/>)}
+                {stateMe.streamManager !== undefined && (<GameResult />)}
+                <Teachable/>
             </div>
             {
             // !check && <div>
