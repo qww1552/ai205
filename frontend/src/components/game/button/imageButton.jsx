@@ -13,6 +13,8 @@ const ImageButton = () => {
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
   const me = useSelector(selectMe).player
+  const adjustPlayer = useSelector(selectMe).adjustPlayer
+
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
   }
@@ -27,6 +29,9 @@ const ImageButton = () => {
   const closeButtonActivate = () => {
     action('gameInfo/setChatModalOpen', false)
   }
+  const killButtonActivate = () => {
+    action('KILL_REQUEST', {to : adjustPlayer})
+  }
 
   const [, get] = useKeyboardControls()
   const { actKey, killKey, reportKey, escKey, chatKey } = get()
@@ -37,7 +42,7 @@ const ImageButton = () => {
   } else if (escKey) {
     closeButtonActivate()
   } else if (killKey) {
-    //killButtonActivate()
+    killButtonActivate()
   } else if (reportKey) {
     //reportButtonActivate()
   }
@@ -70,10 +75,11 @@ const ImageButton = () => {
           <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고"/>
       </button>
       <MissionComponent/>
-      {me.role === "mafia"?
+      {me.role === "MAFIA"?
       <button
-        className="imgBtn floatingComponent"
+        className={"imgBtnNoHover floatingComponent " + (adjustPlayer ? "imgBtnReady" : "")}
         id="killBtn"
+        onClick={killButtonActivate}
       >
         <img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해"/>
       </button>

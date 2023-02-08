@@ -40,6 +40,7 @@ export const gameInfoSlice = createSlice({
       state.isChatModalOpen = action.payload
     },
     setInGame: (state, action) => {
+      console.log(action.payload, state.isInGame)
       state.isInGame = action.payload;
     },
     setMissionModalOpen: (state, action) => {

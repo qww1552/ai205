@@ -18,8 +18,8 @@ public class RoomRepository {
     @PostConstruct
     public void init() {
 //         최초 한 개의 room 생성
-        Room tempRoom = Room.create("first", null);
-        roomStorage.put(tempRoom.getId(), tempRoom);
+        Room room = Room.create("first", Player.create("master", "master"));
+        roomStorage.put(room.getId(), room);
     }
 
     public Room create(String title, Player master) {

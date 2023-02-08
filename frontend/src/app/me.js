@@ -3,20 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   // 내 플레이어 정보
   player: { id: "player1" , isAlive: true},
-
   location: {
     y: 0,
     x: 0,
   },
+  connectionId: undefined,
+  streamManager: undefined,
+  session: undefined,
+  adjustPlayer: null,
 };
 
 export const meSlice = createSlice({
   name: "me",
   initialState,
   reducers: {
-    DIE_SUCCESS: (state, actions) => {
-      state.player.isAlive = false;
-    },
     changeLocation: (state, action) => {
       state.location = {...state.location, x : action.payload.x, y : action.payload.y};
     },
@@ -39,6 +39,9 @@ export const meSlice = createSlice({
         session: undefined,
       };
     },
+    setAdjustPlayer: (state, action) => {
+      state.adjustPlayer = action.payload
+    }
   },
 });
 

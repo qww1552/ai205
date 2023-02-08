@@ -35,4 +35,8 @@ const roomRequest = (roomId) => {
   return axios.get(`${BASE_URL}/rooms/${roomId}`);
 }
 
-export { createClient, send, connectClient, roomRequest };
+const roomListRequest = () => {
+  return axios.get(`${BASE_URL}/rooms/`);
+}
+
+export { createClient, send, connectClient, roomRequest, roomListRequest };
