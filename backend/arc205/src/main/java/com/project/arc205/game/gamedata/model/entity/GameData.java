@@ -22,6 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameData {
 
+    private UUID roomId;
     private int totalMissionCount;      //전체 미션 수
     private int completedMissionCount;  //현재 완료된 미션 수
     private int aliveCitizenCount;      //시민 생존자 수
@@ -34,12 +35,11 @@ public class GameData {
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
     @Builder
-    private GameData(int totalMissionCount, int aliveCitizenCount, int aliveMafiaCount,
+    private GameData(UUID roomId, int totalMissionCount,
             int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters) {
+        this.roomId = roomId;
         this.totalMissionCount = totalMissionCount;
         this.completedMissionCount = 0;
-        this.aliveCitizenCount = aliveCitizenCount;
-        this.aliveMafiaCount = aliveMafiaCount;
         this.meetingLimitTime = meetingLimitTime;
         this.votingLimitTime = votingLimitTime;
         this.gameCharacters = gameCharacters;
@@ -47,14 +47,14 @@ public class GameData {
         this.inMeeting = false;
     }
 
-    public static GameData of(GameSetting gameSetting, Map<String, GameCharacter> gameCharacters) {
+    public static GameData of(UUID roomId, GameSetting gameSetting,
+            Map<String, GameCharacter> gameCharacters) {
 
         int citizenCount = gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias();
 
         return GameData.builder()
+                .roomId(roomId)
                 .totalMissionCount(gameSetting.getNumberOfMissions() * citizenCount)
-                .aliveCitizenCount(citizenCount)
-                .aliveMafiaCount(gameSetting.getNumberOfMafias())
                 .meetingLimitTime(gameSetting.getMeetingLimitTime())
                 .votingLimitTime(gameSetting.getVoteLimitTime())
                 .gameCharacters(gameCharacters)
