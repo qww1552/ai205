@@ -1,10 +1,8 @@
 package com.project.arc205.game.meeting.event.handler;
 
-import com.project.arc205.common.Constant;
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.common.model.Role;
 import com.project.arc205.common.operation.operation.MeetingOperation;
-import com.project.arc205.game.gamedata.event.GameEndEvent;
+import com.project.arc205.common.util.Constant;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
 import com.project.arc205.game.meeting.dto.response.VoteResultResponse;
@@ -20,12 +18,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -33,7 +31,6 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class MeetingEventHandler {
 
-    private final ApplicationEventPublisher publisher;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final TaskScheduler taskScheduler;
     private final GameRepository gameRepository;
@@ -67,6 +64,7 @@ public class MeetingEventHandler {
 
     @Async
     @EventListener
+    @Transactional
     public void votingEnd(VotingEndEvent event) {
         String destination = Constant.DESTINATION_PREFIX + event.getRoomId();
         log.info("{}: voting end", destination);
@@ -106,12 +104,6 @@ public class MeetingEventHandler {
         curGame.meetingEnd();
 
         //kill elected player
-        curGame.kill(elected);
-
-        //check game end
-        Role winRole = curGame.getWinRole();
-        if (winRole != null) {
-            publisher.publishEvent(new GameEndEvent(UUID.fromString(event.getRoomId()), winRole));
-        }
+        curGame.getGameCharacters().get(elected).die();
     }
 }

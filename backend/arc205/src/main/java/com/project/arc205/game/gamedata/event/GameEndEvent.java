@@ -1,14 +1,15 @@
 package com.project.arc205.game.gamedata.event;
 
+import com.project.arc205.common.event.DomainEvent;
 import com.project.arc205.common.model.Role;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 @AllArgsConstructor
-public class GameEndEvent {
+public class GameEndEvent implements DomainEvent {
+
     private UUID roomId;
     private Role winRole;
 }
