@@ -267,7 +267,7 @@ const Game = () => {
             //     <button onClick={onClickbtn}>확인</button>
             // </div>
             }
-            <button onClick={() => action('gameInfo/setInGame', false)}>게임최종결과</button>
+            {/* <button onClick={() => action('gameInfo/setInGame', false)}>게임최종결과</button> */}
 
         </KeyboardControls>
     )
