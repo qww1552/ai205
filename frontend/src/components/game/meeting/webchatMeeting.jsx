@@ -95,13 +95,13 @@ const WebchatMeeting = () => {
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
       {otherPlayers.map((sub) => {     
-        return (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
+        return (<>{sub.streamManager!==undefined && (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
           {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
         <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.player)}}>
-        {sub.streamManager!==undefined && ( <WebchatMeetingcomponent user={sub}/>) }
+          <WebchatMeetingcomponent user={sub}/>
         </div>
-        </Col>)    
-})}
+        </Col>) }</>)    
+      })}
       {/* 스킵한 유저의 결과창을 보일곳 */}
       {isInVoteResult === true&&
         <Col span={24}>
