@@ -14,14 +14,17 @@ import me from 'app/me';
 
 const WebchatMeetingcomponent = (props) => {
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
-  // const voteInfo = useSelector(selectVoteInfo).voteResult
-  const voteInfo = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
+  const voteInfo = useSelector(selectVoteInfo).voteResult.voteResults
+  // const voteInfo = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
   const [from,setFrom] = useState('')
   useEffect(()=>{
+    console.log(voteInfo)
     if (isInVoteResult) {
     for (let i = 0; i < voteInfo.length; i++) {
+      
       if (props.user.player.id === voteInfo[i].id) {
         setFrom(voteInfo[i].from);
+        console.log(from)
         break;
       }
       else (
@@ -45,7 +48,7 @@ const WebchatMeetingcomponent = (props) => {
       {props.user.player.isAlive === true ||props.user.player.isAlive===undefined?
       <>
       <UserVideoComponent user={props.user} />
-      {isInVoteResult === true?<div>{from}</div>:<div>'대충 투표여부'</div>}
+      {isInVoteResult === true?<div>{from}</div>:props.user.player.isVoted===true?<div>투표완료</div>:<div>투표아직안함</div>}
       {/* <div>{typeof(props.voteResult)}</div> */}
       </>
       :<img className='video' src='/testImg/ghost.jpg'/>}
