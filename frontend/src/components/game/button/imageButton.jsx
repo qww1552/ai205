@@ -75,9 +75,9 @@ const ImageButton = () => {
           <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고"/>
       </button>
       <MissionComponent/>
-      {me.role === "mafia"?
+      {me.role === "MAFIA"?
       <button
-        className="imgBtn floatingComponent"
+        className={"imgBtnNoHover floatingComponent " + (adjustPlayer ? "imgBtnReady" : "")}
         id="killBtn"
         onClick={killButtonActivate}
       >

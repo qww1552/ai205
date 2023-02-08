@@ -86,8 +86,6 @@ const channelHandling = {
         break;
       case 'START_PERSONAL':
         const stateMe = yield select(state => state.me);
-        console.log(data)
-        console.log(stateMe.player)
         yield put({
           type: "me/setPlayer",
           payload: {
@@ -122,8 +120,9 @@ const channelHandling = {
         yield put({ type: "dead/addDeadList", payload: data })
         break;
       case 'YOU_DIED':
-        const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
-        yield put({ type: "me/setPlayer", payload })
+        console.log(operation, data)
+        // const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
+        yield put({ type: "me/setPlayer", payload : {...stateMe.player, isAlive: false } })
         break;
       default:
         break;

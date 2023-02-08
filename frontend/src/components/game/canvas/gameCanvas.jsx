@@ -12,8 +12,10 @@ import SimpleMap from "./simpleMap";
 import { selectGameInfo } from "app/gameInfo";
 import DeadMesh from "../mesh/deadMesh";
 import { selectDead } from "app/dead";
+import { selectMe } from "app/me";
 
 const GameCanvas = () => {
+  const stateMe = useSelector(selectMe);
   const players = useSelector(selectOhterPlayers);
   const gameInfo = useSelector(selectGameInfo);
   const deadList = useSelector(selectDead).deadList;
@@ -58,6 +60,7 @@ const GameCanvas = () => {
             {/* <Debug /> */}
             <MyCharacter initPosition={[0, 0, 0]} initColor="red" />
             {players.map((data, idx) => (
+              (stateMe.player.isAlive == data.player.isAlive) &&
               <OtherCharacter
                 initPosition={[0, 0, 0]}
                 initColor="blue"
