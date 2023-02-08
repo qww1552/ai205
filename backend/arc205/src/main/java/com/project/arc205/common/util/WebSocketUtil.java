@@ -3,9 +3,7 @@ package com.project.arc205.common.util;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
-import org.springframework.stereotype.Component;
 
-@Component
 public class WebSocketUtil {
 
     public static MessageHeaders createHeaders(String sessionId) {
