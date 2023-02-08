@@ -42,7 +42,7 @@ const WebchatMeeting = () => {
     if (voteduserInfo.isAlive) {
       console.log(voteduserInfo.id)
       console.log('에게투표함?')
-      if (VoteduserInfo === voteduserInfo) {
+      if (VoteduserInfo === voteduserInfo.id) {
         setVoteduserinfo('skip')
       }
       else{setVoteduserinfo(voteduserInfo.id)}
