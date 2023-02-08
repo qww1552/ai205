@@ -27,7 +27,7 @@ const LobbySimple = () => {
     const timer = setInterval(() => {
       roomRequest(roomId).then(res =>  {
         const players = res.data.data.players
-        const otherPlayers = players.filter(v => (v.id !== me.player.id)).map(v => {return {...v, isAlive : true, isVoted : false}})
+        const otherPlayers = players.filter(v => (v.id !== 'master')&&(v.id !== me.player.id))
         setotherPlayers(otherPlayers);
 
         for(const player of otherPlayers) {
