@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const App = () => {
   const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
+  const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const mainuser = useSelector(selectMe);
   const myUserName = useSelector(selectMe).player.id;
   const [messageList, setMessageList] = useState([]);
@@ -71,7 +72,7 @@ const App = () => {
   };
 
   return (
-    <Modal title="Chatting Modal" open={isChatModalOpen} onCancel={() => action('gameInfo/setChatModalOpen', false)} footer={[]}>
+    <Modal title="Chatting Modal" open={isChatModalOpen&&!isInVoteResult} onCancel={() => action('gameInfo/setChatModalOpen', false)} footer={[]}>
       <div
         ref={chatScroll}
         id="scrollableDiv"
