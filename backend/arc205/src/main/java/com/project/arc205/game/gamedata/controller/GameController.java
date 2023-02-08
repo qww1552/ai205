@@ -1,7 +1,6 @@
 package com.project.arc205.game.gamedata.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
-import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.GameOperation;
 import com.project.arc205.game.gamedata.dto.response.GameStartPersonalResponse;
 import com.project.arc205.game.gamedata.dto.response.GameStartResponse;
@@ -41,11 +40,10 @@ public class GameController {
                 res -> {
                     log.info("/game/start_info/{}", res.getSessionId());
                     template.convertAndSendToUser(res.getSessionId(), "/queue",
-                            GameStartPersonalResponse.newBaseResponse(res),
+                            BaseResponse.game(GameOperation.START_PERSONAL).data(res),
                             createHeaders(res.getSessionId()));
                 });
-
-        return BaseResponse.of(Type.GAME, GameOperation.START, response);
+        return BaseResponse.game(GameOperation.START).data(response);
     }
 
     private MessageHeaders createHeaders(String sessionId) {
@@ -64,7 +62,7 @@ public class GameController {
 
         GameSetting response = gameService.updateSetting(UUID.fromString(roomId), gameSetting);
 
-        return BaseResponse.of(Type.GAME, GameOperation.SETTING_UPDATE, response);
+        return BaseResponse.game(GameOperation.SETTING_UPDATE).data(response);
     }
 }
 

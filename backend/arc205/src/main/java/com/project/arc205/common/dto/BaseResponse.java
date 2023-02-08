@@ -1,14 +1,17 @@
 package com.project.arc205.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.project.arc205.common.exception.custom_exception.CustomException;
 import com.project.arc205.common.operation.Type;
 import com.project.arc205.common.operation.operation.CharacterOperation;
+import com.project.arc205.common.operation.operation.ExceptionOperation;
 import com.project.arc205.common.operation.operation.GameOperation;
 import com.project.arc205.common.operation.operation.MeetingOperation;
 import com.project.arc205.common.operation.operation.Operation;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -19,20 +22,13 @@ public class BaseResponse<T> {
     protected final Operation operation;
     protected final T data;
 
-    private BaseResponse(Type type, Operation operation) {
-        this.type = type;
-        this.operation = operation;
-        this.data = null;
+    public static BaseResponse<?> exception(HttpStatus status, String message) {
+        return new BaseResponse<>(Type.EXCEPTION, ExceptionOperation.valueOf(status.name()),
+                MessageDto.of(message));
     }
 
-    @Deprecated
-    public static <T> BaseResponse<T> of(Type type, Operation operation, T data) {
-        return new BaseResponse<>(type, operation, data);
-    }
-
-    @Deprecated
-    public static BaseResponse<?> of(Type type, Operation operation) {
-        return new BaseResponse<>(type, operation);
+    public static BaseResponse<?> exception(CustomException e) {
+        return BaseResponse.exception(e.getStatus(), e.getMessage());
     }
 
     public static BodyBuilder game(GameOperation operation) {
@@ -71,7 +67,7 @@ public class BaseResponse<T> {
 
         @Override
         public <T> BaseResponse<T> build() {
-            return new BaseResponse<>(this.type, this.operation);
+            return new BaseResponse<>(this.type, this.operation, null);
         }
 
     }
