@@ -37,16 +37,15 @@ const WebchatMeeting = () => {
 
   
   // 투표결과를 id로 접근할수 있도록 객체화 시킴
-  const voteResult = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
-
+  const voteResult = useSelector(selectVoteInfo).voteResult.voteResults
   const VoteEvent = (voteduserInfo) => {
     if (voteduserInfo.isAlive) {
       console.log(voteduserInfo.id)
       console.log('에게투표함?')
-      if (VoteduserInfo === voteduserInfo) {
+      if (VoteduserInfo === voteduserInfo.id) {
         setVoteduserinfo('skip')
       }
-      else{setVoteduserinfo(voteduserInfo)}
+      else{setVoteduserinfo(voteduserInfo.id)}
     }
 
   }
@@ -59,7 +58,7 @@ const WebchatMeeting = () => {
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
     console.log({VoteduserInfo},'한테 대충 제출하는 이벤트')
-    action('VOTE_REQUEST', { to: VoteduserInfo.id})
+    action('VOTE_REQUEST', { to: VoteduserInfo})
   }
 
   const handleSound = (user) => {
@@ -116,7 +115,7 @@ const WebchatMeeting = () => {
       {/* 선택된 유저가 없는 경우 skip 아이콘 보이게 처리 */}
       {/* Todo: voteSkipIcon css 추가 */}
       <button onClick={()=>{console.log(me)}}></button>
-      {(me.player.isAlive&&!me.player.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
+      {(me.player.isAlive&&!me.player.isVoted)&&<button onClick={submitEvent} disabled={!isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
       
     </div>
     

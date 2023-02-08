@@ -17,6 +17,7 @@ export const voteInfoSlice = createSlice({
   initialState,
   reducers: {
     setVoteResult: (state, action) => {
+      
       state.voteResult = action.payload
     },
   },
