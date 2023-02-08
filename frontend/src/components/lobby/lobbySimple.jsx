@@ -27,11 +27,11 @@ const LobbySimple = () => {
     const timer = setInterval(() => {
       roomRequest(roomId).then(res =>  {
         const players = res.data.data.players
-        const otherPlayers = players.filter(v => (v.id !== 'master')&&(v.id !== me.player.id))
+        const otherPlayers = players.filter(v => v.id !== me.player.id)
         setotherPlayers(otherPlayers);
 
         for(const player of otherPlayers) {
-          action('others/setOtherPlayer', {player, location : {x : 0, y: 0}})
+          action('others/initOtherPlayer', player)
         }
       }).catch((e) => {
         setotherPlayers([]);

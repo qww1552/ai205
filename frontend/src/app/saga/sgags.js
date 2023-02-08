@@ -47,9 +47,9 @@ function* startStomp(action) {
   //   try {
   //     const res = yield take(channel);
   //     const body = JSON.parse(res.body);
-  
+
   //     console.log(res, body)
-      
+
   //     if(body.type === 'GAME' && body.operation === 'START') {
   //       yield put({type : "gameInfo/setInGame", payload: true})
   //       break;
@@ -59,7 +59,7 @@ function* startStomp(action) {
   //     console.error(e.message);
   //   } 
 
-    
+
   // }
 
 
@@ -79,10 +79,25 @@ function* startStomp(action) {
 
 
 const channelHandling = {
-  GAME: function*(operation, data) {
-    switch(operation) {
+  GAME: function* (operation, data) {
+    switch (operation) {
       case 'START':
-        yield put({type : "gameInfo/setInGame", payload: true})
+        yield put({ type: "gameInfo/setInGame", payload: true })
+        break;
+      case 'START_PERSONAL':
+        const stateMe = yield select(state => state.me);
+        console.log(data)
+        console.log(stateMe.player)
+        yield put({
+          type: "me/setPlayer",
+          payload: {
+            ...stateMe.player,
+            role: data.role,
+            color: data.color,
+            isAlive: true,
+            isVoted: false,
+          }
+        })
         break;
       default:
         break;
@@ -93,11 +108,7 @@ const channelHandling = {
     switch (operation) {
       case 'MOVE':
         if (stateMe.player.id !== data.player.id) {
-          const otherPlayerData = {
-            player: {...stateMe.player, id: data.player.id, isVoted: false, isAlive: true },
-            location: data.location
-          }
-          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
+          yield put({ type: "others/setOtherPlayer", payload: data })
         }
         break;
       case 'DIE':
@@ -108,10 +119,10 @@ const channelHandling = {
         //   }
         //   yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
         // }
-        yield put({ type: "dead/addDeadList", payload : data })
+        yield put({ type: "dead/addDeadList", payload: data })
         break;
       case 'YOU_DIED':
-        const payload = {...stateMe, player : {...stateMe.player, isAlive : false}}
+        const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
         yield put({ type: "me/setPlayer", payload })
         break;
       default:
