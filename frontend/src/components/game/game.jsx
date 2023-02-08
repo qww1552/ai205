@@ -12,24 +12,30 @@ import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
 import { KeyboardControls } from "@react-three/drei";
-import {
-selectMySessionId,
-} from "app/videoInfo";
+import GameResult from 'components/game/gameResult'
+
+  import {
+    selectMySessionId,
+  } from "app/videoInfo";
 import { selectMe} from 'app/me';
 import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOtherPlayerVideoInfo } from 'app/others'
-
-const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+import { selectGameInfo } from 'app/gameInfo';
+import { useNavigate, useRouteLoaderData } from 'react-router-dom';
+import gameResult from 'app/gameResult';
+  const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
 
 const Game = () => {
 
     const ref = useRef();
     const dispatch = useDispatch();
     const stateMe = useSelector(selectMe);
+    const roomId = useRouteLoaderData("lobby");
 
 
     const mySessionId = useSelector(selectMySessionId);
-
-
+    let isInGame = useSelector(selectGameInfo).isInGame;
+    const navigate = useNavigate();
+    
     let OV;
 
     const onClickbtn = () => {
@@ -210,14 +216,19 @@ const Game = () => {
     }, [])
 
 
-    useEffect(() => {
-        
+    useEffect(() => {      
         return () => {
         leaveSession();
         };
     }, []);
-        
-
+    // ※isInGame이 false 가 되면 gameResult 컴포넌트로 이동
+    // useEffect(() => {
+    //     leaveSession();
+    //     if(isInGame === false) {
+    //         navigate(`/rooms/${roomId}/gameresult`)
+    //       }
+    // },[isInGame])
+    // 여기까지
     return (
         <KeyboardControls
         map={[
@@ -242,6 +253,7 @@ const Game = () => {
                 mainUser에 아직 값이 없어 에러가 발생함 */}
                 {stateMe.streamManager!==undefined &&(<ImageButton/>)}
                 {stateMe.streamManager!==undefined &&(<ModalMeeting/>)}
+                {stateMe.streamManager!==undefined &&(<GameResult/>)}
             </div>
             {
             // !check && <div>
@@ -251,6 +263,7 @@ const Game = () => {
             //     <button onClick={onClickbtn}>확인</button>
             // </div>
             }
+            {/* <button onClick={() => action('gameInfo/setInGame', false)}>게임최종결과</button> */}
 
         </KeyboardControls>
     )

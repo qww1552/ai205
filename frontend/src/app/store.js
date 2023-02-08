@@ -5,6 +5,7 @@ import othersReducer from 'app/others'
 import resultReducer from 'app/result'
 import gamesetReducer from './gameset';
 import mySaga from './saga/sgags';
+import gameResultReducer from 'app/gameResult'
 import gameInfoReducer from 'app/gameInfo'
 import missionInfoReducer from 'app/missionInfo'
 import voteReducer from 'app/voteInfo'
@@ -32,7 +33,8 @@ const reducers = combineReducers({
   gameset: gamesetReducer,
   voteInfo: voteReducer,
   videoInfo: videoReducer,
-  dead: deadReducer
+  dead: deadReducer,
+  gameResult: gameResultReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers);
