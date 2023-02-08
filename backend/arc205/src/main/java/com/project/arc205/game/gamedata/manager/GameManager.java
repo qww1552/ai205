@@ -20,9 +20,7 @@ public class GameManager {
         Map<String, GameCharacter> charactersFromPlayers = gameCharacterAssignStrategy.getCharactersFromPlayers(
                 room.getPlayers());
 
-        GameData gameData = GameData.of(room.getGameSetting(),
+        return GameData.of(room.getId(), room.getGameSetting(),
                 charactersFromPlayers);
-
-        return gameData;
     }
 }

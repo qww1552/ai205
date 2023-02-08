@@ -1,8 +1,8 @@
 package com.project.arc205.game.gamedata.event.handler;
 
-import com.project.arc205.common.Constant;
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.GameOperation;
+import com.project.arc205.common.util.Constant;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.dto.response.GameEndResponse;
 import com.project.arc205.game.gamedata.event.GameEndEvent;

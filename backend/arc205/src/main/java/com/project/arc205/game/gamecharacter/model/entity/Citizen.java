@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 public final class Citizen extends GameCharacter {
 
-    public Citizen(Map<String, ActiveMission> missions) {
-        super(missions);
+    public Citizen(String playerId, Map<String, ActiveMission> missions) {
+        super(playerId, missions);
         this.role = Role.CITIZEN;
     }
 

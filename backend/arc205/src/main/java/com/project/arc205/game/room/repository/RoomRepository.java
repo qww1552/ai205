@@ -3,13 +3,12 @@ package com.project.arc205.game.room.repository;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.room.model.entity.Room;
 import com.project.arc205.game.room.model.exception.RoomNotFoundException;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
 
 @Component
 public class RoomRepository {
@@ -30,7 +29,9 @@ public class RoomRepository {
     }
 
     public Room findById(UUID id) {
-        if (!roomStorage.containsKey(id)) throw new RoomNotFoundException();
+        if (!roomStorage.containsKey(id)) {
+            throw new RoomNotFoundException();
+        }
         return roomStorage.get(id);
     }
 

@@ -11,8 +11,8 @@ public final class Mafia extends GameCharacter {
 
     private int killCount = 0;
 
-    public Mafia(Map<String, ActiveMission> missions) {
-        super(missions);
+    public Mafia(String playerId, Map<String, ActiveMission> missions) {
+        super(playerId, missions);
         this.role = Role.MAFIA;
     }
 
