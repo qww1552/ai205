@@ -12,22 +12,13 @@ import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
 import { KeyboardControls } from "@react-three/drei";
-
 import {
-    setMySessionId,
-    setMyUserName,
-    addMainUser,
-    deleteVideoUsers, addVideoUsers,removeMainUser,
-  } from "app/videoInfo";
-  
-  import {
-    selectMySessionId,
-    selectMyUserName,
-    selectMainUser
-  } from "app/videoInfo";
-import { selectMe, setConnectionId, setStreamManager, setSession} from 'app/me';
-import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue, } from 'app/others'
-  const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+selectMySessionId,
+} from "app/videoInfo";
+import { selectMe} from 'app/me';
+import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOtherPlayerVideoInfo } from 'app/others'
+
+const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
 
 const Game = () => {
 
@@ -36,10 +27,8 @@ const Game = () => {
     const stateMe = useSelector(selectMe);
 
 
-
     const mySessionId = useSelector(selectMySessionId);
-    const myUserName = useSelector(selectMyUserName);
-    const mainUser = useSelector(selectMainUser);
+
 
     let OV;
 
@@ -121,7 +110,13 @@ const Game = () => {
 
       
         mySession.on("streamDestroyed",  (event) => {
-            dispatch(deleteVideoUsers(event.stream)); 
+            const nick = event.stream.connection.data.split('%')[0];
+            const data = {
+                nickname: JSON.parse(nick).clientData
+            };
+            
+            dispatch(removeOtherPlayerVideoInfo(data));
+            // dispatch(deleteVideoUsers(event.stream)); 
         });
         
 
@@ -175,7 +170,7 @@ const Game = () => {
         OV = null;
         dispatch(removePlayerVideo());
         // dispatch(removeMainUser());
-        dispatch(setMySessionId("SessionA"));
+        // dispatch(setMySessionId("SessionA"));
         // dispatch(setMyUserName("Participant" + Math.floor(Math.random() * 100)));
     };
 
