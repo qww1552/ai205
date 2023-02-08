@@ -7,9 +7,11 @@ import { selectMe } from "../../../app/me";
 import { useSelector } from "react-redux";
 import { action } from "app/store";
 import CharacterMesh from "../mesh/characterMesh";
+import { selectGameInfo } from "app/gameInfo";
 
 const MyCharacter = () => {
 
+  const isInVoteResult = useSelector(selectGameInfo).isInVoteResult;
   const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
@@ -37,6 +39,12 @@ const MyCharacter = () => {
       clearInterval(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if(isInVoteResult) {
+      ref.current.setTranslation({x:0,y:0,z:0})
+    }
+  },[isInVoteResult])
 
   useFrame((state) => {
     state.camera.position.lerp(
@@ -89,8 +97,12 @@ const MyCharacter = () => {
           sensor
           onIntersectionEnter={(e) => {
             // console.log(e.colliderObject.name ? e.colliderObject.name : null);
+            if(e.colliderObject.name)
+              action("me/setAdjustPlayer", e.colliderObject.name)
           }}
-          onIntersectionExit={() => { }}
+          onIntersectionExit={() => {
+            action("me/setAdjustPlayer", null)
+          }}
         />}
       </RigidBody>
     </>
