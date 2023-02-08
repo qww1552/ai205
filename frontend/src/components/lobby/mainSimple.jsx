@@ -1,3 +1,4 @@
+import MotionAI from "components/tensorflow/motionAI";
 import { Link, Outlet } from "react-router-dom";
 
 const MainSimple = () => {
@@ -8,6 +9,7 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
+            <MotionAI/>
         </div>
     </>)
 }

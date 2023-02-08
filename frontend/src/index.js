@@ -8,6 +8,7 @@ import './index.css';
 import { RouterProvider } from 'react-router-dom';
 import router from 'router';
 import { PersistGate } from 'redux-persist/integration/react';
+import '@tensorflow/tfjs';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
