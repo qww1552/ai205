@@ -89,8 +89,12 @@ const MyCharacter = () => {
           sensor
           onIntersectionEnter={(e) => {
             // console.log(e.colliderObject.name ? e.colliderObject.name : null);
+            if(e.colliderObject.name)
+              action("me/setAdjustPlayer", e.colliderObject.name)
           }}
-          onIntersectionExit={() => { }}
+          onIntersectionExit={() => {
+            action("me/setAdjustPlayer", null)
+          }}
         />}
       </RigidBody>
     </>
