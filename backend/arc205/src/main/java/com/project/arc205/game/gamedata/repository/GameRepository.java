@@ -20,28 +20,6 @@ public class GameRepository {
 
     private final ConcurrentHashMap<UUID, GameData> gameStorage = new ConcurrentHashMap<>();
 
-    @PostConstruct
-    public void init() {
-        Map<String, GameCharacter> gameCharacters = new HashMap<>();
-        Location loc = new Location(0.0, 0.0);
-//        gameCharacters.put("p1", new Citizen(loc, null));
-//        gameCharacters.put("p2", new Citizen(loc, null));
-//        gameCharacters.put("p3", new Mafia(loc, null));
-
-//        GameData tmpGame = new GameData(5, 2, 1, 3, 30,
-//                gameCharacters);
-//
-        gameCharacters.put("p1", new Citizen(null));
-        gameCharacters.put("p2", new Citizen(null));
-        gameCharacters.put("p3", new Citizen(null));
-
-        GameData tmpGame = GameData.of(new GameSetting(), gameCharacters);
-        tmpGame.moveGameCharactersTo(loc);
-
-        gameStorage.put(UUID.fromString(Constant.TEMP_ROOM_ID), tmpGame);
-    }
-
-
     public void save(UUID roomId, GameData gameData) {
         if (gameStorage.containsKey(roomId)) {
             throw new GameAlreadyExistException(roomId.toString());

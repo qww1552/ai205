@@ -84,6 +84,17 @@ const channelHandling = {
       case 'START':
         yield put({type : "gameInfo/setInGame", payload: true})
         break;
+      case 'START_PERSONAL':
+        const player = yield select(state => state.me).player;
+        yield put({ type: "me/setPlayer", 
+        payload: {
+          ...player,
+          role : data.role, 
+          color : data.color,
+          isAlive : true,
+          isVoted : false, 
+        } })
+        break;
       default:
         break;
     }
@@ -93,11 +104,13 @@ const channelHandling = {
     switch (operation) {
       case 'MOVE':
         if (stateMe.player.id !== data.player.id) {
-          const otherPlayerData = {
-            player: {...stateMe.player, id: data.player.id, isVoted: false, isAlive: true },
-            location: data.location
-          }
-          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
+          yield put({ type: "others/setOtherPlayer", payload: data })
+
+          // const otherPlayerData = {
+          //   player: {...stateMe.player, id: data.player.id, isVoted: false, isAlive: true },
+          //   location: data.location
+          // }
+          // yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
         }
         break;
       case 'DIE':
