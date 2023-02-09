@@ -13,7 +13,7 @@ import createUser from 'components/webchat/user-model';
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
 import { KeyboardControls } from "@react-three/drei";
 import GameResult from 'components/game/gameResult'
-
+import GameVideo from './gameVideo';
   import {
     selectMySessionId,
   } from "app/videoInfo";
@@ -247,6 +247,7 @@ const Game = () => {
             { name: "escKey", keys: ["Esc"] },
         ]}>
             <div>
+            {stateMe.streamManager!==undefined &&(<GameVideo/>)}
                 <GameCanvas/>
                 <div className="missionComponent floatingComponent">
                     <MissionProgress/>
