@@ -18,6 +18,7 @@ public class KillBroadcastResponse {
     }
 
     @AllArgsConstructor(staticName = "of")
+    @Getter
     public static class Player {
 
         String id;

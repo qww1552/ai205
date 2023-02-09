@@ -37,16 +37,15 @@ const WebchatMeeting = () => {
 
   
   // 투표결과를 id로 접근할수 있도록 객체화 시킴
-  const voteResult = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
-
+  const voteResult = useSelector(selectVoteInfo).voteResult.voteResults
   const VoteEvent = (voteduserInfo) => {
     if (voteduserInfo.isAlive) {
       console.log(voteduserInfo.id)
       console.log('에게투표함?')
-      if (VoteduserInfo === voteduserInfo) {
+      if (VoteduserInfo === voteduserInfo.id) {
         setVoteduserinfo('skip')
       }
-      else{setVoteduserinfo(voteduserInfo)}
+      else{setVoteduserinfo(voteduserInfo.id)}
     }
 
   }
@@ -95,13 +94,13 @@ const WebchatMeeting = () => {
         <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
       {otherPlayers.map((sub) => {     
-        return (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
+        return (<>{sub.streamManager!==undefined && (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
           {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
         <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.player)}}>
-        {sub.streamManager!==undefined && ( <WebchatMeetingcomponent user={sub}/>) }
+          <WebchatMeetingcomponent user={sub}/>
         </div>
-        </Col>)    
-})}
+        </Col>) }</>)    
+      })}
       {/* 스킵한 유저의 결과창을 보일곳 */}
       {isInVoteResult === true&&
         <Col span={24}>
@@ -116,7 +115,7 @@ const WebchatMeeting = () => {
       {/* 선택된 유저가 없는 경우 skip 아이콘 보이게 처리 */}
       {/* Todo: voteSkipIcon css 추가 */}
       <button onClick={()=>{console.log(me)}}></button>
-      {(me.player.isAlive&&!me.player.isVoted)&&<button onClick={submitEvent} disabled={isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
+      {(me.player.isAlive&&!me.player.isVoted)&&<button onClick={submitEvent} disabled={!isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
       
     </div>
     

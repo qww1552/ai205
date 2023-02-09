@@ -9,7 +9,7 @@ const RegistSimple = () => {
     const roomId = useRouteLoaderData('regist');
 
     const onClickbtn = () => {
-        action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
+        action('me/setPlayer',{id: ref.current.value})
         nav(`/rooms/${roomId}/lobby`)
     }
 

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { Vector2, Vector3, MathUtils } from "three";
 import CharacterMesh from "../mesh/characterMesh";
 
-const OtherCharacter = ({ location, initColor, initPosition, id }) => {
+const OtherCharacter = ({ location, initColor, initPosition, id, isAlive }) => {
   const ref = useRef();
   const [nextPos, setNextPos] = useState(new Vector2(0, 0));
 
@@ -62,6 +62,7 @@ const OtherCharacter = ({ location, initColor, initPosition, id }) => {
           initColor={initColor}
           id={id}
           ref={ref}
+          isAlive={isAlive}
         />
         <CuboidCollider
           args={[0.5, 0.5, 0.1]}

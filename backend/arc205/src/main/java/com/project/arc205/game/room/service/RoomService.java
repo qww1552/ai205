@@ -1,6 +1,7 @@
 package com.project.arc205.game.room.service;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
+import com.project.arc205.game.gamecharacter.service.PlayerRoomMappingRepository;
 import com.project.arc205.game.room.dto.response.RoomListItemResponse;
 import com.project.arc205.game.room.dto.response.RoomResponse;
 import com.project.arc205.game.room.model.entity.Room;
@@ -18,12 +19,15 @@ import org.springframework.stereotype.Service;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final PlayerRoomMappingRepository playerRoomMappingRepository;
 
     public void enterRoom(String roomId, Player player) {
         UUID uuidRoomId = UUID.fromString(roomId);
 
         Room room = roomRepository.findById(uuidRoomId);
         room.enter(player);
+
+        playerRoomMappingRepository.create(player.getId(), uuidRoomId);
         log.info("player {} entered room {}", player, roomId);
 
     }

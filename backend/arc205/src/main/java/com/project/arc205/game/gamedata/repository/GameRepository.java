@@ -1,10 +1,18 @@
 package com.project.arc205.game.gamedata.repository;
 
+import com.project.arc205.common.Constant;
+import com.project.arc205.common.model.Location;
+import com.project.arc205.game.gamecharacter.model.entity.Citizen;
+import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.model.entity.GameData;
+import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.gamedata.model.exception.GameAlreadyExistException;
 import com.project.arc205.game.gamedata.model.exception.GameNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 @Component

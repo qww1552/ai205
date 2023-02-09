@@ -47,9 +47,9 @@ function* startStomp(action) {
   //   try {
   //     const res = yield take(channel);
   //     const body = JSON.parse(res.body);
-  
+
   //     console.log(res, body)
-      
+
   //     if(body.type === 'GAME' && body.operation === 'START') {
   //       yield put({type : "gameInfo/setInGame", payload: true})
   //       break;
@@ -59,7 +59,7 @@ function* startStomp(action) {
   //     console.error(e.message);
   //   } 
 
-    
+
   // }
 
 
@@ -79,13 +79,33 @@ function* startStomp(action) {
 
 
 const channelHandling = {
-  GAME: function*(operation, data) {
-    switch(operation) {
+  GAME: function* (operation, data) {
+    switch (operation) {
       case 'START':
-        yield put({type : "gameInfo/setInGame", payload: true})
+        yield put({ type: "gameInfo/setInGame", payload: true })
         break;
+      case 'START_PERSONAL':
+        const stateMe = yield select(state => state.me);
+        yield put({
+          type: "me/setPlayer",
+          payload: {
+            ...stateMe.player,
+            role: data.role,
+            color: data.color,
+            isAlive: true,
+            isVoted: false,
+          }
+        })
+        break;
+      // ※게임 종료신호 데이터 받아오기
+      case 'END':
+        yield put({ type: "gameResult/setGameResult", payload: data })
+        yield put({type : "gameInfo/setInGame", payload: false})
+        break;
+
       default:
         break;
+
     }
   },
   CHARACTER: function* (operation, data) {
@@ -93,26 +113,23 @@ const channelHandling = {
     switch (operation) {
       case 'MOVE':
         if (stateMe.player.id !== data.player.id) {
-          const otherPlayerData = {
-            player: {...stateMe.player, id: data.player.id, isVoted: false, isAlive: true },
-            location: data.location
-          }
-          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
+          yield put({ type: "others/setOtherPlayer", payload: data })
         }
         break;
       case 'DIE':
-        if (stateMe.player.id !== data.player.id) {
-          const otherPlayerData = {
-            player: {...stateMe.player, id: data.player.id, isAlive: false },
-            location: data.location
-          }
-          yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
-        }
+        // if (stateMe.player.id !== data.player.id) {
+        //   const otherPlayerData = {
+        //     player: {...stateMe.player, id: data.player.id, isAlive: false },
+        //     location: data.location
+        //   }
+        //   yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
+        // }
+        yield put({ type: "dead/addDeadList", payload: data })
         break;
       case 'YOU_DIED':
-        const payload = {...stateMe, player : {...stateMe.player, isAlive : false}}
-        yield put({ type: "me/setPlayer", payload })
-
+        console.log(operation, data)
+        // const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
+        yield put({ type: "me/setPlayer", payload : {...stateMe.player, isAlive: false } })
         break;
       default:
         break;
@@ -198,7 +215,7 @@ function* startMeeting(client, roomId, action) {
 function* vote(client, roomId, action) {
   const stateMe = yield select(state => state.me);
   yield put({ type: "me/setPlayer", payload: { ...stateMe.player, isVoted: true } })
-  yield call(send, client, "meeting/vote", roomId, { from: stateMe.player.id, to: action.payload })
+  yield call(send, client, "meeting/vote", roomId, { from: stateMe.player.id, to: action.payload.to })
 }
 
 // 미션 완료 전송 요청

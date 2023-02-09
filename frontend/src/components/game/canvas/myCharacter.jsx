@@ -1,4 +1,4 @@
-import { useKeyboardControls } from "@react-three/drei";
+import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { Vector3 } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
@@ -7,12 +7,15 @@ import { selectMe } from "../../../app/me";
 import { useSelector } from "react-redux";
 import { action } from "app/store";
 import CharacterMesh from "../mesh/characterMesh";
+import { selectGameInfo } from "app/gameInfo";
 
 const MyCharacter = () => {
 
+  const isInVoteResult = useSelector(selectGameInfo).isInVoteResult;
   const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
+  const light = useRef();
   const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
@@ -37,6 +40,12 @@ const MyCharacter = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if(isInVoteResult) {
+      ref.current.setTranslation({x:0,y:0,z:0})
+    }
+  },[isInVoteResult])
+
   useFrame((state) => {
     state.camera.position.lerp(
       cameraVec.set(
@@ -46,6 +55,7 @@ const MyCharacter = () => {
       ),
       0.02
     );
+
 
     const { forward, backward, left, right } = get();
 
@@ -65,11 +75,14 @@ const MyCharacter = () => {
       .multiplyScalar(speed);
 
     ref.current.setLinvel({ x: direction.x, y: direction.y, z: 0 });
+
   });
 
   return (
     <>
       <RigidBody ref={ref} type="dynamic" lockRotations={true}>
+        <pointLight distance={4} decay={0.01} position={[0,0,1]}/>
+
         <Suspense>
           <CharacterMesh
             id={stateMe.player.id}
@@ -84,8 +97,12 @@ const MyCharacter = () => {
           sensor
           onIntersectionEnter={(e) => {
             // console.log(e.colliderObject.name ? e.colliderObject.name : null);
+            if(e.colliderObject.name)
+              action("me/setAdjustPlayer", e.colliderObject.name)
           }}
-          onIntersectionExit={() => { }}
+          onIntersectionExit={() => {
+            action("me/setAdjustPlayer", null)
+          }}
         />}
       </RigidBody>
     </>

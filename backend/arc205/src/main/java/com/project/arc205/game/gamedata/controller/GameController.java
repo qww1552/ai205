@@ -2,6 +2,7 @@ package com.project.arc205.game.gamedata.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.GameOperation;
+import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamedata.dto.response.GameStartPersonalResponse;
 import com.project.arc205.game.gamedata.dto.response.GameStartResponse;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
@@ -41,18 +42,9 @@ public class GameController {
                     log.info("/game/start_info/{}", res.getSessionId());
                     template.convertAndSendToUser(res.getSessionId(), "/queue",
                             BaseResponse.game(GameOperation.START_PERSONAL).data(res),
-                            createHeaders(res.getSessionId()));
+                            WebSocketUtil.createHeaders(res.getSessionId()));
                 });
         return BaseResponse.game(GameOperation.START).data(response);
-    }
-
-    private MessageHeaders createHeaders(String sessionId) {
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
-                .create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
-        return headerAccessor.getMessageHeaders();
-
     }
 
     @MessageMapping("/room/{room-id}/game/setting/update")

@@ -11,9 +11,12 @@ import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
@@ -59,11 +62,24 @@ public class GameCharacterController {
                 roomUuid,
                 mafiaPlayerId,
                 citizenPlayerId);
-        // TODO: 2023-02-07 citizen의 playerId를 이용해 sessionId를 얻어와서 처리해야 함
-        template.convertAndSendToUser(citizenPlayerId, "/user/queue",
-                BaseResponse.character(CharacterOperation.YOU_DIED).build());
+
+        String citizenSessionId = mappingService.convertPlayerIdToSessionIdInRoom(roomUuid,
+                citizenPlayerId);
+
+        template.convertAndSendToUser(citizenSessionId, "/queue",
+                BaseResponse.character(CharacterOperation.YOU_DIED).build(),
+                createHeaders(citizenSessionId));
 
         return BaseResponse.character(CharacterOperation.DIE).data(killBroadcastResponse);
+    }
+
+    private MessageHeaders createHeaders(String sessionId) {
+        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
+                .create(SimpMessageType.MESSAGE);
+        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setLeaveMutable(true);
+        return headerAccessor.getMessageHeaders();
+
     }
 
     private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {

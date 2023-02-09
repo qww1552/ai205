@@ -1,4 +1,4 @@
-import { OrthographicCamera, OrbitControls } from "@react-three/drei";
+import { OrthographicCamera, OrbitControls, SpotLight } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Debug, Physics } from "@react-three/rapier";
 import MyCharacter from "../canvas/myCharacter";
@@ -12,11 +12,28 @@ import SimpleMap from "./simpleMap";
 import { selectGameInfo } from "app/gameInfo";
 import DeadMesh from "../mesh/deadMesh";
 import { selectDead } from "app/dead";
+import { selectMe } from "app/me";
 
 const GameCanvas = () => {
+  const stateMe = useSelector(selectMe);
   const players = useSelector(selectOhterPlayers);
   const gameInfo = useSelector(selectGameInfo);
   const deadList = useSelector(selectDead).deadList;
+
+  // const players = [
+  //   {
+  //     player: {
+  //       id: "asdfadsf",
+  //       role: "mafia",
+  //       isAlive: false,
+  //     },
+  //     location: {
+  //       y: 1,
+  //       x: 1,
+  //     },
+  //   },
+  // ];
+
   // const deadList = [
   //   {
   //     player: {
@@ -34,8 +51,7 @@ const GameCanvas = () => {
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas flat linear>
-          <ambientLight intensity={0.1} />
-          <directionalLight position={[0, 0, 5]} />
+          <ambientLight intensity={0.3} />
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}
@@ -44,12 +60,14 @@ const GameCanvas = () => {
             {/* <Debug /> */}
             <MyCharacter initPosition={[0, 0, 0]} initColor="red" />
             {players.map((data, idx) => (
+              ((!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive)) &&
               <OtherCharacter
                 initPosition={[0, 0, 0]}
                 initColor="blue"
                 id={data.player.id}
                 key={`${data.player.id}${idx}`}
                 location={data.location}
+                isAlive={data.player.isAlive}
               />
             ))}
             {deadList.map((data, idx) => (
