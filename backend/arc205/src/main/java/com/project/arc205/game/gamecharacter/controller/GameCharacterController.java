@@ -5,20 +5,15 @@ import com.project.arc205.common.operation.operation.CharacterOperation;
 import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
-import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
@@ -32,7 +27,6 @@ public class GameCharacterController {
 
     private final GameCharacterService gameCharacterService;
     private final PlayerSessionMappingService mappingService;
-    private final SimpMessagingTemplate template;
 
     @MessageMapping("/room/{room-id}/character/move")
     @SendTo("/sub/room/{room-id}")
@@ -49,8 +43,7 @@ public class GameCharacterController {
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
-    @SendTo("/sub/room/{room-id}")
-    public BaseResponse<KillBroadcastResponse> kill(@DestinationVariable("room-id") String roomId,
+    public void kill(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor, @Valid KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
 
@@ -59,28 +52,10 @@ public class GameCharacterController {
         String mafiaPlayerId = getPlayerIdFromHeader(accessor, roomUuid);
         String citizenPlayerId = killRequest.getTo();
 
-        KillBroadcastResponse killBroadcastResponse = gameCharacterService.kill(
+        gameCharacterService.kill(
                 roomUuid,
                 mafiaPlayerId,
                 citizenPlayerId);
-
-        String citizenSessionId = mappingService.convertPlayerIdToSessionIdInRoom(roomUuid,
-                citizenPlayerId);
-
-        template.convertAndSendToUser(citizenSessionId, "/queue",
-                BaseResponse.character(CharacterOperation.YOU_DIED).build(),
-                createHeaders(citizenSessionId));
-
-        return BaseResponse.character(CharacterOperation.DIE).data(killBroadcastResponse);
-    }
-
-    private MessageHeaders createHeaders(String sessionId) {
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
-                .create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
-        return headerAccessor.getMessageHeaders();
-
     }
 
     private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {

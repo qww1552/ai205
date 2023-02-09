@@ -12,8 +12,8 @@ public class GameSetting {
     private Integer numberOfMissions = 1;
     private Double visionRange = 1.0;
     private Double playerSpeed = 1.0;
-    private Integer meetingLimitTime = 20;
-    private Integer voteLimitTime = 10;
+    private Integer meetingLimitTime = 15;
+    private Integer voteLimitTime = 120;
     private Integer killCoolTime = 10;
     private Integer meetingCoolTime = 15;
 
