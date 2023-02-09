@@ -105,7 +105,7 @@ const ImageButton = () => {
           (adjustPlayer && killTimer) ? () => {
           killButtonActivate()
           resetKillTimer()
-        } : {undefined}}
+        } : undefined}
       >
         <Progress strokeWidth={4} percent={killTimer} steps={10} showInfo={false} strokeColor="red"/>
         <p/>
@@ -117,15 +117,22 @@ const ImageButton = () => {
       <button
         className={"imgBtnNoHover floatingComponent " + ((adjustBody) ? "imgBtnReady" : "")}
         id="reportBtn"
-        onClick={reportButtonActivate}
+        onClick={
+          (adjustBody) ?
+          reportButtonActivate
+          : undefined}
         >
           <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고"/>
       </button>
       <MissionComponent/>
       <button
-        className={"imgBtnNoHover floatingComponent " + ((isAdjacentMeetingBtn || isAdjacentMissionBtn) ? "imgBtnReady" : "")}
+        className={"imgBtnNoHover floatingComponent " + ((isAdjacentMeetingBtn || (me.role!=="MAFIA" && isAdjacentMissionBtn)) ? "imgBtnReady" : "")}
         id="actBtn"
-        onClick={actButtonActivate}>
+        onClick={
+          (isAdjacentMeetingBtn || (me.role!=="MAFIA" && isAdjacentMissionBtn)) ?
+          actButtonActivate
+          : undefined}
+        >
         <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/>
       </button>
     </>
@@ -133,6 +140,5 @@ const ImageButton = () => {
     </>
   );
 };
-
 
 export default ImageButton;
