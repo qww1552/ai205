@@ -17,7 +17,7 @@
   .imgBtn, .imgBtnNoHover {
     background-color: silver;
     right: 10px;
-    padding: 4px 0px 4px;
+    padding: 4px 0px;
     opacity: 0.3;
     font-size: 0;
     line-height: 0;
@@ -37,6 +37,7 @@
   
   #killBtn {
     top: 130px;
+    padding: 0px;
   }
   
   #reportBtn {
