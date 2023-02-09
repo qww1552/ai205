@@ -47,21 +47,23 @@ const VoteMeeting = () => {
     <div>
       <div id="usercontent">
       </div>
-      <Row gutter={[8,8]}>
-        {/* Todo: 게임방 세팅에서 회의시간 저장한것 받아오기 */}
-        {/* Todo: TimerMeeting sec에서 시간정보 받아오기 */}
-        {isInMeeting === true ? <TimerMeeting sec={time} getRestTime={getRestTime}/>:<div>아직회의시간이 아님</div>}
-        {/* {isInVote === true ? <TimerMeeting sec={time}/>:<div>아직투표시간이 아님</div>} */}
-        {/* <button onClick={clickevent}>시간이벤트</button> */}
-        <Col span={2}>  
+      <Row gutter={[8,8]} justify="space-between">
+      {isInMeeting === true ? <TimerMeeting sec={time} getRestTime={getRestTime}/>:<div>아직회의시간이 아님</div>}
+      <Col span={2}>  
           <Button block id="chatBtnIcon" onClick={() => action('gameInfo/setChatModalOpen', true)}>
             <MessageTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
           </Button>
         </Col>
+      </Row>
+      <Row >
+        {/* Todo: 게임방 세팅에서 회의시간 저장한것 받아오기 */}
+        {/* Todo: TimerMeeting sec에서 시간정보 받아오기 */}
+        
+        {/* {isInVote === true ? <TimerMeeting sec={time}/>:<div>아직투표시간이 아님</div>} */}
+        {/* <button onClick={clickevent}>시간이벤트</button> */}
+
         <Col span={2}>  
-          <Button block id="settingBtnIcon" onClick={() => console.log("설정")}>
-            <SettingTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-          </Button>
+
         </Col>
       </Row>
       <ChatComponent/>

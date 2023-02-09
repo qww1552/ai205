@@ -12,7 +12,9 @@ export const gameResultSlice = createSlice({
   initialState,
   reducers: {
     setGameResult: (state, action) => {
+      
       state.gameResult = action.payload
+      console.log(state.gameResult)
     },
   },
 });

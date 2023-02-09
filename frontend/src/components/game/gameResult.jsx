@@ -1,17 +1,28 @@
 import { Modal } from 'antd';
 import { selectGameInfo } from 'app/gameInfo';
 import { selectGameResult } from 'app/gameResult';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import TypingText from './meeting/TypingText';
+
+
 
 const GameResult = () => {
   const isInGame = useSelector(selectGameInfo).isInGame
   const gameResult = useSelector(selectGameResult)
   const navigate = useNavigate();
+  const [Text, setText] = useState("")
+
+
+
   // ※렌더링 되고 10초 지난후 라우터 이동
   useEffect(()=>{
+    
     if (!isInGame&&gameResult) {
+    console.log('결과창내놔')
+    console.log(gameResult)
+    setText(`${gameResult.win}가 이겼습니다`)
     setTimeout(() => {
       navigate('/rooms')
       // Todo:
@@ -30,8 +41,7 @@ const GameResult = () => {
     closable={false}>
 
     <div>
-      <div>대충 10초 정도 결과창 보이는중</div>
-      <div>{gameResult.win}가 이겼다!</div>
+      <TypingText text={Text} speed={60} fontSize="1.25rem" color="green" />
       {gameResult.players.map((player) => {
         <div>{player.id}:{player.role}</div>
       })}
