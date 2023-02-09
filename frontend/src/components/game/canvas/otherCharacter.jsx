@@ -6,16 +6,16 @@ import { useState, useEffect } from "react";
 import { Vector2, Vector3, MathUtils } from "three";
 import CharacterMesh from "../mesh/characterMesh";
 
-const OtherCharacter = ({ location, initColor, initPosition, id, isAlive }) => {
+const OtherCharacter = ({ location, color, id, isAlive }) => {
   const ref = useRef();
   const [nextPos, setNextPos] = useState(new Vector2(0, 0));
 
-  const minusVector = new Vector2();
   // ref.current.charState = "IDLE"
   // ref.current.charDir = "RIGHT"
-
+  
   useEffect(() => {
-
+    const minusVector = new Vector2();
+    
     minusVector.subVectors(nextPos, location).normalize();
     
     setNextPos(location);
@@ -58,8 +58,7 @@ const OtherCharacter = ({ location, initColor, initPosition, id, isAlive }) => {
         lockRotations={true}
       >
         <CharacterMesh
-          initPosition={initPosition}
-          initColor={initColor}
+          color={color}
           id={id}
           ref={ref}
           isAlive={isAlive}

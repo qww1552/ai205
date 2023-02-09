@@ -59,12 +59,11 @@ const GameCanvas = () => {
             paused={gameInfo.isInMeeting}
           >
             {/* <Debug /> */}
-            <MyCharacter initPosition={[0, 0, 0]} initColor="red" />
+            <MyCharacter color={stateMe.player.color} />
             {players.map((data, idx) => (
               ((!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive)) &&
               <OtherCharacter
-                initPosition={[0, 0, 0]}
-                initColor="blue"
+                color={data.player.color}
                 id={data.player.id}
                 key={`${data.player.id}${idx}`}
                 location={data.location}
@@ -73,6 +72,7 @@ const GameCanvas = () => {
             ))}
             {deadList.map((dead, idx) => (
               <DeadCharacter
+                // color={dead.player.color}
                 id={`${dead.player.id}`}
                 position={dead.location}
                 key={`${dead.player.id}${idx}`}

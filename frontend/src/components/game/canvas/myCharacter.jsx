@@ -9,7 +9,7 @@ import { action } from "app/store";
 import CharacterMesh from "../mesh/characterMesh";
 import { selectGameInfo } from "app/gameInfo";
 
-const MyCharacter = () => {
+const MyCharacter = ({color}) => {
 
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult;
   const stateMe = useSelector(selectMe);
@@ -87,6 +87,7 @@ const MyCharacter = () => {
           <CharacterMesh
             id={stateMe.player.id}
             ref={ref}
+            color={color}
             isAlive={stateMe.player.isAlive}
           />
         </Suspense>
