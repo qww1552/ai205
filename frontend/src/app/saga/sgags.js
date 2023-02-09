@@ -140,6 +140,8 @@ const channelHandling = {
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
+        // 시체들 초기화
+        yield put({ type: "dead/setDeadList", payload: [] })
         yield put({ type: "gameInfo/setInMeeting", payload: true })
         break;
       // 투표 시작 알림 받음 

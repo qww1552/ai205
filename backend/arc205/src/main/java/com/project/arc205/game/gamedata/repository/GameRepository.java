@@ -1,6 +1,6 @@
 package com.project.arc205.game.gamedata.repository;
 
-import com.project.arc205.common.Constant;
+//import com.project.arc205.common.Constant;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
