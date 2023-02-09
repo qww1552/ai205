@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public abstract class GameCharacter {
 
-    protected String playerId;
+    protected final String playerId;
     protected Role role;
     protected Boolean isAlive;
     protected Location location;
