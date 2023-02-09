@@ -4,6 +4,7 @@ import com.project.arc205.common.event.Events;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.common.model.Role;
 import com.project.arc205.common.util.Constant;
+import com.project.arc205.game.gamecharacter.exception.GameCharacterNotFoundException;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.event.GameEndEvent;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
@@ -12,6 +13,7 @@ import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -135,4 +137,11 @@ public class GameData {
             Events.raise(gameEndEvent);
         }
     }
+
+    public GameCharacter getGameCharacter(String playerId) {
+        return Optional.of(gameCharacters.get(playerId)).orElseThrow(
+                GameCharacterNotFoundException::new);
+    }
+
+
 }
