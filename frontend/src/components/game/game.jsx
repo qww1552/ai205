@@ -255,7 +255,7 @@ const Game = () => {
                 {stateMe.streamManager!==undefined &&(<ImageButton/>)}
                 {stateMe.streamManager!==undefined &&(<ModalMeeting/>)}
                 {stateMe.streamManager !== undefined && (<GameResult />)}
-                <Teachable/>
+                {stateMe.streamManager !== undefined && (<Teachable streamManager={stateMe.streamManager}/>)}
             </div>
             {
             // !check && <div>

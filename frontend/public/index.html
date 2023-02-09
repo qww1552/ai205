@@ -45,12 +45,12 @@
     <script type="text/javascript">
       // More API functions here:
 
-        const URL = "./my_model/";
+        const myurl = "/my_model/";
         let model, webcam, ctx, labelContainer, maxPredictions;
 
         async function init() {
-          const modelURL = URL + "model.json";
-          const metadataURL = URL + "metadata.json";
+          const modelURL = myurl + "model.json";
+          const metadataURL = myurl + "metadata.json";
 
           model = await tmPose.load(modelURL, metadataURL);
           maxPredictions = model.getTotalClasses();
@@ -58,6 +58,7 @@
           const size = 200;
           const flip = true; // whether to flip the webcam
           webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+          console.log(webcam);
           await webcam.setup(); // request access to the webcam
           await webcam.play();
           window.requestAnimationFrame(loop);
