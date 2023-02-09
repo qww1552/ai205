@@ -1,5 +1,6 @@
 package com.project.arc205.game.gamedata.strategy;
 
+import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
@@ -25,12 +26,14 @@ public class BasicGameCharacterAssignStrategy implements
         for (Player player : players.values()) {
             String playerId = player.getId();
             initialGameCharacters.put(playerId, new Citizen(playerId, Map.of(
-                    UUID.randomUUID().toString(), new BasicActiveMission())));
+                    UUID.randomUUID().toString(),
+                    new BasicActiveMission(1L, "m1", new Location(1.1, 1.1)))));
             mafiaId = playerId;
         }
 
         initialGameCharacters.put(mafiaId, new Mafia(mafiaId, Map.of(
-                UUID.randomUUID().toString(), new BasicActiveMission())));
+                UUID.randomUUID().toString(),
+                new BasicActiveMission(1L, "m1", new Location(1.1, 1.1)))));
 
         return initialGameCharacters;
     }
