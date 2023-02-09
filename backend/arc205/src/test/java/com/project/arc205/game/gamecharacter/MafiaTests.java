@@ -27,8 +27,7 @@ public class MafiaTests {
 
     @BeforeEach
     void init() {
-        dummyMission = new DummyMission();
-        dummyMission.setTitle("dummy");
+        dummyMission = DummyMission.getTestMission();
     }
 
     @Test
