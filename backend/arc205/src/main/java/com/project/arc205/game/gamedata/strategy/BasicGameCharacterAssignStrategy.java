@@ -8,6 +8,7 @@ import com.project.arc205.game.mission.model.BasicActiveMission;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,16 +22,19 @@ public class BasicGameCharacterAssignStrategy implements
     public Map<String, GameCharacter> getCharactersFromPlayers(Map<String, Player> players) {
         Map<String, GameCharacter> initialGameCharacters = new HashMap<>();
         String mafiaId = "";
+        AtomicInteger colorIdx = new AtomicInteger();   //assign gameCharacter color in order
 
         for (Player player : players.values()) {
             String playerId = player.getId();
             initialGameCharacters.put(playerId, new Citizen(playerId, Map.of(
-                    UUID.randomUUID().toString(), new BasicActiveMission())));
+                    UUID.randomUUID().toString(), new BasicActiveMission()),
+                    colorIdx.getAndIncrement()));
             mafiaId = playerId;
         }
 
         initialGameCharacters.put(mafiaId, new Mafia(mafiaId, Map.of(
-                UUID.randomUUID().toString(), new BasicActiveMission())));
+                UUID.randomUUID().toString(), new BasicActiveMission()),
+                colorIdx.decrementAndGet()));
 
         return initialGameCharacters;
     }

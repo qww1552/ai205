@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,11 +44,9 @@ public class MafiaGameService implements GameService {
         Map<String, GameCharacter> gameCharacters = gameRepository.findById(roomId)
                 .getGameCharacters();
 
-        AtomicInteger colorIdx = new AtomicInteger();   //assign gameCharacter color in order
         List<GameStartPersonalResponse> responses = new ArrayList<>(gameCharacters.size());
         players.forEach((sessionId, player) -> responses.add(
-                GameStartPersonalResponse.of(sessionId, gameCharacters.get(player.getId()),
-                        colorIdx.getAndIncrement()))
+                GameStartPersonalResponse.of(sessionId, gameCharacters.get(player.getId())))
         );
         return responses;
     }

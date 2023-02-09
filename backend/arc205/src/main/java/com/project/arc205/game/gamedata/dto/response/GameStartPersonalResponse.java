@@ -20,9 +20,8 @@ public class GameStartPersonalResponse {
     //TODO: mission
 //    private final List<Mission> missions;
 
-    public static GameStartPersonalResponse of(String sessionId, GameCharacter character,
-            int color) {
+    public static GameStartPersonalResponse of(String sessionId, GameCharacter character) {
         return new GameStartPersonalResponse(sessionId, character.getRole(),
-                character.getLocation(), color);
+                character.getLocation(), character.getColor());
     }
 }
