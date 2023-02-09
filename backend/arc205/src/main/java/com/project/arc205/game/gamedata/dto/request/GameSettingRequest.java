@@ -31,4 +31,12 @@ public class GameSettingRequest {
     @Range(min = 0, max = 300)
     private Integer voteProgressTime;
 
+    @NotNull
+    @Range(min = 10, max = 60)
+    private Integer killCoolTime;
+
+    @NotNull
+    @Range(min = 0, max = 60)
+    private Integer meetingCoolTime;
+
 }

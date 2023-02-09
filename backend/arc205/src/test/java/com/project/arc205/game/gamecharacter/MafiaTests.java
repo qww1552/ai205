@@ -1,10 +1,15 @@
 package com.project.arc205.game.gamecharacter;
 
+import static com.project.arc205.game.dummy.DummyGameCharacter.getTestCitizen;
+import static com.project.arc205.game.dummy.DummyGameCharacter.getTestMafia;
+import static com.project.arc205.game.dummy.DummyGameCharacter.getTestMafiaWithMission;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.project.arc205.common.model.Location;
 import com.project.arc205.game.dummy.DummyMission;
+import com.project.arc205.game.gamecharacter.exception.CannotKillDeadException;
 import com.project.arc205.game.gamecharacter.exception.MafiaCannotKillEachOtherException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
@@ -23,8 +28,7 @@ public class MafiaTests {
 
     @BeforeEach
     void init() {
-        dummyMission = new DummyMission();
-        dummyMission.setTitle("dummy");
+        dummyMission = new DummyMission(1L, "dummy", new Location(0.0, 0.0));
     }
 
     @Test
@@ -33,7 +37,7 @@ public class MafiaTests {
         String missionId = "test";
         HashMap<String, ActiveMission> missionMap = new HashMap<>();
         missionMap.put(missionId, dummyMission);
-        gameCharacter = new Mafia(missionMap);
+        gameCharacter = getTestMafiaWithMission(missionMap);
         gameCharacter.interaction(missionId);
         assertFalse(dummyMission.isSolved());
     }
@@ -41,8 +45,8 @@ public class MafiaTests {
     @Test
     @DisplayName("마피아는 시민을 죽일 수 있다.")
     void mafiaCanKillCitizen() {
-        gameCharacter = new Citizen(null);
-        Mafia mafia = new Mafia(new HashMap<>());
+        gameCharacter = getTestCitizen();
+        Mafia mafia = getTestMafiaWithMission(new HashMap<>());
 
         mafia.kill(gameCharacter);
         assertFalse(gameCharacter.getIsAlive());
@@ -51,13 +55,21 @@ public class MafiaTests {
     @Test
     @DisplayName("마피아가 마피아를 죽이면 예외가 발생한다.")
     void mafiaCannotKillMafia() {
-        gameCharacter = new Mafia(null);
-        Mafia mafia = new Mafia(null);
+        gameCharacter = getTestMafia();
+        Mafia mafia = getTestMafia();
 
         assertThrows(MafiaCannotKillEachOtherException.class,
                 () -> mafia.kill(gameCharacter));
         assertTrue(gameCharacter.getIsAlive());
     }
 
+    @Test
+    @DisplayName("kill 호출 시 이미 죽은 상대라면 예외가 발생한다.")
+    void killDeadWillThrowException() {
+        Mafia testMafia = getTestMafia();
+        Citizen testCitizen = getTestCitizen();
+        testCitizen.die();
+        assertThrows(CannotKillDeadException.class, () -> testMafia.kill(testCitizen));
+    }
 
 }

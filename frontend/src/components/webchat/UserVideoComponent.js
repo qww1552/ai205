@@ -8,8 +8,8 @@ export default function UserVideoComponent(props) {
       {props.user.streamManager !== undefined ? (
         // <div className="streamcomponent">
           <OpenViduVideoComponent
-            mutedSound={!props.user.audioActive}
-            mutedVideo={!props.user.videoActive}
+            mutedSound={props.user.mutedSound}
+            mutedVideo={props.user.mutedVideo}
             streamManager={props.user.streamManager}
           />
           

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventPublisherAspect implements ApplicationEventPublisherAware {
 
+    private final ThreadLocal<Boolean> appliedLocal = new ThreadLocal<>();
     private ApplicationEventPublisher publisher;
-    private ThreadLocal<Boolean> appliedLocal = new ThreadLocal<>();
 
     @Around("@annotation(org.springframework.transaction.annotation.Transactional)")
     public Object handleEvent(ProceedingJoinPoint joinPoint) throws Throwable {
         Boolean appliedValue = appliedLocal.get();
-        boolean nested = false;
+        boolean nested;
 
         if (appliedValue != null && appliedValue) {
             nested = true;

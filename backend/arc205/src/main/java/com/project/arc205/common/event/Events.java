@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 public class Events {
 
-    private static ThreadLocal<ApplicationEventPublisher> publisherLocal = new ThreadLocal<>();
+    private static final ThreadLocal<ApplicationEventPublisher> publisherLocal = new ThreadLocal<>();
 
     public static void raise(DomainEvent event) {
         if (event == null) {

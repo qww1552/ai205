@@ -1,5 +1,8 @@
 package com.project.arc205.game.service;
 
+import static com.project.arc205.game.dummy.DummyGameCharacter.getTestCitizen;
+import static com.project.arc205.game.dummy.DummyGameCharacter.getTestMafia;
+import static com.project.arc205.game.dummy.DummyGameData.getTestGameDataWithGameCharacter;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,8 +17,6 @@ import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
-import com.project.arc205.game.gamedata.model.entity.GameData;
-import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.gamedata.repository.GameRepository;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,14 +45,14 @@ public class GameCharacterServiceTests {
     @DisplayName("마피아는 시민을 살해할 수 있다.")
     void mafiaCanKillCitizen() {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
-        Mafia mafia = new Mafia(null);
-        Citizen citizen = new Citizen(null);
-        gameCharacterMap.put("mafiaSessionId", mafia);
-        gameCharacterMap.put("citizenSessionId", citizen);
+        Mafia mafia = getTestMafia();
+        Citizen citizen = getTestCitizen();
+        gameCharacterMap.put(mafia.getPlayerId(), mafia);
+        gameCharacterMap.put(citizen.getPlayerId(), citizen);
         when(gameRepository.findById(any()))
-                .thenReturn(GameData.of(new GameSetting(), gameCharacterMap));
+                .thenReturn(getTestGameDataWithGameCharacter(gameCharacterMap));
 
-        gameCharacterService.kill(UUID.randomUUID(), "mafiaSessionId", "citizenSessionId");
+        gameCharacterService.kill(UUID.randomUUID(), mafia.getPlayerId(), citizen.getPlayerId());
 
         assertFalse(citizen.getIsAlive());
         assertThat(mafia.getKillCount(), equalTo(1));
@@ -61,16 +62,16 @@ public class GameCharacterServiceTests {
     @DisplayName("마피아가 아닌 GameCharacter는 상대방을 살해할 수 없다.")
     void onlyMafiaCanKill() {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
-        Citizen citizen1 = new Citizen(null);
-        Citizen citizen2 = new Citizen(null);
-        gameCharacterMap.put("citizen1SessionId", citizen1);
-        gameCharacterMap.put("citizen2SessionId", citizen2);
+        Citizen citizen1 = getTestCitizen();
+        Citizen citizen2 = getTestCitizen();
+        gameCharacterMap.put(citizen1.getPlayerId(), citizen1);
+        gameCharacterMap.put(citizen2.getPlayerId(), citizen2);
         when(gameRepository.findById(any()))
-                .thenReturn(GameData.of(new GameSetting(), gameCharacterMap));
+                .thenReturn(getTestGameDataWithGameCharacter(gameCharacterMap));
 
         assertThrows(OnlyMafiaCanKillException.class, () ->
-                gameCharacterService.kill(UUID.randomUUID(), "citizen1SessionId",
-                        "citizen2SessionId")
+                gameCharacterService.kill(UUID.randomUUID(), citizen1.getPlayerId(),
+                        citizen2.getPlayerId())
         );
     }
 
@@ -78,12 +79,12 @@ public class GameCharacterServiceTests {
     @DisplayName("GameChacterService의 move 호출 시 해당 캐릭터가 이동한다.")
     void gameCharacterCanMove() {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
-        Citizen citizen = new Citizen(null);
+        Citizen citizen = getTestCitizen();
         String citizenPlayerId = "citizenPlayerId";
         gameCharacterMap.put(citizenPlayerId, citizen);
         citizen.setLocation(new Location(0.0, 0.0));
         when(gameRepository.findById(any()))
-                .thenReturn(GameData.of(new GameSetting(), gameCharacterMap));
+                .thenReturn(getTestGameDataWithGameCharacter(gameCharacterMap));
 
         MoveRequest moveRequest = new MoveRequest();
         Location newLocation = new Location(1.1, 1.1);
