@@ -64,8 +64,8 @@ public class GameCharacterServiceTests {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
         Citizen citizen1 = getTestCitizen();
         Citizen citizen2 = getTestCitizen();
-        gameCharacterMap.put("citizen1SessionId", citizen1);
-        gameCharacterMap.put("citizen2SessionId", citizen2);
+        gameCharacterMap.put(citizen1.getPlayerId(), citizen1);
+        gameCharacterMap.put(citizen2.getPlayerId(), citizen2);
         when(gameRepository.findById(any()))
                 .thenReturn(getTestGameDataWithGameCharacter(gameCharacterMap));
 
