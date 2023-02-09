@@ -9,6 +9,7 @@ import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import java.util.UUID;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.MessageHeaders;
@@ -50,7 +51,7 @@ public class GameCharacterController {
     @MessageMapping("/room/{room-id}/character/kill")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<KillBroadcastResponse> kill(@DestinationVariable("room-id") String roomId,
-            StompHeaderAccessor accessor, KillRequest killRequest) {
+            StompHeaderAccessor accessor, @Valid KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
 
         UUID roomUuid = UUID.fromString(roomId);
