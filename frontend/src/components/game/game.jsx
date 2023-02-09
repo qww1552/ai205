@@ -17,8 +17,8 @@ import GameResult from 'components/game/gameResult'
   import {
     selectMySessionId,
   } from "app/videoInfo";
-import { selectMe} from 'app/me';
-import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOtherPlayerVideoInfo } from 'app/others'
+import { selectMe,setMySoundOff,setMyVideoOff} from 'app/me';
+import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOtherPlayerVideoInfo , setOtherVideoOff,setOtherSoundOff} from 'app/others'
 import { selectGameInfo } from 'app/gameInfo';
 import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 import gameResult from 'app/gameResult';
@@ -88,7 +88,8 @@ const Game = () => {
             localUser.setSession(mySession)
             
             dispatch(addPlayerVideo(localUser));
-
+            //   dispatch(setMySoundOff(localUser.getNickname()))
+            // dispatch(setMyVideoOff(localUser.getNickname()));
 
             })
             .catch((error) => {
@@ -110,6 +111,8 @@ const Game = () => {
             // 발언자 표시를 나타내는 변수를 추가한다
             newUser.isSpeaking = false
             dispatch(setOtherPlayerVideoInfo(newUser));
+            // dispatch(setOtherSoundOff(newUser.getNickname()))
+            // dispatch(setOtherVideoOff(newUser.getNickname()));
             // dispatch(addVideoUsers(newUser));
              
         });

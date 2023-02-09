@@ -1,12 +1,5 @@
 package com.project.arc205.game.gamedata.repository;
 
-<<<<<<< HEAD
-//import com.project.arc205.common.Constant;
-import com.project.arc205.common.model.Location;
-import com.project.arc205.game.gamecharacter.model.entity.Citizen;
-import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
-=======
->>>>>>> dddbea17601e4ba03bfde0d8ac55943331112f55
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.model.exception.GameAlreadyExistException;
 import com.project.arc205.game.gamedata.model.exception.GameNotFoundException;

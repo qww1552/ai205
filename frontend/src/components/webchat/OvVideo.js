@@ -13,9 +13,10 @@ export default function OpenViduVideoComponent(props) {
   }, [props.streamManager]);
 
   return (
-    // <div style={makeStyle()}>
+    <div style={makeStyle()}>
     <div>
       <video autoPlay={true} muted={props.mutedSound} ref={videoRef} />
+    </div>
     </div>
   );
 }
