@@ -104,6 +104,8 @@ public class MeetingEventHandler {
         curGame.meetingEnd();
 
         //kill elected player
-        curGame.getGameCharacters().get(elected).die();
+        if (elected != null && !elected.equals(Constant.VOTED_SKIP_ID)) {
+            curGame.getGameCharacter(elected).die();
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.project.arc205.game.gamecharacter.model.entity;
 import com.project.arc205.common.event.Events;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.common.model.Role;
+import com.project.arc205.game.gamecharacter.exception.CannotKillDeadException;
 import com.project.arc205.game.gamedata.event.DieEvent;
 import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.Map;
@@ -28,7 +29,9 @@ public abstract class GameCharacter {
     }
 
     public void die() {
-        //TODO: throw Exception when already dead
+        if (!isAlive) {
+            throw new CannotKillDeadException();
+        }
         this.isAlive = false;
         Events.raise(new DieEvent(playerId));
     }

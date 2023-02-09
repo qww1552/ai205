@@ -5,7 +5,9 @@ import com.project.arc205.common.model.Role;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @AllArgsConstructor
 public class GameEndEvent implements DomainEvent {
