@@ -11,6 +11,7 @@ const initialState = {
   streamManager: undefined,
   session: undefined,
   adjustPlayer: null,
+  adjustBody: null,
 };
 
 export const meSlice = createSlice({
@@ -69,6 +70,9 @@ export const meSlice = createSlice({
     },
     setAdjustPlayer: (state, action) => {
       state.adjustPlayer = action.payload
+    },
+    setAdjustBody: (state, action) => {
+      state.adjustBody = action.payload
     }
   },
 });

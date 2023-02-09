@@ -14,6 +14,7 @@ const ImageButton = () => {
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
   const me = useSelector(selectMe).player
   const adjustPlayer = useSelector(selectMe).adjustPlayer
+  const adjustBody = useSelector(selectMe).adjustBody
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
@@ -33,6 +34,12 @@ const ImageButton = () => {
     if(adjustPlayer)  {
       action('KILL_REQUEST', {to : adjustPlayer})
       action('me/setAdjustPlayer', null);
+    }
+  }
+  const reportButtonActivate = () => {
+    if(adjustBody) {
+      action('START_MEETING_REQUEST')
+      action('me/setAdjustBody', null);
     }
   }
 
@@ -71,9 +78,9 @@ const ImageButton = () => {
         <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/>
       </button>
       <button
-        className="imgBtn floatingComponent"
+        className={"imgBtnNoHover floatingComponent " + ((adjustBody) ? "imgBtnReady" : "")}
         id="reportBtn"
-        onClick={undefined}
+        onClick={reportButtonActivate}
         >
           <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고"/>
       </button>

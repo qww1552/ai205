@@ -96,12 +96,20 @@ const MyCharacter = () => {
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
-            // console.log(e.colliderObject.name ? e.colliderObject.name : null);
-            if(e.colliderObject.name)
+            console.log(e.colliderObject.name ? e.colliderObject.name : null);
+
+            if(!e.colliderObject.name) return
+
+            if(e.colliderObject.name?.search('dead_') < 0)
               action("me/setAdjustPlayer", e.colliderObject.name)
+            else {
+              action('me/setAdjustBody',  e.colliderObject.name)
+            }
+
           }}
           onIntersectionExit={() => {
             action("me/setAdjustPlayer", null)
+            action('me/setAdjustBody', null)
           }}
         />}
       </RigidBody>
