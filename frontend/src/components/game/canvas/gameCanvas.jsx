@@ -60,7 +60,7 @@ const GameCanvas = () => {
             {/* <Debug /> */}
             <MyCharacter initPosition={[0, 0, 0]} initColor="red" />
             {players.map((data, idx) => (
-              (!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive) &&
+              ((!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive)) &&
               <OtherCharacter
                 initPosition={[0, 0, 0]}
                 initColor="blue"
