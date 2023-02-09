@@ -37,7 +37,7 @@ const ModalMeeting = () => {
   },[isInMeeting,isInVoteResult])
   
   const votetest = () => {
-    console.log('votetest실행')
+    // console.log('votetest실행')
     action('gameInfo/setInVote', !isInVote)
     // setTimeout(() => action('gameInfo/setInVote', !isInVote),5000); 
   }
@@ -47,14 +47,14 @@ const ModalMeeting = () => {
   useEffect(() => {
     // 모달창이 닫히면 변수를 모두 초기화한다
     if (isInMeeting === false) {
-      console.log('미팅창 비활성화')
+      // console.log('미팅창 비활성화')
       action('gameInfo/setInVoteResult', false)
       action('gameInfo/setInVote', false)
       setCompleteNoticeMeet(false)
       setSeeNextResult(false)
     }
     if (isInMeeting === true) {
-      console.log('미팅창 활성화')
+      // console.log('미팅창 활성화')
       setTimeout(()=>setCompleteNoticeMeet(true),5000)
       action('gameInfo/setInVoteResult', false)
       action('gameInfo/setInVote', false)

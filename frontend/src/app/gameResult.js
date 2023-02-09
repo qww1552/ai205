@@ -14,7 +14,7 @@ export const gameResultSlice = createSlice({
     setGameResult: (state, action) => {
       
       state.gameResult = action.payload
-      console.log(state.gameResult)
+
     },
   },
 });

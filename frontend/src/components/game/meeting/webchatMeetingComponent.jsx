@@ -18,13 +18,13 @@ const WebchatMeetingcomponent = (props) => {
   // const voteInfo = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
   const [from,setFrom] = useState('')
   useEffect(()=>{
-    console.log(voteInfo)
+    // console.log(voteInfo)
     if (isInVoteResult) {
     for (let i = 0; i < voteInfo.length; i++) {
       
       if (props.user.player.id === voteInfo[i].id) {
         setFrom(voteInfo[i].from);
-        console.log(from)
+        // console.log(from)
         break;
       }
       else (
