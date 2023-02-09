@@ -30,7 +30,10 @@ const ImageButton = () => {
     action('gameInfo/setChatModalOpen', false)
   }
   const killButtonActivate = () => {
-    action('KILL_REQUEST', {to : adjustPlayer})
+    if(adjustPlayer)  {
+      action('KILL_REQUEST', {to : adjustPlayer})
+      action('me/setAdjustPlayer', null);
+    }
   }
 
   const [, get] = useKeyboardControls()
