@@ -1,5 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
 
+const iframePoseHeart = () => {
+    return {
+        __html:
+          '<iframe src="./missionPoseHeart.html" width="100%" height="700px"></iframe>'
+    };
+}
+
 const MainSimple = () => {
 
     return (<>
@@ -9,6 +16,7 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
+            <div dangerouslySetInnerHTML={iframePoseHeart()}/>
         </div>
     </>)
 }

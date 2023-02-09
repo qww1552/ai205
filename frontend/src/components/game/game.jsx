@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import GameCanvas from 'components/game/canvas/gameCanvas'
 import MissionProgress from 'components/game/mission/missionProgress'
 import MissionList from 'components/game/mission/missionList'
@@ -10,6 +10,7 @@ import ModalMeeting from 'components/game/meeting/modalMeeting'
 import LoadingSpinner from 'components/loadingSpinner'
 import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
+import Teachable from "components/game/meeting/teachable";
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
 import { KeyboardControls } from "@react-three/drei";
 
@@ -256,7 +257,7 @@ const Game = () => {
             //     <button onClick={onClickbtn}>확인</button>
             // </div>
             }
-
+            {stateMe.streamManager !== undefined &&( <Teachable streamManager={stateMe.streamManager}/>)}
         </KeyboardControls>
     )
 }
