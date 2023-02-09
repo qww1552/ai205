@@ -9,7 +9,6 @@ import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
-import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ public class GameCharacterService {
     public MoveResponse move(UUID roomId, String playerId, Location location) {
         GameData gameData = gameRepository.findById(roomId);
 
-        GameCharacter gameCharacter = gameData.getGameCharacters().get(playerId);
+        GameCharacter gameCharacter = gameData.getGameCharacter(playerId);
         gameCharacter.setLocation(location);
 
         return MoveResponse.builder()
@@ -38,16 +37,15 @@ public class GameCharacterService {
 
     public KillBroadcastResponse kill(UUID uuid, String mafiaPlayerId, String citizenPlayerId) {
         GameData gameData = gameRepository.findById(uuid);
-        Map<String, GameCharacter> gameCharacters = gameData.getGameCharacters();
 
-        GameCharacter gameCharacter = gameCharacters.get(mafiaPlayerId);
+        GameCharacter gameCharacter = gameData.getGameCharacter(mafiaPlayerId);
 
         if (!(gameCharacter instanceof Mafia)) {
             throw new OnlyMafiaCanKillException();
         }
 
         Mafia mafia = (Mafia) gameCharacter;
-        Citizen citizen = (Citizen) gameCharacters.get(citizenPlayerId);
+        Citizen citizen = (Citizen) gameData.getGameCharacter(citizenPlayerId);
         mafia.kill(citizen);
 
         KillBroadcastResponse.Player playerResponse = KillBroadcastResponse.Player.of(

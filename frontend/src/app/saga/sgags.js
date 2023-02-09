@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take, takeLatest, select, fork, all } from 'redux-saga/effects'
+import { call, put, takeEvery, take, takeLatest, select, fork, all, throttle } from 'redux-saga/effects'
 import { eventChannel, buffers } from 'redux-saga'
 import { createClient, send, connectClient } from 'api';
 
@@ -140,6 +140,8 @@ const channelHandling = {
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
+        // 시체들 초기화
+        yield put({ type: "dead/setDeadList", payload: [] })
         yield put({ type: "gameInfo/setInMeeting", payload: true })
         break;
       // 투표 시작 알림 받음 
@@ -187,10 +189,10 @@ const channelHandling = {
 function* sendChannel(client, roomId) {
   yield takeEvery("GAME_START_REQUEST", gameStart, client, roomId);
   yield takeEvery("LOCAITION_SEND_REQUEST", locationSend, client, roomId);
-  yield takeEvery("START_MEETING_REQUEST", startMeeting, client, roomId);
-  yield takeEvery("VOTE_REQUEST", vote, client, roomId)
+  yield throttle(3000, "START_MEETING_REQUEST", startMeeting, client, roomId);
+  yield throttle(3000, "VOTE_REQUEST", vote, client, roomId)
   yield takeEvery("MISSION_REQUEST", mission, client, roomId)
-  yield takeEvery("KILL_REQUEST", kill, client, roomId)
+  yield throttle(3000, "KILL_REQUEST", kill, client, roomId)
 }
 
 // 게임 시작 요청

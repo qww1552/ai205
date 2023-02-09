@@ -11,18 +11,20 @@ import lombok.Getter;
 @Getter
 public abstract class GameCharacter {
 
-    protected String playerId;
+    protected final String playerId;
     protected Role role;
     protected Boolean isAlive;
     protected Location location;
+    protected int color;
 
     protected Map<String, ActiveMission> missions;
 
-    protected GameCharacter(String playerId, Map<String, ActiveMission> missions) {
+    protected GameCharacter(String playerId, Map<String, ActiveMission> missions, int color) {
         this.playerId = playerId;
         this.isAlive = true;
         this.location = new Location(0.0, 0.0);
         this.missions = missions;
+        this.color = color;
     }
 
     public void die() {

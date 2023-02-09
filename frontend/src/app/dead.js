@@ -10,10 +10,10 @@ export const deadSlice = createSlice({
   reducers: {
     addDeadList : (state, action) => {
       state.deadList = [...state.deadList, action.payload]
+    },
+    setDeadList : (state, action) => {
+      state.deadList = action.payload
     }
-    // gamesetTime: (state, action) => {
-    //   state.time = action.payload
-    // },
   },
 });
 

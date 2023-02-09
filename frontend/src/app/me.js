@@ -11,6 +11,7 @@ const initialState = {
   streamManager: undefined,
   session: undefined,
   adjustPlayer: null,
+  adjustBody: null,
 };
 
 export const meSlice = createSlice({
@@ -29,6 +30,8 @@ export const meSlice = createSlice({
         connectionId: action.payload.connectionid,
         streamManager: action.payload.streamManager,
         session: action.payload.session,
+        mutedSound: false,
+        mutedVideo: false
       };
     },
     removePlayerVideo: (state, action) => {
@@ -37,15 +40,44 @@ export const meSlice = createSlice({
         connectionId: undefined,
         streamManager: undefined,
         session: undefined,
+        mutedSound: false,
+        mutedVideo: false
+      };
+    },
+    setMySoundOn(state, action) {
+      return {
+        ...state,
+        mutedSound: false,
+      };
+    },
+    setMySoundOff(state,action){
+      return {
+        ...state,
+        mutedSound: true,
+      };
+    },
+    setMyVideoOn(state, action) {
+      return {
+        ...state,
+        mutedVideo: false
+      };
+    },
+    setMyVideoOff(state, action){
+      return {
+        ...state,
+        mutedVideo: true
       };
     },
     setAdjustPlayer: (state, action) => {
       state.adjustPlayer = action.payload
+    },
+    setAdjustBody: (state, action) => {
+      state.adjustBody = action.payload
     }
   },
 });
 
-export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo } = meSlice.actions;
+export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo, setMySoundOn, setMySoundOff, setMyVideoOn, setMyVideoOff} = meSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

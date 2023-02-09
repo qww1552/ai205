@@ -13,6 +13,7 @@ import { selectGameInfo } from "app/gameInfo";
 import DeadMesh from "../mesh/deadMesh";
 import { selectDead } from "app/dead";
 import { selectMe } from "app/me";
+import DeadCharacter from "components/game/canvas/deadCharacter";
 
 const GameCanvas = () => {
   const stateMe = useSelector(selectMe);
@@ -70,10 +71,11 @@ const GameCanvas = () => {
                 isAlive={data.player.isAlive}
               />
             ))}
-            {deadList.map((data, idx) => (
-              <DeadMesh
-                location={data.location}
-                key={`${data.player.id}${idx}`}
+            {deadList.map((dead, idx) => (
+              <DeadCharacter
+                id={`${dead.player.id}`}
+                position={dead.location}
+                key={`${dead.player.id}${idx}`}
               />
             ))}
             <SimpleMap />
