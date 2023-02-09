@@ -86,12 +86,8 @@ const WebchatMeeting = () => {
   return (
     <div>
       <Row gutter={[8, 8]}>
-
-      <Col span = {8}>
+      <Col className={me.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
      <WebchatMeetingcomponent user={me} userinfo={me}/>
-      </Col>
-      <Col span = {16}>
-        <div>여기에 무슨정보를 넣는게 좋을까</div>
       </Col>
       {otherPlayers.map((sub) => {     
         return (<>{sub.streamManager!==undefined && (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
@@ -106,16 +102,13 @@ const WebchatMeeting = () => {
         <Col span={24}>
           <Card size="small">
           <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-          {voteResult.skip === []?"기권한 사람이 없는 경우 보일 메세지":<div>{skipinfo}</div>}
+          {skipinfo === []?"아무도 기권하지 않았습니다":skipinfo}
         </Card>
         </Col>}
       </Row>
-      {/* isInVote가 실행되면 활성화 */}
-      {/* 죽은 경우에는 투표를 못하니까 표시안함 */}
-      {/* 선택된 유저가 없는 경우 skip 아이콘 보이게 처리 */}
-      {/* Todo: voteSkipIcon css 추가 */}
-      <button onClick={()=>{console.log(me)}}></button>
-      {(me.player.isAlive&&!me.player.isVoted)&&<button onClick={submitEvent} disabled={!isInVote}>{VoteduserInfo === 'skip'?'스킵':'투표하기'}</button>}
+      <Row justify="center">
+      {(me.player.isAlive&&!me.player.isVoted)&&<Button type="primary" onClick={submitEvent} disabled={!isInVote}>{VoteduserInfo === 'skip'?'SKIP':'VOTE'}</Button>}
+      </Row>      
       
     </div>
     

@@ -18,17 +18,17 @@ const WebchatMeetingcomponent = (props) => {
   // const voteInfo = [{id:"a",from:['b','c','d']},{id:"b",from:['g']},{id:"skip",from:['b','c']},{id:"ab",from:['b','c','d']}]
   const [from,setFrom] = useState('')
   useEffect(()=>{
-    console.log(voteInfo)
+    // console.log(voteInfo)
     if (isInVoteResult) {
     for (let i = 0; i < voteInfo.length; i++) {
       
       if (props.user.player.id === voteInfo[i].id) {
         setFrom(voteInfo[i].from);
-        console.log(from)
+        // console.log(from)
         break;
       }
       else (
-        setFrom('null')
+        setFrom('')
       )
     }
   }},[isInVoteResult])
@@ -38,17 +38,11 @@ const WebchatMeetingcomponent = (props) => {
     <>
 
     {/* Todo: 죽은 사람인 경우 유령이미지 보이는 css 추가 */}
-        {props.user.player.id && <Card title={props.user.player.id} size="small"
-      extra={[
-        <CheckSquareTwoTone twoToneColor='LimeGreen' style={{ fontSize: '20px' }} />, " ",
-        <CustomerServiceTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px' }} />, " ",
-        <AudioTwoTone twoToneColor='RoyalBlue' style={{ fontSize: '20px' }} />, " ",
-        <AlertTwoTone twoToneColor='Red' style={{ fontSize: '20px' }} />
-      ]}>
+        {props.user.player.id && <Card title={props.user.player.id} size="small">
       {props.user.player.isAlive === true ||props.user.player.isAlive===undefined?
       <>
       <UserVideoComponent user={props.user} />
-      {isInVoteResult === true?<div>{from}</div>:props.user.player.isVoted===true?<div>투표완료</div>:<div>투표아직안함</div>}
+      {isInVoteResult === true&&<div>{from}</div>}
       {/* <div>{typeof(props.voteResult)}</div> */}
       </>
       :<img className='video' src='/testImg/ghost.jpg'/>}

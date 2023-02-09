@@ -38,13 +38,14 @@ const TimerMeeting = (props) => {
 
 
   return (
-    <Col span={20}>
+    <>
+    <Col span={18}>
       {/* success에서 -1을 한것은 진행중 percent와 겹치지 않게 하기 위해서임 */}
-      <Progress percent={initialTime.current/props.sec*100} success={{ percent: Math.min(50,initialTime.current/props.sec*100-1), strokeColor:"#52c41a" }} showInfo={false} strokeWidth={20} strokeColor={(initialTime.current/props.sec*100>Math.min(50,initialTime.current/props.sec*100))?"#13c2c2":"#52c41a"}/>
-    
+      <Progress percent={initialTime.current/props.sec*100} success={{ percent: Math.min(50,initialTime.current/props.sec*100-1), strokeColor:"#52c41a" }} showInfo={false} strokeWidth={20} strokeColor={(initialTime.current/props.sec*100>Math.min(50,initialTime.current/props.sec*100))?"#13c2c2":"#52c41a"}/>   
       {/* <div>{(initialTime.current/props.sec)*100}</div> */}
-      {hour} : {min} : {sec}
     </Col>
+    <Col span={4}>남은 시간: {min} : {sec}</Col>
+    </>
   );
 };
 
