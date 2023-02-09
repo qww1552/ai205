@@ -24,13 +24,12 @@ public class GameStartPersonalResponse {
     private final int color;
     private final List<Mission> missions;
 
-    public static GameStartPersonalResponse of(String sessionId, GameCharacter character,
-            int color) {
+    public static GameStartPersonalResponse of(String sessionId, GameCharacter character) {
         Map<String, ActiveMission> entityMissions = character.getMissions();
         List<Mission> missions = new ArrayList<>(entityMissions.size());
         entityMissions.forEach((k, v) -> missions.add(Mission.of(v)));
         return new GameStartPersonalResponse(sessionId, character.getRole(),
-                character.getLocation(), color, missions);
+                character.getLocation(), character.getColor(), missions);
     }
 
     @Getter
