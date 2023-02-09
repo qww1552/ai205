@@ -102,7 +102,7 @@ const ImageButton = () => {
         className={"imgBtnNoHover floatingComponent " + ((adjustPlayer && killTimer >= 100) ? "imgBtnReady" : "")}
         id="killBtn"
         onClick={
-          (adjustPlayer && killTimer) ? () => {
+          (adjustPlayer && killTimer >= 100) ? () => {
           killButtonActivate()
           resetKillTimer()
         } : undefined}
