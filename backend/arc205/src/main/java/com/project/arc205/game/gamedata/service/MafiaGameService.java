@@ -35,7 +35,7 @@ public class MafiaGameService implements GameService {
         gameRepository.save(roomId, gameData);
 
         log.info("create new gameData :: {}", gameData);
-        return GameStartResponse.of(roomId.toString());
+        return GameStartResponse.of(room.getGameSetting(), gameData.getGameCharacters());
     }
 
     @Override

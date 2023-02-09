@@ -27,16 +27,16 @@ public class BasicGameCharacterAssignStrategy implements
 
         for (Player player : players.values()) {
             String playerId = player.getId();
-            initialGameCharacters.put(playerId, new Citizen(playerId, Map.of(
-                    UUID.randomUUID().toString(),
-                    new BasicActiveMission(1L, "m1", new Location(1.1, 1.1)),
+            initialGameCharacters.put(playerId, new Citizen(playerId,
+                    Map.of(UUID.randomUUID().toString(),
+                            new BasicActiveMission(1L, "m1", new Location(1.1, 1.1))),
                     colorIdx.getAndIncrement()));
             mafiaId = playerId;
         }
 
-        initialGameCharacters.put(mafiaId, new Mafia(mafiaId, Map.of(
-                UUID.randomUUID().toString(),
-                new BasicActiveMission(1L, "m1", new Location(1.1, 1.1))))
+        initialGameCharacters.put(mafiaId, new Mafia(mafiaId,
+                Map.of(UUID.randomUUID().toString(),
+                        new BasicActiveMission(1L, "m1", new Location(1.1, 1.1))),
                 colorIdx.decrementAndGet()));
 
         return initialGameCharacters;
