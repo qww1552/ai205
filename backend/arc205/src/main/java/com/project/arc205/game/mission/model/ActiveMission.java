@@ -9,12 +9,12 @@ import lombok.Getter;
 @Getter
 public abstract class ActiveMission {
 
-    protected final Long id;
+    protected final String id;
     protected final String title;
     protected final Location location;
     protected boolean solved;
 
-    protected ActiveMission(Long id, String title, Location location) {
+    protected ActiveMission(String id, String title, Location location) {
         this.id = id;
         this.title = title;
         this.location = location;

@@ -29,14 +29,14 @@ public class BasicGameCharacterAssignStrategy implements
             String playerId = player.getId();
             initialGameCharacters.put(playerId, new Citizen(playerId,
                     Map.of(UUID.randomUUID().toString(),
-                            new BasicActiveMission(1L, "m1", new Location(1.1, 1.1))),
+                            new BasicActiveMission("1", "m1", new Location(1.1, 1.1))),
                     colorIdx.getAndIncrement()));
             mafiaId = playerId;
         }
 
         initialGameCharacters.put(mafiaId, new Mafia(mafiaId,
                 Map.of(UUID.randomUUID().toString(),
-                        new BasicActiveMission(1L, "m1", new Location(1.1, 1.1))),
+                        new BasicActiveMission("1", "m1", new Location(1.1, 1.1))),
                 colorIdx.decrementAndGet()));
 
         return initialGameCharacters;
