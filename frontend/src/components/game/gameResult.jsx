@@ -36,10 +36,11 @@ const GameResult = () => {
   return (
     <>
     <Modal
-    title="대충 10초 정도 결과창 보이는중"
     open={!isInGame&&gameResult}
     width={1920}
-    closable={false}>
+    closable={false}
+    footer={[
+    ]}>
 
     <div>
       <TypingText text={Text} speed={60} fontSize="1.25rem" color="green" />

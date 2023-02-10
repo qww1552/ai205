@@ -91,7 +91,7 @@ const WebchatMeeting = () => {
       </Col>
       {otherPlayers.map((sub) => {     
         return (<>{sub.streamManager!==undefined && (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
-          {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
+
         <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.player)}}>
           <WebchatMeetingcomponent user={sub}/>
         </div>
