@@ -3,6 +3,7 @@ package com.project.arc205.game.gamecharacter.model.entity;
 import com.project.arc205.common.model.Role;
 import com.project.arc205.game.gamecharacter.exception.CannotKillDeadException;
 import com.project.arc205.game.gamecharacter.exception.MafiaCannotKillEachOtherException;
+import com.project.arc205.game.gamecharacter.exception.MafiaCannotMissionInteractionException;
 import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.Map;
 import lombok.Getter;
@@ -31,6 +32,6 @@ public final class Mafia extends GameCharacter {
 
     @Override
     public void interaction(String missionId) {
-        // do nothing
+        throw new MafiaCannotMissionInteractionException();
     }
 }
