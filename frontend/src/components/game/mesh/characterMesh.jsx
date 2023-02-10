@@ -5,7 +5,7 @@ import { Vector3, RepeatWrapping } from "three";
 
 import { TEXTURE_WIDTH, TEXTRUE_HEIGHT, FPS, MOTION, COLOR } from "config/texture";
 
-const CharacterMesh = forwardRef(({ id, isAlive=true , color}, paramRef) => {
+const CharacterMesh = forwardRef(({ id, isAlive=true , color=0}, paramRef) => {
   // 텍스쳐 설정
   // const texture = useTexture('/player/players_blue_x1.png')
 
