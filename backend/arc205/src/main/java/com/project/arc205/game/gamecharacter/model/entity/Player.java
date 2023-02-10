@@ -15,7 +15,6 @@ public class Player {
     private String id;
     private String sessionId;
     private Room room;
-    private GameCharacter gameCharacter;
 
     public static Player create(String id, String sessionId) {
         Player player = new Player();
@@ -26,5 +25,10 @@ public class Player {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public void exit() {
+        room.remove(this);
+        this.room = null;
     }
 }

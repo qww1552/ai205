@@ -21,4 +21,7 @@ public class PlayerRepository {
         storage.put(player.getSessionId(), player);
     }
 
+    public void deleteBySessionId(String sessionId) {
+        storage.remove(sessionId);
+    }
 }
