@@ -89,6 +89,7 @@ const channelHandling = {
             yield put({ type: "others/initOtherPlayer", payload: {id : player.id, color : player.color} })
         }
         yield put({ type: "gameInfo/setInGame", payload: true })
+        yield put({ type: "gameSet/setGameSet", payload: data.gameSetting})
         break;
       case 'START_PERSONAL':
 
@@ -105,7 +106,6 @@ const channelHandling = {
         break;
       // ※게임 종료신호 데이터 받아오기
       case 'END':
-        console.log('게임끝이라는 신호임')
         yield put({ type: "gameResult/setGameResult", payload: data })
         yield put({type : "gameInfo/setInGame", payload: false})
         break;

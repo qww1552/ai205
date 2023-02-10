@@ -22,7 +22,9 @@ export const meSlice = createSlice({
       state.location = {...state.location, x : action.payload.x, y : action.payload.y};
     },
     setPlayer: (state, action) => {
+
       state.player = action.payload;
+      console.log(state.player)
     },
     addPlayerVideo: (state, action) => {
       return  {
@@ -73,11 +75,26 @@ export const meSlice = createSlice({
     },
     setAdjustBody: (state, action) => {
       state.adjustBody = action.payload
+    },
+    setMyIsSpeakingTrue: (state, action) => {
+      // console.log('내가 말을 하는중')
+      return {
+        ...state,
+        isSpeaking: true
+      }
+    },
+    setMyIsSpeakingFalse:(state, action) => {
+      // console.log('내가 말을 안하는중')
+      return {
+        ...state,
+        isSpeaking: false
+      }      
+
     }
   },
 });
 
-export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo, setMySoundOn, setMySoundOff, setMyVideoOn, setMyVideoOff} = meSlice.actions;
+export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo, setMySoundOn, setMySoundOff, setMyVideoOn, setMyVideoOff, setMyIsSpeakingTrue, setMyIsSpeakingFalse} = meSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

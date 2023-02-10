@@ -3,7 +3,6 @@ import createSagaMiddleware from 'redux-saga'
 import meReducer from 'app/me'
 import othersReducer from 'app/others'
 import resultReducer from 'app/result'
-import gamesetReducer from './gameset';
 import mySaga from './saga/sgags';
 import gameResultReducer from 'app/gameResult'
 import gameInfoReducer from 'app/gameInfo'
@@ -13,6 +12,7 @@ import videoReducer from 'app/videoInfo'
 import deadReducer from 'app/dead'
 import { persistReducer } from 'redux-persist';
 import persistStore from 'redux-persist/es/persistStore';
+import gameSetReducer from'app/gameSet'
 
 // import storage from 'redux-persist/lib/storage'; // 로컬 스토리지
 import storageSession from 'redux-persist/lib/storage/session' // 세션 스토리지
@@ -30,7 +30,7 @@ const reducers = combineReducers({
   gameInfo: gameInfoReducer,
   missionInfo: missionInfoReducer,
   result: resultReducer,
-  gameset: gamesetReducer,
+  gameSet: gameSetReducer,
   voteInfo: voteReducer,
   videoInfo: videoReducer,
   dead: deadReducer,

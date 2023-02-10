@@ -6,6 +6,8 @@ import { selectMyUserName, selectMainUser } from "app/videoInfo";
 import { selectMe } from "app/me";
 import { action } from "app/store"
 import InfiniteScroll from "react-infinite-scroll-component";
+import { COLOR } from "config/texture";
+import { selectOhterPlayers } from "app/others";
 
 const App = () => {
   const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
@@ -15,9 +17,34 @@ const App = () => {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState("");
   const chatScroll = useRef();
-
+  const others = useSelector(selectOhterPlayers)
+  let [colors, setColors ]= useState(new Map())
   useEffect(() => {}, []);
+  // useEffect(()=>{
+  //   if (others) {
+  //     for (let i =0; i<others.length; i++) {
+  //       setColors((prev) => new Map([...prev, [others[i].player.id, others[i].player.color]]));
+  //     }
+  //   }
+  //   console.log(colors)
 
+  // },[others])
+  // useEffect(()=>{
+  //   if (mainuser.player) {
+  //     setColors((prev) => new Map([...prev, mainuser.player.id, mainuser.player.color]))
+  //   }
+  // },[mainuser.player])
+  const getColors=(name)=>{
+    if (mainuser.player.id === name) {
+      return(mainuser.player.color)   
+  }else{
+          for (let i =0; i<others.length; i++) {
+        if (others[i].player.id === name) {
+      return(others[i].player.color)
+      break;
+        }
+      }
+  }}
   const scrollToBottom = () => {
     setTimeout(() => {
       try {
@@ -93,14 +120,19 @@ const App = () => {
         >
           <List>
             {messageList.map((item, i) => (
+              
               <List.Item key={item.nickname}>
+                {/* {colors.size()!==0? */}
                 <List.Item.Meta
-                  avatar={<Avatar src={'/testImg/mychar.PNG'} />}
+                  avatar={<Avatar src={`/testImg/char_color/char_${COLOR[getColors(item.nickname)]}_mini.png`} />}
                   title={item.nickname}
                   // description={item.email}
                 />
+                {/* :<div></div>} */}
                 <div>{item.message}</div>
+                
               </List.Item>
+           
             ))}
           </List>
         </InfiniteScroll>

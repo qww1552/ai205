@@ -1,5 +1,5 @@
 import ChatComponent from 'components/webchat/ChatComponent'
-import { selectGameset } from 'app/gameset';
+import { selectGameset } from 'app/gameSet';
 import { selectResult } from 'app/result';
 import React from 'react';
 import { useState } from 'react';
@@ -56,11 +56,7 @@ const VoteMeeting = () => {
         </Col>
       </Row>
       <Row >
-        {/* Todo: 게임방 세팅에서 회의시간 저장한것 받아오기 */}
-        {/* Todo: TimerMeeting sec에서 시간정보 받아오기 */}
-        
-        {/* {isInVote === true ? <TimerMeeting sec={time}/>:<div>아직투표시간이 아님</div>} */}
-        {/* <button onClick={clickevent}>시간이벤트</button> */}
+
 
         <Col span={2}>  
 
