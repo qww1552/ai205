@@ -13,6 +13,7 @@ import { selectGameInfo } from "app/gameInfo";
 import DeadMesh from "../mesh/deadMesh";
 import { selectDead } from "app/dead";
 import { selectMe } from "app/me";
+import DeadCharacter from "components/game/canvas/deadCharacter";
 
 const GameCanvas = () => {
   const stateMe = useSelector(selectMe);
@@ -58,22 +59,23 @@ const GameCanvas = () => {
             paused={gameInfo.isInMeeting}
           >
             {/* <Debug /> */}
-            <MyCharacter initPosition={[0, 0, 0]} initColor="red" />
+            <MyCharacter color={stateMe.player.color} />
             {players.map((data, idx) => (
               ((!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive)) &&
               <OtherCharacter
-                initPosition={[0, 0, 0]}
-                initColor="blue"
+                color={data.player.color}
                 id={data.player.id}
                 key={`${data.player.id}${idx}`}
                 location={data.location}
                 isAlive={data.player.isAlive}
               />
             ))}
-            {deadList.map((data, idx) => (
-              <DeadMesh
-                location={data.location}
-                key={`${data.player.id}${idx}`}
+            {deadList.map((dead, idx) => (
+              <DeadCharacter
+                // color={dead.player.color}
+                id={`${dead.player.id}`}
+                position={dead.location}
+                key={`${dead.player.id}${idx}`}
               />
             ))}
             <SimpleMap />

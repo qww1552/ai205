@@ -7,5 +7,7 @@ const MOTION = {
   DEAD: { idx: 1, frame: 8 },
 };
 const FPS = 10;
+const COLOR = ["black","blue","gray","green","pink","red"]
+const MAX_PLAYER = 6;
 
-export { TEXTURE_WIDTH, TEXTRUE_HEIGHT, MOTION, FPS }
+export { TEXTURE_WIDTH, TEXTRUE_HEIGHT, MOTION, FPS, COLOR, MAX_PLAYER }

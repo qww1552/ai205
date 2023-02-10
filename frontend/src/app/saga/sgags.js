@@ -80,12 +80,18 @@ function* startStomp(action) {
 
 const channelHandling = {
   GAME: function* (operation, data) {
+    const stateMe = yield select(state => state.me);
+    
     switch (operation) {
       case 'START':
+        for(const player of data.players) {
+          if(stateMe.player.id !== player.id)
+            yield put({ type: "others/initOtherPlayer", payload: {id : player.id, color : player.color} })
+        }
         yield put({ type: "gameInfo/setInGame", payload: true })
         break;
       case 'START_PERSONAL':
-        const stateMe = yield select(state => state.me);
+
         yield put({
           type: "me/setPlayer",
           payload: {
@@ -99,6 +105,7 @@ const channelHandling = {
         break;
       // ※게임 종료신호 데이터 받아오기
       case 'END':
+        console.log('게임끝이라는 신호임')
         yield put({ type: "gameResult/setGameResult", payload: data })
         yield put({type : "gameInfo/setInGame", payload: false})
         break;
@@ -140,6 +147,8 @@ const channelHandling = {
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
+        // 시체들 초기화
+        yield put({ type: "dead/setDeadList", payload: [] })
         yield put({ type: "gameInfo/setInMeeting", payload: true })
         break;
       // 투표 시작 알림 받음 

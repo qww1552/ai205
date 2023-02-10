@@ -1,9 +1,10 @@
 package com.project.arc205.game.gamecharacter;
 
 import static com.project.arc205.game.dummy.DummyGameCharacter.getTestCitizenWithMission;
-import static com.project.arc205.game.dummy.DummyMission.getTestMission;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.project.arc205.common.model.Location;
+import com.project.arc205.game.dummy.DummyMission;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class CitizenTests {
 
     @BeforeEach
     void init() {
-        dummyMission = getTestMission();
+        dummyMission = new DummyMission(1L, "dummy", new Location(0.0, 0.0));
     }
 
     @Test

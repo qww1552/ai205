@@ -9,10 +9,6 @@ public class DummyMission extends ActiveMission {
         super(id, title, location);
     }
 
-    public static ActiveMission getTestMission() {
-        return new DummyMission(1L, "testMission", null);
-    }
-
     @Override
     public boolean solve() {
         solved = true;

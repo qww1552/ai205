@@ -8,19 +8,19 @@ import java.util.HashMap;
 public class DummyGameCharacter {
 
     public static Mafia getTestMafia() {
-        return new Mafia("mafia", null);
+        return new Mafia("mafia", null, 1);
     }
 
     public static Mafia getTestMafiaWithMission(HashMap<String, ActiveMission> missionMap) {
-        return new Mafia("mafia", missionMap);
+        return new Mafia("mafia", missionMap, 1);
     }
 
     public static Citizen getTestCitizen() {
-        return new Citizen("citizen", null);
+        return new Citizen("citizen", null, 0);
     }
 
     public static Citizen getTestCitizenWithMission(HashMap<String, ActiveMission> missionMap) {
-        return new Citizen("citizen", missionMap);
+        return new Citizen("citizen", missionMap, 0);
     }
 
 }

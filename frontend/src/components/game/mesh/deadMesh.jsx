@@ -5,7 +5,7 @@ import { Vector3, RepeatWrapping } from "three";
 
 import { TEXTURE_WIDTH, TEXTRUE_HEIGHT, FPS, MOTION } from "config/texture";
 
-const DeadMesh = ({location}) => {
+const DeadMesh = () => {
   // 텍스쳐 설정
   // const texture = useTexture('/player/players_blue_x1.png')
   const originTexture = useTexture(
@@ -43,7 +43,7 @@ const DeadMesh = ({location}) => {
 
   return (
     <>
-      <mesh position={[location.x,location.y,0]}>
+      <mesh>
         <planeGeometry args={[1, 1]} attach="geometry" />
         <meshStandardMaterial ref={ref} map={texture} transparent={true} />
       </mesh>

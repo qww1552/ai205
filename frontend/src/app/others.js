@@ -23,7 +23,7 @@ export const othersSlice = createSlice({
 
           state.players[idx].player = {
             ...state.players[idx].player,
-            isAlive : action.payload.player.isAlive,
+            isAlive: action.payload.player.isAlive,
           }
           state.players[idx].location = action.payload.location;
           return;
@@ -42,7 +42,18 @@ export const othersSlice = createSlice({
       }
 
       // 이름이 없으면 추가
-      state.players = [...state.players, { player: { id: action.payload.id, isAlive: true, isVoted: false } , location : {x : 0, y : 0} }];
+      state.players = 
+      [...state.players, {
+        player: {
+          id: action.payload.id,
+          color: action.payload.color,
+          isAlive: true, 
+          isVoted: false
+        }, 
+        location: {
+           x: 0, y: 0 
+        }
+      }];
       state.otherPlayersCnt += 1;
     },
 
@@ -69,6 +80,8 @@ export const othersSlice = createSlice({
             streamManager: action.payload.streamManager,
             connectionId: action.payload.connectionId,
             isSpeaking: action.payload.isSpeaking,
+            mutedSound: false,
+            mutedVideo: false
           };
           return;
         }
@@ -82,6 +95,8 @@ export const othersSlice = createSlice({
             streamManager: undefined,
             connectionId: undefined,
             isSpeaking: undefined,
+            mutedSound: false,
+            mutedVideo: false
           };
           return;
         }
@@ -103,10 +118,54 @@ export const othersSlice = createSlice({
         }
       }
     },
+    setOtherSoundOn(state, action) {
+      for (const idx of state.players.keys()) {
+        if (state.players[idx].player.id === action.payload) {
+          state.players[idx] = {
+            ...state.players[idx],
+            mutedSound: false
+          };
+          return;
+        }
+      }
+    },
+    setOtherSoundOff(state, action) {
+      for (const idx of state.players.keys()) {
+        if (state.players[idx].player.id === action.payload) {
+          state.players[idx] = {
+            ...state.players[idx],
+            mutedSound: true
+          };
+          return;
+        }
+      }
+    },
+    setOtherVideoOn(state, action) {
+      for (const idx of state.players.keys()) {
+        if (state.players[idx].player.id === action.payload) {
+          state.players[idx] = {
+            ...state.players[idx],
+            mutedVideo: false
+          };
+          return;
+        }
+      }
+    },
+    setOtherVideoOff(state, action) {
+      for (const idx of state.players.keys()) {
+        if (state.players[idx].player.id === action.payload) {
+          state.players[idx] = {
+            ...state.players[idx],
+            mutedVideo: true
+          };
+          return;
+        }
+      }
+    }
   },
 });
 
-export const { setOtherPlayer, setOtherPlayerVideoInfo,setIsSpeakingFalse, setIsSpeakingTrue, removeOtherPlayerVideoInfo  } = othersSlice.actions;
+export const { setOtherPlayer, setOtherPlayerVideoInfo, setIsSpeakingFalse, setIsSpeakingTrue, removeOtherPlayerVideoInfo, setOtherSoundOn, setOtherSoundOff, setOtherVideoOn, setOtherVideoOff } = othersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

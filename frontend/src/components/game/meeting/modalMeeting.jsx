@@ -37,7 +37,7 @@ const ModalMeeting = () => {
   },[isInMeeting,isInVoteResult])
   
   const votetest = () => {
-    console.log('votetest실행')
+    // console.log('votetest실행')
     action('gameInfo/setInVote', !isInVote)
     // setTimeout(() => action('gameInfo/setInVote', !isInVote),5000); 
   }
@@ -47,14 +47,14 @@ const ModalMeeting = () => {
   useEffect(() => {
     // 모달창이 닫히면 변수를 모두 초기화한다
     if (isInMeeting === false) {
-      console.log('미팅창 비활성화')
+      // console.log('미팅창 비활성화')
       action('gameInfo/setInVoteResult', false)
       action('gameInfo/setInVote', false)
       setCompleteNoticeMeet(false)
       setSeeNextResult(false)
     }
     if (isInMeeting === true) {
-      console.log('미팅창 활성화')
+      // console.log('미팅창 활성화')
       setTimeout(()=>setCompleteNoticeMeet(true),5000)
       action('gameInfo/setInVoteResult', false)
       action('gameInfo/setInVote', false)
@@ -81,21 +81,14 @@ const ModalMeeting = () => {
           //   닫기
           // </Button>
         ]}
-      >
+      className = 'g'>
         {completeNoticeMeet === false?<NoticeMeeting/>:isInMeeting &&(!seeNextResult)?<VoteMeeting/>:<ResultMeeting/>}
         
-        {/* ※시험용으로 만둘어둔 버튼 나중에 지우기 */}
-        <Button key="test1" onClick={() => action('gameInfo/setInVoteResult', !isInVoteResult)}>
-            결과창띄우기
-        </Button>
-        <Button key="test2" onClick={() => votetest()}>
-            투표시작
-        </Button>
         {/* ※여기까지 */}
         {/* 페이지전환을 위한 변수를 띄움 */}
-        <div>{isInMeeting?'미팅임':'미팅아님'}</div>
+        {/* <div>{isInMeeting?'미팅임':'미팅아님'}</div>
         <div>{seeNextResult?'다음결과true':'다음결과false'}</div>
-        <div>{isInVoteResult?'투표결과보이는중':'투표결과안보이는중'}</div>
+        <div>{isInVoteResult?'투표결과보이는중':'투표결과안보이는중'}</div> */}
       </Modal>
       
     </>

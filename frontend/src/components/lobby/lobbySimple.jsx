@@ -29,10 +29,6 @@ const LobbySimple = () => {
         const players = res.data.data.players
         const otherPlayers = players.filter(v => v.id !== me.player.id)
         setotherPlayers(otherPlayers);
-
-        for(const player of otherPlayers) {
-          action('others/initOtherPlayer', player)
-        }
       }).catch((e) => {
         setotherPlayers([]);
       });

@@ -1,7 +1,6 @@
 package com.project.arc205.game.gamecharacter.service;
 
 import com.project.arc205.common.model.Location;
-import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
@@ -13,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -35,7 +35,8 @@ public class GameCharacterService {
                 .build();
     }
 
-    public KillBroadcastResponse kill(UUID uuid, String mafiaPlayerId, String citizenPlayerId) {
+    @Transactional
+    public void kill(UUID uuid, String mafiaPlayerId, String citizenPlayerId) {
         GameData gameData = gameRepository.findById(uuid);
 
         GameCharacter gameCharacter = gameData.getGameCharacter(mafiaPlayerId);
@@ -47,11 +48,5 @@ public class GameCharacterService {
         Mafia mafia = (Mafia) gameCharacter;
         Citizen citizen = (Citizen) gameData.getGameCharacter(citizenPlayerId);
         mafia.kill(citizen);
-
-        KillBroadcastResponse.Player playerResponse = KillBroadcastResponse.Player.of(
-                citizenPlayerId,
-                citizen.getRole().name(), citizen.getIsAlive());
-
-        return new KillBroadcastResponse(playerResponse, citizen.getLocation());
     }
 }

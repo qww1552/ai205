@@ -3,7 +3,10 @@ package com.project.arc205.game.gamedata.event.handler;
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
 import com.project.arc205.common.service.PlayerSessionMappingService;
+import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
+import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
+import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.service.PlayerRoomMappingRepository;
 import com.project.arc205.game.gamedata.event.DieEvent;
 import com.project.arc205.game.gamedata.repository.GameRepository;
@@ -26,20 +29,35 @@ public class DieEventHandler {
     private final PlayerSessionMappingService playerSessionMappingService;
     private final SimpMessagingTemplate template;
 
+    @Async
+    @EventListener
+    public void sendDie(DieEvent event) {
+        UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
+        log.info("DieEvent(sendDie): {}, {}", roomId.toString(), event.getPlayerId());
+        GameCharacter deadCharacter = gameRepository.findById(roomId)
+                .getGameCharacter(event.getPlayerId());
+
+        String destination = Constant.DESTINATION_PREFIX + roomId;
+        KillBroadcastResponse responseData = KillBroadcastResponse.of(deadCharacter);
+        BaseResponse<KillBroadcastResponse> response = BaseResponse.character(
+                CharacterOperation.DIE).data(responseData);
+        template.convertAndSend(destination, response);
+        log.info("{}: {}", destination, responseData);
+    }
 
     @Async
     @EventListener
     public void sendYouDie(DieEvent event) {
         UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
-        String citizenSessionId = playerSessionMappingService.convertPlayerIdToSessionIdInRoom(
+        String sessionId = playerSessionMappingService.convertPlayerIdToSessionIdInRoom(
                 roomId,
                 event.getPlayerId());
-        log.info("DieEvent - send YOU_DIE: {}, {}, {}", roomId.toString(), event.getPlayerId(),
-                citizenSessionId);
-        template.convertAndSendToUser(citizenSessionId, "/queue",
+        log.info("DieEvent(sendYouDie): {}, {}, {}", roomId.toString(), event.getPlayerId(),
+                sessionId);
+        template.convertAndSendToUser(sessionId, "/queue",
                 BaseResponse.character(CharacterOperation.YOU_DIED).build(),
-                WebSocketUtil.createHeaders(citizenSessionId)
-        );
+                WebSocketUtil.createHeaders(sessionId));
+        log.info("/user/{}/queue: /CHARACTER/YOU_DIED", sessionId);
     }
 
     @Async
@@ -48,7 +66,7 @@ public class DieEventHandler {
     public void checkGameEnd(DieEvent event) {
         UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
         gameRepository.findById(roomId).checkGameEnd();
-        log.info("DieEvent - check game end: {}, {}", roomId.toString(), event.getPlayerId());
+        log.info("DieEvent(checkGameEnd): {}, {}", roomId.toString(), event.getPlayerId());
     }
 
 }
