@@ -58,7 +58,7 @@ const GameCanvas = () => {
             gravity={[0, 0, 0]}
             paused={gameInfo.isInMeeting}
           >
-            <Debug />
+            {/* <Debug /> */}
             <MyCharacter color={stateMe.player.color} />
             {players.map((data, idx) => (
               ((!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive)) &&
