@@ -22,7 +22,9 @@ export const meSlice = createSlice({
       state.location = {...state.location, x : action.payload.x, y : action.payload.y};
     },
     setPlayer: (state, action) => {
+
       state.player = action.payload;
+      console.log(state.player)
     },
     addPlayerVideo: (state, action) => {
       return  {
