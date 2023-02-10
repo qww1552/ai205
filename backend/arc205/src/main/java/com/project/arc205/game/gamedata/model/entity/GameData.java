@@ -127,12 +127,13 @@ public class GameData {
 
         log.info("check game end: {}, {}", aliveCitizenCount, aliveMafiaCount);
         GameEndEvent gameEndEvent = null;
-        if (aliveMafiaCount == aliveCitizenCount) {
+        if (aliveMafiaCount >= aliveCitizenCount) {
             gameEndEvent = new GameEndEvent(roomId, Role.MAFIA);
         } else if (aliveMafiaCount == 0 || totalMissionCount == completedMissionCount) {
             gameEndEvent = new GameEndEvent(roomId, Role.CITIZEN);
         }
 
+        log.info("game end event: {}", gameEndEvent);
         if (gameEndEvent != null) {
             Events.raise(gameEndEvent);
         }

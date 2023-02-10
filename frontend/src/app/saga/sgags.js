@@ -80,14 +80,19 @@ function* startStomp(action) {
 
 const channelHandling = {
   GAME: function* (operation, data) {
+    const stateMe = yield select(state => state.me);
+    
     switch (operation) {
       case 'START':
-        console.log(data.gameSetting)
+        for(const player of data.players) {
+          if(stateMe.player.id !== player.id)
+            yield put({ type: "others/initOtherPlayer", payload: {id : player.id, color : player.color} })
+        }
         yield put({ type: "gameInfo/setInGame", payload: true })
         yield put({ type: "gameSet/setGameSet", payload: data.gameSetting})
         break;
       case 'START_PERSONAL':
-        const stateMe = yield select(state => state.me);
+
         yield put({
           type: "me/setPlayer",
           payload: {
