@@ -11,8 +11,14 @@ const MeetingButton = ({ position }) => {
     return (
         <>
             <RigidBody colliders="cuboid" type="fixed" sensor
-                onIntersectionEnter={() => action('gameInfo/setAdjacentMeetingBtn', true)}
-                onIntersectionExit={() => action('gameInfo/setAdjacentMeetingBtn', false)}
+                onIntersectionEnter={(e) => {
+                    if(e.colliderObject.name?.search('char_') >= 0) 
+                        action('gameInfo/setAdjacentMeetingBtn', true)
+                }}
+                onIntersectionExit={(e) => {
+                    if(e.colliderObject.name?.search('char_') >= 0) 
+                        action('gameInfo/setAdjacentMeetingBtn', false)
+                }}
             >
                 <mesh receiveShadow position={position}>
                     <boxGeometry args={[1, 1, 1]} />

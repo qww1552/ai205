@@ -1,15 +1,15 @@
 import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { Vector3 } from "three";
+import { Vector3, Euler } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
-import { CuboidCollider, RigidBody } from "@react-three/rapier";
+import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier";
 import { selectMe } from "../../../app/me";
 import { useSelector } from "react-redux";
 import { action } from "app/store";
 import CharacterMesh from "../mesh/characterMesh";
 import { selectGameInfo } from "app/gameInfo";
 
-const MyCharacter = ({color}) => {
+const MyCharacter = ({ color }) => {
 
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult;
   const stateMe = useSelector(selectMe);
@@ -24,6 +24,8 @@ const MyCharacter = ({color}) => {
   const cameraVec = new Vector3();
 
   const speed = 6.0;
+
+  const sylinderRot = new Euler(1.5,0,0);
 
   // ref.current.charState = "IDLE";
   // ref.current.charDir = "RIGHT";
@@ -41,10 +43,10 @@ const MyCharacter = ({color}) => {
   }, []);
 
   useEffect(() => {
-    if(isInVoteResult) {
-      ref.current.setTranslation({x:0,y:0,z:0})
+    if (isInVoteResult) {
+      ref.current.setTranslation({ x: 0, y: 0, z: 0 })
     }
-  },[isInVoteResult])
+  }, [isInVoteResult])
 
   useFrame((state) => {
     state.camera.position.lerp(
@@ -81,7 +83,7 @@ const MyCharacter = ({color}) => {
   return (
     <>
       <RigidBody ref={ref} type="dynamic" lockRotations={true}>
-        <pointLight distance={4} decay={0.01} position={[0,0,1]}/>
+        <pointLight distance={4} decay={0.01} position={[0, 0, 1]} />
 
         <Suspense>
           <CharacterMesh
@@ -93,18 +95,18 @@ const MyCharacter = ({color}) => {
         </Suspense>
 
         {stateMe.player.isAlive && <CuboidCollider
-
+          name={`char_${stateMe.player.id}`}
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
-            console.log(e.colliderObject.name ? e.colliderObject.name : null);
+            // console.log(e.colliderObject.name ? e.colliderObject.name : null);
 
-            if(!e.colliderObject.name) return
+            if (!e.colliderObject.name) return
 
-            if(e.colliderObject.name?.search('dead_') < 0)
+            if (e.colliderObject.name?.search('dead_') < 0)
               action("me/setAdjustPlayer", e.colliderObject.name)
             else {
-              action('me/setAdjustBody',  e.colliderObject.name)
+              action('me/setAdjustBody', e.colliderObject.name)
             }
 
           }}
@@ -113,6 +115,19 @@ const MyCharacter = ({color}) => {
             action('me/setAdjustBody', null)
           }}
         />}
+        <CylinderCollider
+          name={`sight_${stateMe.player.id}`}
+          args={[3.8, 3.8, 0.05]}
+          sensor
+          restitution={0}
+          rotation={sylinderRot}
+          onIntersectionEnter={(e) => {
+
+          }}
+          onIntersectionExit={() => {
+
+          }}
+        />
       </RigidBody>
     </>
   );

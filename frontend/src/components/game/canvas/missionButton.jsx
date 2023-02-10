@@ -11,17 +11,15 @@ const MissionButton = ({ position }) => {
   return (
     <>
       <RigidBody colliders="cuboid" type="fixed" sensor
-        onIntersectionEnter={() => action('missionInfo/setAdjacentMissionBtn', true)}
-        onIntersectionExit={() => action('missionInfo/setAdjacentMissionBtn', false)}
+        onIntersectionEnter={(e) => {
+          if(e.colliderObject.name?.search('char_') >= 0) 
+            action('missionInfo/setAdjacentMissionBtn', true)
+          }}
+        onIntersectionExit={(e) => {
+          if(e.colliderObject.name?.search('char_') >= 0) 
+            action('missionInfo/setAdjacentMissionBtn', false)
+        }}
       >
-        {/* <mesh position={position}>
-          <Box args={[1, 1, 1]}
-            material-color={isAdjacentMissionBtn ? "purple" : "lime"}
-          />
-          <Text fontSize={0.5} position={[0, 0, 1]} color="black" anchorX="center" >
-            Mission
-          </Text>
-        </mesh> */}
         <mesh receiveShadow position={position}>
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial color={isAdjacentMissionBtn ? "purple" : "lime"} />
