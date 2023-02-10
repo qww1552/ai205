@@ -5,8 +5,12 @@ import com.project.arc205.game.mission.model.ActiveMission;
 
 public class DummyMission extends ActiveMission {
 
-    public DummyMission(Long id, String title, Location location) {
+    public DummyMission(String id, String title, Location location) {
         super(id, title, location);
+    }
+
+    public static DummyMission getInstance() {
+        return new DummyMission("1", "dummy", new Location(0.0, 0.0));
     }
 
     @Override

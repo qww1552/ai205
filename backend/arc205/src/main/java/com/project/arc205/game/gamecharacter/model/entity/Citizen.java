@@ -15,7 +15,7 @@ public final class Citizen extends GameCharacter {
 
     @Override
     public void interaction(String missionId) {
-        this.missions.get(missionId).solve();
+        this.getMission(missionId).solve();
     }
 
 }

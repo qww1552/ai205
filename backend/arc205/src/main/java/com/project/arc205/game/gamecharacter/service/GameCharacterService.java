@@ -1,6 +1,7 @@
 package com.project.arc205.game.gamecharacter.service;
 
 import com.project.arc205.common.model.Location;
+import com.project.arc205.game.gamecharacter.dto.response.MissionProgressResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
@@ -48,5 +49,13 @@ public class GameCharacterService {
         Mafia mafia = (Mafia) gameCharacter;
         Citizen citizen = (Citizen) gameData.getGameCharacter(citizenPlayerId);
         mafia.kill(citizen);
+    }
+
+    public MissionProgressResponse missionComplete(UUID roomId, String playerId, String missionId) {
+        GameData gameData = gameRepository.findById(roomId);
+        GameCharacter gameCharacter = gameData.getGameCharacter(playerId);
+        gameCharacter.interaction(missionId);
+        int progress = gameData.incrementAndGetMissionProgress();
+        return MissionProgressResponse.of(progress);
     }
 }

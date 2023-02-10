@@ -67,6 +67,10 @@ public class GameData {
                 .build();
     }
 
+    public int incrementAndGetMissionProgress() {
+        return ++completedMissionCount / totalMissionCount * 100;
+    }
+
     public boolean meetingStart() {
         if (inMeeting) {
             return false;

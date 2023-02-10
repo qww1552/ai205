@@ -4,9 +4,11 @@ import com.project.arc205.common.event.Events;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.common.model.Role;
 import com.project.arc205.game.gamecharacter.exception.CannotKillDeadException;
+import com.project.arc205.game.gamecharacter.exception.MissionNotFoundException;
 import com.project.arc205.game.gamedata.event.DieEvent;
 import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -38,6 +40,11 @@ public abstract class GameCharacter {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    protected ActiveMission getMission(String missionId) {
+        return Optional.of(missions.get(missionId))
+                .orElseThrow(() -> new MissionNotFoundException((missionId)));
     }
 
     public abstract void interaction(String missionId);
