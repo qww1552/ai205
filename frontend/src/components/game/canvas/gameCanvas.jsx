@@ -24,12 +24,12 @@ const GameCanvas = () => {
   // const players = [
   //   {
   //     player: {
-  //       id: "asdfadsf",
+  //       id: "aa",
   //       role: "mafia",
   //       isAlive: false,
   //     },
   //     location: {
-  //       y: 1,
+  //       y: 3,
   //       x: 1,
   //     },
   //   },
