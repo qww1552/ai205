@@ -255,7 +255,9 @@ const Game = () => {
                 {stateMe.streamManager!==undefined &&(<ImageButton/>)}
                 {stateMe.streamManager!==undefined &&(<ModalMeeting/>)}
                 {stateMe.streamManager !== undefined && (<GameResult />)}
-                {stateMe.streamManager !== undefined && (<Teachable streamManager={stateMe.streamManager}/>)}
+                
+                {/* URL 정보 없이 실행하려 하는 문제가 있어 임시로 주석 처리 */}
+                {/* {stateMe.streamManager !== undefined && (<Teachable streamManager={stateMe.streamManager}/>)} */}
             </div>
             {
             // !check && <div>

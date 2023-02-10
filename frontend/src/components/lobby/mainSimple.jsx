@@ -9,7 +9,7 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
-            <Teachable/>
+            {/* <Teachable myurl="/heart_model/" /> */}
         </div>
     </>)
 }

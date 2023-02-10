@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import { Button, Progress } from 'antd'
 
 const Teachable = (props) => {
   // const videoRef = useRef();
@@ -24,34 +25,40 @@ const Teachable = (props) => {
   //     props.streamManager.addVideoElement(videoRef.current);
   //   }
   // }, [props.streamManager]);
-
+  
   useEffect(() => {
-
     const btn = document.getElementById("teachable");
-    btn.setAttribute("onclick", "init("+ "/my_model/" +")");
-
-    const btn2 = document.getElementById("teachable2")
-    btn2.setAttribute("onclick", "init("+ "/heart_model/" +")")
-
+    btn.setAttribute("onclick", `init("${props.myurl}")`);
   }, []);
+
+  const getPoseResult = () => {
+    setTimeout(() => {
+      console.log(document.getElementById("poseResult").innerHTML)
+    }, 1000)
+  }
+  // try {
+  //   // 일단 이러면 String의 형태로 오는 거 같긴 한데...
+  //   console.log(document.getElementById("poseResult").innerHTML)
+  // } catch (err) {
+  //   console.log("아직 태그 생성이 안 됐어!")
+  // }
 
   return (
     <>
       {/* <div>
         <video id="teachable" autoPlay={true} muted={props.mutedSound} ref={videoRef} />
       </div> */}
-      <div/>
-      <button id="teachable" type="button">
-        Start
-      </button>
-      <button id="teachable2" type="button">
-        Start2
-      </button>
-
+      <Button id="teachable">
+        카메라 테스트하기
+      </Button>
+      <div id="poseResult" style={{display:"none"}}> </div>
       <div>
         <canvas id="canvas"></canvas>
       </div>
       <div id="label-container"></div>
+      <Button onClick={getPoseResult}>
+        미션 수행!
+      </Button>
     </>
   );
 };

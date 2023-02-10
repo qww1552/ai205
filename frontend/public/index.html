@@ -48,6 +48,10 @@
         // const myurl = "/my_model/";
         let model, webcam, ctx, labelContainer, maxPredictions;
 
+        // function quitTeachable() {
+        //   model = null?!
+        // }
+
         async function init(myurl) {
           const modelURL = myurl + "model.json";
           const metadataURL = myurl + "metadata.json";
@@ -68,7 +72,7 @@
           ctx = canvas.getContext("2d");
           labelContainer = document.getElementById("label-container");
           for (let i = 0; i < maxPredictions; i++) { // and class labels
-            labelContainer.appendChild(document.createElement("div"));
+            labelContainer.appendChild(document.createElement("h4"));
           }
         }
 
@@ -85,8 +89,12 @@
           const prediction = await model.predict(posenetOutput);
 
           for (let i = 0; i < maxPredictions; i++) {
-            const classPrediction =
+            let classPrediction =
               prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            if (prediction[i].probability >= 0.9) {
+              classPrediction += " <= 당신의 포즈"
+              document.getElementById("poseResult").innerHTML = "보낸 거"
+            }
             labelContainer.childNodes[i].innerHTML = classPrediction;
           }
 

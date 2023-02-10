@@ -1,6 +1,7 @@
 import 'styles/styles.css'
 import ChatComponent from 'components/webchat/ChatComponent'
 import MissionComponent from '../mission/missionComponent'
+import MissionComponentTeachable from '../mission/missionComponentTeachable'
 import { selectGameInfo } from "app/gameInfo"
 import { selectMissionInfo } from "app/missionInfo"
 import { useSelector } from "react-redux"
@@ -67,6 +68,7 @@ const ImageButton = () => {
         onClick={actButtonActivate}>
         <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동"/>
       </button>
+      <MissionComponentTeachable />
       <button
         className="imgBtn floatingComponent"
         id="reportBtn"
@@ -74,7 +76,6 @@ const ImageButton = () => {
         >
           <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고"/>
       </button>
-      <MissionComponent/>
       {me.role === "MAFIA"?
       <button
         className={"imgBtnNoHover floatingComponent " + (adjustPlayer ? "imgBtnReady" : "")}
