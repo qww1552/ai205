@@ -9,7 +9,7 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
-           
+            <Teachable/>
         </div>
     </>)
 }

@@ -1,62 +1,53 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
 const Teachable = (props) => {
-  const videoRef = useRef();
-  useEffect(() => {
-    if (props && !!videoRef) {
+  // const videoRef = useRef();
+  // useEffect(() => {
+  //   if (props && !!videoRef) {
      
 
-      const canvas = document.querySelector('#canvas');
-      const ctx = canvas.getContext('2d');
-      let canPlayState = false;
+  //     const canvas = document.querySelector('#canvas');
+  //     const ctx = canvas.getContext('2d');
+  //     let canPlayState = false;
 
-      ctx.textAlign = 'center';
-      ctx.fillText('비디오 로딩 중..', 300, 200);
+  //     ctx.textAlign = 'center';
+  //     ctx.fillText('비디오 로딩 중..', 300, 200);
 
-      const videoElem = document.querySelector('#teachable');
-      videoElem.addEventListener('canplaythrough', render);
+  //     const videoElem = document.querySelector('#teachable');
+  //     videoElem.addEventListener('canplaythrough', render);
 
-      function render() {
-        ctx.drawImage(videoElem, 0, 0, 600, 400);
-        // 첫 번째 인자로 비디오를 넣어준다.
-        requestAnimationFrame(render);
-      }
-      props.streamManager.addVideoElement(videoRef.current);
-    }
-  }, [props.streamManager]);
+  //     function render() {
+  //       ctx.drawImage(videoElem, 0, 0, 600, 400);
+  //       // 첫 번째 인자로 비디오를 넣어준다.
+  //       requestAnimationFrame(render);
+  //     }
+  //     props.streamManager.addVideoElement(videoRef.current);
+  //   }
+  // }, [props.streamManager]);
 
   useEffect(() => {
-    // const header1 = document.createElement("script");
-    // header1.src = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js";
-    // document.head.appendChild(header1);
 
-    // const header2 = document.createElement("script");
-    // header2.src =
-    //   "https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js";
-    // document.head.appendChild(header2);
-
-    // const script = document.createElement("script");
-    // script.innerHTML = ``;
-    // script.type = "text/javascript";
-    // script.async = "async";
     const btn = document.getElementById("teachable");
-    btn.setAttribute("onclick", "init()");
+    btn.setAttribute("onclick", "init("+ "/my_model/" +")");
 
+    const btn2 = document.getElementById("teachable2")
+    btn2.setAttribute("onclick", "init("+ "/heart_model/" +")")
 
-
-    // document.head.appendChild(script);
   }, []);
 
-
-  
   return (
     <>
-      <div>
+      {/* <div>
         <video id="teachable" autoPlay={true} muted={props.mutedSound} ref={videoRef} />
-      </div>
+      </div> */}
+      <div/>
       <button id="teachable" type="button">
         Start
       </button>
+      <button id="teachable2" type="button">
+        Start2
+      </button>
+
       <div>
         <canvas id="canvas"></canvas>
       </div>
