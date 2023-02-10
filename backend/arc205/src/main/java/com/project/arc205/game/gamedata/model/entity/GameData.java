@@ -68,8 +68,24 @@ public class GameData {
     }
 
     public int incrementAndGetMissionProgress() {
-        return ++completedMissionCount / totalMissionCount * 100;
+        return (int) (++completedMissionCount / (float) totalMissionCount) * 100;
     }
+
+    public int getMissionProgress() {
+        return (int) (((float) completedMissionCount / (double) totalMissionCount) * 100.0);
+    }
+
+//    public int getMissionProgress() {
+//        AtomicInteger total = new AtomicInteger();
+//        AtomicInteger complete = new AtomicInteger();
+//        gameCharacters.values().stream().filter(v -> v.getRole() == Role.CITIZEN).forEach(v -> {
+//            Map<String, ActiveMission> missions = v.getMissions();
+//            total.addAndGet(missions.size());
+//            complete.addAndGet(
+//                    (int) missions.values().stream().filter(ActiveMission::isSolved).count());
+//        });
+//        return (int) (complete.doubleValue() / total.doubleValue() * 100);
+//    }
 
     public boolean meetingStart() {
         if (inMeeting) {
