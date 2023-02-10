@@ -95,7 +95,7 @@ const MyCharacter = ({ color }) => {
         </Suspense>
 
         {stateMe.player.isAlive && <CuboidCollider
-          name={`char_${stateMe.player.id}`}
+          name={`me_${stateMe.player.id}`}
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
@@ -122,10 +122,25 @@ const MyCharacter = ({ color }) => {
           restitution={0}
           rotation={sylinderRot}
           onIntersectionEnter={(e) => {
+            if (!e.colliderObject.name) return
+            
+            if (e.colliderObject.name?.search('dead_') < 0) {
+              // action("me/setAdjustPlayer", e.colliderObject.name)
+              // console.log("in ", e.colliderObject.name)
+              action('others/setOtherSoundOn', e.colliderObject.name)
+              action('others/setOtherVideoOn', e.colliderObject.name)
+            }
 
           }}
-          onIntersectionExit={() => {
-
+          onIntersectionExit={(e) => {
+            if (!e.colliderObject.name) return
+            
+            if (e.colliderObject.name?.search('dead_') < 0) {
+              // action("me/setAdjustPlayer", e.colliderObject.name)
+              // console.log("out ", e.colliderObject.name)
+              action('others/setOtherSoundOff', e.colliderObject.name)
+              action('others/setOtherVideoOff', e.colliderObject.name)
+            }
           }}
         />
       </RigidBody>

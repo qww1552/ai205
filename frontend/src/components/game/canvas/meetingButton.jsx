@@ -12,11 +12,11 @@ const MeetingButton = ({ position }) => {
         <>
             <RigidBody colliders="cuboid" type="fixed" sensor
                 onIntersectionEnter={(e) => {
-                    if(e.colliderObject.name?.search('char_') >= 0) 
+                    if(e.colliderObject.name?.search('me_') >= 0) 
                         action('gameInfo/setAdjacentMeetingBtn', true)
                 }}
                 onIntersectionExit={(e) => {
-                    if(e.colliderObject.name?.search('char_') >= 0) 
+                    if(e.colliderObject.name?.search('me_') >= 0) 
                         action('gameInfo/setAdjacentMeetingBtn', false)
                 }}
             >
