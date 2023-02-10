@@ -95,7 +95,7 @@ export const othersSlice = createSlice({
       for (let i = 0; i < state.players.length; i++) {
 
         if (state.players[i].connectionId === action.payload) {
-          // console.log(state.videoUsers[i].nickname,state.videoUsers[i].connectionId,"이 말하는중")
+          console.log("누군가 말하는중")
           state.players[i] = { ...state.players[i], isSpeaking: true }
         }
       }

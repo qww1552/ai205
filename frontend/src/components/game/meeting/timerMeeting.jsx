@@ -1,15 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Card, Button, Modal, Progress } from "antd"
+import { selectGameset } from 'app/gameSet';
+import { useSelector } from 'react-redux';
 
 const padNumber = (num, length) => {
   return String(num).padStart(length, '0');
 };
-
 const TimerMeeting = (props) => {
+  const meetingLimitTime = useSelector(selectGameset).gameSet.meetingLimitTime
+  const totalMeetingTime = useSelector(selectGameset).gameSet.meetingLimitTime-5+useSelector(selectGameset).gameSet.voteLimitTime 
+  const voteLimitTime = useSelector(selectGameset).gameSet.voteLimitTime
+  const gameset = useSelector(selectGameset)
   // 아무것도 입력하지 않으면 undefined가 들어오기 때문에 유효성 검사부터..
   const tempHour = props.hour ? parseInt(props.hour) : 0;
   const tempMin = props.min ? parseInt(props.min) : 0;
-  const tempSec = props.sec ? parseInt(props.sec) : 0;
+  const tempSec = totalMeetingTime ? parseInt(totalMeetingTime) :0;
   // 타이머를 초단위로 변환한 initialTime과 setInterval을 저장할 interval ref
   const initialTime = useRef(tempHour * 60 * 60 + tempMin * 60 + tempSec);
   const interval = useRef(null);
@@ -28,6 +33,10 @@ const TimerMeeting = (props) => {
     return () => clearInterval(interval.current);
   }, []);
 
+  useEffect(()=>{
+    console.log(totalMeetingTime,voteLimitTime)
+    console.log(gameset)
+  },[totalMeetingTime,voteLimitTime])
   // 초가 변할 때만 실행되는 useEffect
   // initialTime을 검사해서 0이 되면 interval을 멈춘다.
   useEffect(() => {
@@ -39,9 +48,10 @@ const TimerMeeting = (props) => {
 
   return (
     <>
+    <div></div>
     <Col span={18}>
       {/* success에서 -1을 한것은 진행중 percent와 겹치지 않게 하기 위해서임 */}
-      <Progress percent={initialTime.current/props.sec*100} success={{ percent: Math.min(50,initialTime.current/props.sec*100-1), strokeColor:"#52c41a" }} showInfo={false} strokeWidth={20} strokeColor={(initialTime.current/props.sec*100>Math.min(50,initialTime.current/props.sec*100))?"#13c2c2":"#52c41a"}/>   
+      <Progress percent={initialTime.current/totalMeetingTime*100} success={{ percent: Math.min((Number(voteLimitTime)/Number(totalMeetingTime)*100),initialTime.current/totalMeetingTime*100-1), strokeColor:"#52c41a" }} showInfo={false} strokeWidth={20} strokeColor={(initialTime.current/totalMeetingTime*100>Math.min((Number(voteLimitTime)/Number(totalMeetingTime)*100),initialTime.current/totalMeetingTime*100))?"#13c2c2":"#52c41a"}/>   
       {/* <div>{(initialTime.current/props.sec)*100}</div> */}
     </Col>
     <Col span={4}>남은 시간: {min} : {sec}</Col>

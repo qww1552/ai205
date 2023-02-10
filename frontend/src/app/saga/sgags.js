@@ -82,7 +82,9 @@ const channelHandling = {
   GAME: function* (operation, data) {
     switch (operation) {
       case 'START':
+        console.log(data.gameSetting)
         yield put({ type: "gameInfo/setInGame", payload: true })
+        yield put({ type: "gameSet/setGameSet", payload: data.gameSetting})
         break;
       case 'START_PERSONAL':
         const stateMe = yield select(state => state.me);
@@ -99,7 +101,6 @@ const channelHandling = {
         break;
       // ※게임 종료신호 데이터 받아오기
       case 'END':
-        console.log('게임끝이라는 신호임')
         yield put({ type: "gameResult/setGameResult", payload: data })
         yield put({type : "gameInfo/setInGame", payload: false})
         break;

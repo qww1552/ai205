@@ -10,7 +10,7 @@ import ModalMeeting from 'components/game/meeting/modalMeeting'
 import LoadingSpinner from 'components/loadingSpinner'
 import { action } from 'app/store'
 import createUser from 'components/webchat/user-model';
-import { addPlayerVideo, removePlayerVideo } from 'app/me'
+import { addPlayerVideo, removePlayerVideo, setMyIsSpeakingFalse, setMyIsSpeakingTrue } from 'app/me'
 import { KeyboardControls } from "@react-three/drei";
 import GameResult from 'components/game/gameResult'
 
@@ -135,7 +135,12 @@ const Game = () => {
 
         // 여기서부터 발언자표시 시험
         mySession.on("publisherStartSpeaking", (event) => {
-            dispatch(setIsSpeakingTrue(event.connection.connectionId))
+            if (mySession.connection.connectionId === event.connection.connectionId) {
+                dispatch(setMyIsSpeakingTrue())
+            }
+            else {
+            dispatch(setIsSpeakingTrue())
+            }
             // for (let i = 0; i < ref.current.children.length; i++) {
             //   if (
             //     JSON.parse(event.connection.data).clientData ===
@@ -151,6 +156,9 @@ const Game = () => {
           });
   
         mySession.on("publisherStopSpeaking", (event) => {
+            if (mySession.connection.connectionId === event.connection.connectionId) {
+                dispatch(setMyIsSpeakingFalse())
+            }
             dispatch(setIsSpeakingFalse(event.connection.connectionId))
         // console.log(
         //     "User " + event.connection.connectionId + " stop speaking"

@@ -2,24 +2,32 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   // Todo: 대충 게임에 필요한 세팅을 저장하는 변수
-  time : 0,
+  gameSet: {
+        "visionRange": 1,
+        "playerSpeed": 1,
+        "meetingLimitTime": 20,
+        "voteLimitTime": 10,
+        "killCoolTime": 10,
+        "meetingCoolTime": 15
+  }
   
 }
 
 export const gamesetSlice = createSlice({
-  name: 'gameset',
+  name: 'gameSet',
   initialState,
   reducers: {
-    gamesetTime: (state, action) => {
-      state.time = action.payload
+    setGameSet: (state, action) => {
+      state.gameSet = action.payload
+      console.log(state.gameSet)
     },
   },
 });
 
-export const { gamesetTime } = gamesetSlice.actions;
+export const { setGameSet } = gamesetSlice.actions;
 
 
-export const selectGameset = (state) => state.gameset;
+export const selectGameset = (state) => state.gameSet;
 
 
 export default gamesetSlice.reducer;
