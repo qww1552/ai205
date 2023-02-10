@@ -4,37 +4,43 @@ import { useSelector } from "react-redux";
 import { Modal, Button } from "antd";
 import { selectGameInfo } from "app/gameInfo"
 import { action } from "app/store"
+import TimerMission from './timerMission';
+import MoveMission from './moveMission';
+import DragMission from './dragMission';
 
 const MissionComponent = () => {
+
+  const [complete, setComplete] = useState(false)
   
   const isMissionModalOpen = useSelector(selectGameInfo).isMissionModalOpen
-  const [loading, setLoading] = useState(false)
-  const waitAndClose = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      // TODO: 이 부분에 미션 완료 요청이 들어가야 함!
-      // action('missionInfo/setMissionById', {id : "missionId", solved : true}))
-      console.log('미션 완료 요청')
-      action('gameInfo/setMissionModalOpen', false)
-    }, 5000);
+  const mssionBtn = () => {
+
+    // TODO: 이 부분에 미션 완료 요청이 들어가야 함!
+    // action('missionInfo/setMissionById', {id : "missionId", solved : true}))
+    action('gameInfo/setMissionModalOpen', false)
   }
 
   return (
     <Modal
       open={isMissionModalOpen}
-      closable={false}
+      closable={true}
+      onCancel={() => {
+        action('gameInfo/setMissionModalOpen', false)
+      }}
       footer={[
         <Button
           key="submit"
           type="primary"
-          loading={loading}
-          onClick={waitAndClose}
+          disabled={complete ? false : true}
+          onClick={mssionBtn}
         >
-          미션 수행하기
+          미션 완료
         </Button>
     ]}>
-      아래 버튼을 누르고 기다리면 5초 뒤 미션이 완료됩니다.
+      {/* 여기에 어떤 미션이 수행될것인지 상태에 따라 변경 */}
+      <TimerMission setComplete={setComplete}/>
+      {/* <MoveMission setComplete={setComplete}/> */}
+      {/* <DragMission setComplete={setComplete}/> */}
     </Modal>
   )
 };
