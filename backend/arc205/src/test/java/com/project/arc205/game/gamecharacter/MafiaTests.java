@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.project.arc205.game.dummy.DummyMission;
 import com.project.arc205.game.gamecharacter.exception.CannotKillDeadException;
 import com.project.arc205.game.gamecharacter.exception.MafiaCannotKillEachOtherException;
+import com.project.arc205.game.gamecharacter.exception.MafiaCannotMissionInteractionException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
@@ -37,8 +38,8 @@ public class MafiaTests {
         HashMap<String, ActiveMission> missionMap = new HashMap<>();
         missionMap.put(missionId, dummyMission);
         gameCharacter = getTestMafiaWithMission(missionMap);
-        gameCharacter.interaction(missionId);
-        assertFalse(dummyMission.isSolved());
+        assertThrows(MafiaCannotMissionInteractionException.class,
+                () -> gameCharacter.interaction(missionId));
     }
 
     @Test
