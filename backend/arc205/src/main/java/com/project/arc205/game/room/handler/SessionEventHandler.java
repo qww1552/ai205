@@ -23,7 +23,7 @@ public class SessionEventHandler {
     private final RoomService roomService;
     private final PlayerRepository playerRepository;
 
-    public static String getRoomIdFromHeader(SimpMessageHeaderAccessor accessor) {
+    public String getRoomIdFromHeader(SimpMessageHeaderAccessor accessor) {
         String destination = accessor.getDestination();
         return Objects.requireNonNull(destination).substring(destination.lastIndexOf("/") + 1);
     }
@@ -58,6 +58,7 @@ public class SessionEventHandler {
     public void onDisconnect(SessionDisconnectEvent event) {
         log.info("onDisconnect : {}", event);
         Player player = playerRepository.findBySessionId(event.getSessionId());
+//        Player player = (Player) event.getUser();
         player.exit();
         playerRepository.deleteBySessionId(event.getSessionId());
     }

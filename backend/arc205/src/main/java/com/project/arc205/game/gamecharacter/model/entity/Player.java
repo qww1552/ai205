@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.security.Principal;
+
 @Getter
 @Setter
 @ToString(of = "id")
 @EqualsAndHashCode(of = "id")
-public class Player {
+public class Player implements Principal {
 
     private String id;
     private String sessionId;
@@ -30,5 +32,10 @@ public class Player {
     public void exit() {
         room.remove(this);
         this.room = null;
+    }
+
+    @Override
+    public String getName() {
+        return id;
     }
 }
