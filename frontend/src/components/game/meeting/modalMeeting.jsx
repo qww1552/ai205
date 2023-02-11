@@ -7,9 +7,6 @@ import { useEffect, useRef } from 'react'
 import ResultMeeting from './resultMeeting'
 import { useState } from 'react'
 import { setInMeeting } from 'app/gameInfo'
-import {
-  AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
-} from '@ant-design/icons';
 import NoticeMeeting from './noticeMeeting'
 
 
@@ -19,28 +16,30 @@ const ModalMeeting = () => {
   const isInVote = useSelector(selectGameInfo).isInVote
   const [seeNextResult,setSeeNextResult] = useState(false)
   const [completeNoticeMeet, setCompleteNoticeMeet] = useState(false)
+  const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
+
   useEffect(() => {
     if (!isInVoteResult && !isInMeeting) {
       Modal.destroyAll()
     }
   },[isInVoteResult, isInMeeting])
-  
-  // 대충 누가 투표했는지 5초정도 보이기 위해서 띄움
+
   useEffect(() => {
     if (isInMeeting &&(isInVoteResult)) {
       setTimeout(()=>{setSeeNextResult(true);
         setTimeout(()=>{
           action('gameInfo/setInMeeting', false)
-        },5000)}, 5000)
+        },5000)}, 8000)
 
     }
   },[isInMeeting,isInVoteResult])
+
+  useEffect(() => {
+    if (isChatModalOpen === true&& isInVoteResult === true) {
+      action('gameInfo/setChatModalOpen', false)
+    }
+  })
   
-  const votetest = () => {
-    // console.log('votetest실행')
-    action('gameInfo/setInVote', !isInVote)
-    // setTimeout(() => action('gameInfo/setInVote', !isInVote),5000); 
-  }
 
   // 대충 미팅시작할때랑 끝날때 변수를 변화시키는 내용
   // isInMeeting에 연결되었기때문에 문제생길수 있을듯...?
@@ -75,20 +74,10 @@ const ModalMeeting = () => {
         width={1920}
         closable={false}
         footer={[
-          // TODO:닫기버튼을 누르면 회의시작버튼이 씹히는 상황이 발생함 일단 없애놓음
-          // 추후 닫기 버튼을 제거하고 회의 완료 요청을 받으면 action이 수행되도록 수정 필요
-          // <Button key="back" onClick={() => action('gameInfo/setInMeeting', !isInMeeting)}>
-          //   닫기
-          // </Button>
+
         ]}
       className = 'g'>
         {completeNoticeMeet === false?<NoticeMeeting/>:isInMeeting &&(!seeNextResult)?<VoteMeeting/>:<ResultMeeting/>}
-        
-        {/* ※여기까지 */}
-        {/* 페이지전환을 위한 변수를 띄움 */}
-        {/* <div>{isInMeeting?'미팅임':'미팅아님'}</div>
-        <div>{seeNextResult?'다음결과true':'다음결과false'}</div>
-        <div>{isInVoteResult?'투표결과보이는중':'투표결과안보이는중'}</div> */}
       </Modal>
       
     </>

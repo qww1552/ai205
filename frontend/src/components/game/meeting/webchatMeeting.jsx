@@ -8,7 +8,7 @@ import { selectGameInfo } from '../../../app/gameInfo';
 import { action } from "app/store"
 import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import {
-  AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
+ DeleteTwoTone
 } from '@ant-design/icons';
 import "./style.css"
 
@@ -33,6 +33,7 @@ const WebchatMeeting = () => {
   const me = useSelector(selectMe)
   const otherPlayers = useSelector(selectOhterPlayers);
   const [skipinfo, setSkipInfo] = useState([])
+
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
 
   
@@ -53,7 +54,8 @@ const WebchatMeeting = () => {
   const videoUsers = useSelector(selectVideoUsers);
   const mainUser = useSelector(selectMainUser);
   const dispatch = new useDispatch();
-
+  const isme = {isme:true}
+  const isnotme = {isme:false}
   
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
@@ -87,13 +89,13 @@ const WebchatMeeting = () => {
     <div>
       <Row gutter={[8, 8]}>
       <Col className={me.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
-     <WebchatMeetingcomponent user={me} userinfo={me}/>
+     <WebchatMeetingcomponent user={me} userinfo={me} isme={isme}/>
       </Col>
       {otherPlayers.map((sub) => {     
         return (<>{sub.streamManager!==undefined && (<Col className={sub.isSpeaking === true ?"unvoted isSpeaking":"unvoted isNotSpeaking"} span={6}>
 
-        <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"} onClick={()=>{VoteEvent(sub.player)}}>
-          <WebchatMeetingcomponent user={sub}/>
+        <div className={sub.player.id === VoteduserInfo?"voted":"unvoted"}>
+          <WebchatMeetingcomponent user={sub} voteEvent={VoteEvent} isme={isnotme}/>
         </div>
         </Col>) }</>)    
       })}

@@ -24,7 +24,6 @@ export const meSlice = createSlice({
     setPlayer: (state, action) => {
 
       state.player = action.payload;
-      console.log(state.player)
     },
     addPlayerVideo: (state, action) => {
       return  {

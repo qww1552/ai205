@@ -13,22 +13,9 @@ const ResultMeeting = () => {
     }
   },[result])
   
-//   let index = 0;
-//   const content = "Glad to Meet You."
-//   const mainTitle = useRef();
-//   const typing = () =>{
-//     let text = `${content[index++]}`;
-//     if (index <= content.length) {
-//         mainTitle.textContent += text;
-//   }
-// }
-//   const start = () =>{
-//     setInterval(typing, 100);
-//   }
 
   return (
     <div>
-      {/* <div className="typing-demo">{result}</div> */}
       {result === "skip"?
       <TypingText text="아무도 당선되지 않았습니다..." speed={60} fontSize="1.25rem" color="green" />
       :<TypingText text={Text} speed={60} fontSize="1.25rem" color="green" />}
