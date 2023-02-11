@@ -8,16 +8,19 @@ import { useSelector } from "react-redux"
 import { action } from "app/store"
 import { selectMe } from 'app/me'
 import { useKeyboardControls } from "@react-three/drei";
-import { Progress } from 'antd'
+import { Progress,Badge } from 'antd'
+import './style.css'
+import { selectGameset } from 'app/gameSet'
 
 const ImageButton = () => {
-
+  
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
   const me = useSelector(selectMe).player
   const adjustPlayer = useSelector(selectMe).adjustPlayer
   const adjustBody = useSelector(selectMe).adjustBody
+  const unReadMessage = useSelector(selectGameInfo).unReadMessage
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
@@ -45,7 +48,7 @@ const ImageButton = () => {
       action('me/setAdjustBody', null);
     }
   }
-  
+  useEffect(()=>{console.log(unReadMessage)},[unReadMessage])
   // 게임 첫 시작의 쿨타임은 15초, 이후 10초로 설정
   const [killTimer, setKillTimer] = useState(-50)
   const killInterval = useRef(null) // 회의 interval과 충돌...?
@@ -89,14 +92,17 @@ const ImageButton = () => {
     <>
       {/* {me.isAlive === true? */}
       {/* 버튼의 가로세로 비율은 8:5로 지정할 것 (원본 560x350px) */}
+      
       <button
         className="imgBtn floatingComponent"
         id="chatBtn"
         onClick={chatButtonActivate}
-        >
+        ><Badge count = {unReadMessage}>
           <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅"/>
+          </Badge>
       </button>
-      <ChatComponent/>
+      
+      <ChatComponent className="z-index2000"/>
       {me.role === "MAFIA"?
       <button
         className={"imgBtnNoHover floatingComponent " + ((adjustPlayer && killTimer >= 100) ? "imgBtnReady" : "")}

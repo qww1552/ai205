@@ -9,7 +9,8 @@ const initialState = {
         "voteLimitTime": 10,
         "killCoolTime": 10,
         "meetingCoolTime": 15
-  }
+  },
+  
   
 }
 
@@ -19,12 +20,12 @@ export const gamesetSlice = createSlice({
   reducers: {
     setGameSet: (state, action) => {
       state.gameSet = action.payload
-      console.log(state.gameSet)
     },
+
   },
 });
 
-export const { setGameSet } = gamesetSlice.actions;
+export const { setGameSet,} = gamesetSlice.actions;
 
 
 export const selectGameset = (state) => state.gameSet;

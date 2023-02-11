@@ -2,12 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Avatar, List, Input, Divider, Modal } from "antd";
 import { selectGameInfo } from "app/gameInfo"
-import { selectMyUserName, selectMainUser } from "app/videoInfo";
 import { selectMe } from "app/me";
 import { action } from "app/store"
 import InfiniteScroll from "react-infinite-scroll-component";
 import { COLOR } from "config/texture";
 import { selectOhterPlayers } from "app/others";
+
 
 const App = () => {
   const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
@@ -18,22 +18,15 @@ const App = () => {
   const [message, setMessage] = useState("");
   const chatScroll = useRef();
   const others = useSelector(selectOhterPlayers)
-  let [colors, setColors ]= useState(new Map())
-  useEffect(() => {}, []);
-  // useEffect(()=>{
-  //   if (others) {
-  //     for (let i =0; i<others.length; i++) {
-  //       setColors((prev) => new Map([...prev, [others[i].player.id, others[i].player.color]]));
-  //     }
-  //   }
-  //   console.log(colors)
+  const unReadMessagesRef = useRef(0)
 
-  // },[others])
-  // useEffect(()=>{
-  //   if (mainuser.player) {
-  //     setColors((prev) => new Map([...prev, mainuser.player.id, mainuser.player.color]))
-  //   }
-  // },[mainuser.player])
+  useEffect(()=>{
+    if(isChatModalOpen) {
+      console.log('useEffect 0으로 초기화')
+      action('gameInfo/setunReadMessage', true)
+    }
+  },[isChatModalOpen])
+
   const getColors=(name)=>{
     if (mainuser.player.id === name) {
       return(mainuser.player.color)   
@@ -55,7 +48,13 @@ const App = () => {
 
   useEffect(() => {
     mainuser.streamManager.stream.session.on("signal:chat", (event) => {
+      
       const data = JSON.parse(event.data);
+      if (data.nickname !== mainuser.player.id) {
+      if (!isChatModalOpen) {
+        action('gameInfo/setunReadMessage')
+
+      }}
       setMessageList((messageList) => [
         ...messageList,
         {
@@ -79,7 +78,7 @@ const App = () => {
   };
 
   const sendMessage = () => {
-    console.log(message);
+    // console.log(message);
     if (mainuser.streamManager && message) {
       let newMessage = message.replace(/ +(?= )/g, "");
       if (newMessage !== "" && newMessage !== " ") {
@@ -88,7 +87,9 @@ const App = () => {
           nickname: myUserName,
           stream: mainuser.streamManager.stream.streamId,
         };
-
+        if(isChatModalOpen === true) {
+          action('gameInfo/setunReadMessage', unReadMessagesRef.current)
+        };
         mainuser.streamManager.stream.session.signal({
           data: JSON.stringify(data),
           type: "chat",
@@ -99,7 +100,8 @@ const App = () => {
   };
 
   return (
-    <Modal title="Chatting Modal" open={isChatModalOpen&&!isInVoteResult} onCancel={() => action('gameInfo/setChatModalOpen', false)} footer={[]}>
+    // <div className="z-index10000">
+    <Modal zIndex={10000} title="Chatting Modal" open={isChatModalOpen&&!isInVoteResult} onCancel={() => action('gameInfo/setChatModalOpen', false)} footer={[]}>
       <div
         ref={chatScroll}
         id="scrollableDiv"
@@ -121,7 +123,7 @@ const App = () => {
           <List>
             {messageList.map((item, i) => (
               
-              <List.Item key={item.nickname}>
+              <List.Item key={item.nickname+i}>
                 {/* {colors.size()!==0? */}
                 <List.Item.Meta
                   avatar={<Avatar src={`/testImg/char_color/char_${COLOR[getColors(item.nickname)]}_mini.png`} />}
@@ -147,6 +149,7 @@ const App = () => {
         />
       </div>
     </Modal>
+    // </div>
   );
 };
 

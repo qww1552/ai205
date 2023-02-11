@@ -104,9 +104,7 @@ export const othersSlice = createSlice({
     },
     setIsSpeakingTrue(state, action) {
       for (let i = 0; i < state.players.length; i++) {
-
         if (state.players[i].connectionId === action.payload) {
-          console.log("누군가 말하는중")
           state.players[i] = { ...state.players[i], isSpeaking: true }
         }
       }
@@ -119,6 +117,7 @@ export const othersSlice = createSlice({
       }
     },
     setOtherSoundOn(state, action) {
+
       for (const idx of state.players.keys()) {
         if (state.players[idx].player.id === action.payload) {
           state.players[idx] = {
@@ -130,6 +129,7 @@ export const othersSlice = createSlice({
       }
     },
     setOtherSoundOff(state, action) {
+
       for (const idx of state.players.keys()) {
         if (state.players[idx].player.id === action.payload) {
           state.players[idx] = {

@@ -21,33 +21,7 @@ const GameCanvas = () => {
   const gameInfo = useSelector(selectGameInfo);
   const deadList = useSelector(selectDead).deadList;
 
-  // const players = [
-  //   {
-  //     player: {
-  //       id: "aa",
-  //       role: "mafia",
-  //       isAlive: false,
-  //     },
-  //     location: {
-  //       y: 3,
-  //       x: 1,
-  //     },
-  //   },
-  // ];
 
-  // const deadList = [
-  //   {
-  //     player: {
-  //       id: "asdfadsf",
-  //       role: "mafia",
-  //       isAlive: false,
-  //     },
-  //     location: {
-  //       y: 1,
-  //       x: 1,
-  //     },
-  //   },
-  // ];
   return (
     <>
       <div style={{ width: "100vw", height: "100vh" }}>

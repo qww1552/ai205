@@ -15,6 +15,7 @@ const initialState = {
   isChatModalOpen: false,
   // 미션창을 열어야 하는지 체크하는 변수
   isMissionModalOpen: false,
+  unReadMessage:0,
 }
 
 export const gameInfoSlice = createSlice({
@@ -46,11 +47,18 @@ export const gameInfoSlice = createSlice({
     setMissionModalOpen: (state, action) => {
       state.isMissionModalOpen = action.payload
     },
+    setunReadMessage: (state, action) => {
+      if (state.isChatModalOpen === true) {
+        state.unReadMessage = 0
+      } else {
+        state.unReadMessage = state.unReadMessage+1
+      }
+    }
   },
 });
 
 export const {
-  setAdjacentMeetingBtn, setInMeeting, setInVote, setInVoteResult, setChatModalOpen, setMissionModalOpen
+  setAdjacentMeetingBtn, setInMeeting, setInVote, setInVoteResult, setChatModalOpen, setMissionModalOpen, setunReadMessage 
 } = gameInfoSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
