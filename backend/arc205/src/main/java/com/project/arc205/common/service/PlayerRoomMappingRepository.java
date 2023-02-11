@@ -1,4 +1,4 @@
-package com.project.arc205.game.gamecharacter.service;
+package com.project.arc205.common.service;
 
 import com.project.arc205.game.room.model.exception.PlayerIdAlreadyExistException;
 import java.util.UUID;

@@ -2,12 +2,12 @@ package com.project.arc205.game.gamedata.event.handler;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
+import com.project.arc205.common.service.PlayerRoomMappingRepository;
 import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
-import com.project.arc205.game.gamecharacter.service.PlayerRoomMappingRepository;
 import com.project.arc205.game.gamedata.event.DieEvent;
 import com.project.arc205.game.gamedata.repository.GameRepository;
 import java.util.UUID;

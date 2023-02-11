@@ -1,7 +1,7 @@
 package com.project.arc205.game.room.service;
 
+import com.project.arc205.common.service.PlayerRoomMappingRepository;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
-import com.project.arc205.game.gamecharacter.service.PlayerRoomMappingRepository;
 import com.project.arc205.game.room.dto.response.RoomListItemResponse;
 import com.project.arc205.game.room.dto.response.RoomResponse;
 import com.project.arc205.game.room.model.entity.Room;
