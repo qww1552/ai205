@@ -28,7 +28,7 @@ import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrateg
 import com.project.arc205.game.room.model.entity.Room;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -136,10 +136,9 @@ public class GameCharacterServiceTests {
         room.enter(getPlayerOf("p4"));
         GameData gameData = gameManager.createGameDataFrom(room);
         var gameCharacters = gameData.getGameCharacters();
-        for (Entry<String, GameCharacter> entry : gameCharacters.entrySet()) {
-            GameCharacter v = entry.getValue();
-            if (v instanceof Citizen) {
-                citizen = (Citizen) v;
+        for (GameCharacter gameCharacter : gameCharacters.values()) {
+            if (gameCharacter instanceof Citizen) {
+                citizen = (Citizen) gameCharacter;
                 break;
             }
         }
@@ -147,8 +146,7 @@ public class GameCharacterServiceTests {
         when(gameRepository.findById(any()))
                 .thenReturn(gameData);
 
-        assert citizen != null;
-        String missionKey = citizen.getMissions().keySet()
+        String missionKey = Objects.requireNonNull(citizen).getMissions().keySet()
                 .toArray()[0].toString();
 
         int completedMissionCount = gameData.getCompletedMissionCount();
