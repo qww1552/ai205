@@ -179,3 +179,16 @@ figure.snip1432.hover figcaption h3:nth-of-type(2) {
   50%{border-right: 1px solid #000} 
   100%{border-right: 1px solid #fff} 
 }
+.position-relative{
+  position: relative;
+}
+.z-index2{
+
+  position: absolute;
+  z-index: 2;
+ 
+}
+.z-index1{
+  z-index: 1;
+  
+}

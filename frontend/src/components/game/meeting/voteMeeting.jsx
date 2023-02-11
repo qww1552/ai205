@@ -14,7 +14,7 @@ import { Row, Col, Card, Button, Modal, Progress } from "antd"
 import {
   AudioTwoTone, CheckSquareTwoTone, AlertTwoTone, SettingTwoTone, MessageTwoTone, CustomerServiceTwoTone, DeleteTwoTone
 } from '@ant-design/icons';
-
+import VoteResultFrom from './voteResultFrom';
 const VoteMeeting = () => {
   const result = useSelector(selectResult).result
   // const time = useSelector(selectGameset).time
@@ -64,6 +64,7 @@ const VoteMeeting = () => {
       </Row>
       <ChatComponent/>
       <WebchatMeeting/>
+
     </div>
   );
 };
