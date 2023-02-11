@@ -179,16 +179,16 @@ figure.snip1432.hover figcaption h3:nth-of-type(2) {
   50%{border-right: 1px solid #000} 
   100%{border-right: 1px solid #fff} 
 }
-.parent{
+.position-relative{
   position: relative;
 }
-.child1{
+.z-index2{
 
   position: absolute;
   z-index: 2;
  
 }
-.child2{
+.z-index1{
   z-index: 1;
   
 }

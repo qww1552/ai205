@@ -50,13 +50,13 @@ const WebchatMeetingcomponent = (props) => {
     <>
 
     {/* Todo: 죽은 사람인 경우 유령이미지 보이는 css 추가 */}
-        {props.user.player.id && <Card bodyStyle={{backgroundColor: `${COLOR[props.user.player.color]}`, border: 0 }} title={props.user.player.id} size="small" className='parent'>
+        {props.user.player.id && <Card bodyStyle={{backgroundColor: `${COLOR[props.user.player.color]}`, border: 0 }} title={props.user.player.id} size="small" className='position-relative'>
       
       <>
       {/* {isInVoteResult === true&&} */}
       {/* <div className='child1'><VoteResultFrom/></div> */}
-      {isInVoteResult === true&&<div className='child1'><VoteResultFrom from={getFrom()}/></div>}
-      {props.user.player.isAlive === true ||props.user.player.isAlive===undefined?<div className='child2'><UserVideoComponent  user={props.user}/></div>
+      {isInVoteResult === true&&<div className='z-index2'><VoteResultFrom from={getFrom()}/></div>}
+      {props.user.player.isAlive === true ||props.user.player.isAlive===undefined?<div className='z-index1'><UserVideoComponent  user={props.user}/></div>
       :<img className='video' src='/testImg/ghost.jpg'/>}
       </>
     </Card>}
