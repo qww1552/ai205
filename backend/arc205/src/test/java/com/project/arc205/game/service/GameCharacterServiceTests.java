@@ -1,25 +1,34 @@
 package com.project.arc205.game.service;
 
 import static com.project.arc205.game.dummy.DummyGameCharacter.getTestCitizen;
+import static com.project.arc205.game.dummy.DummyGameCharacter.getTestCitizenWithMission;
 import static com.project.arc205.game.dummy.DummyGameCharacter.getTestMafia;
 import static com.project.arc205.game.dummy.DummyGameData.getTestGameDataWithGameCharacter;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.project.arc205.common.model.Location;
+import com.project.arc205.game.dummy.DummyMission;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
+import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
+import com.project.arc205.game.gamedata.manager.GameManager;
+import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
+import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrategy;
+import com.project.arc205.game.room.model.entity.Room;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -92,5 +101,65 @@ public class GameCharacterServiceTests {
         gameCharacterService.move(UUID.randomUUID(), citizenPlayerId, moveRequest.getLocation());
 
         assertThat(citizen.getLocation(), equalTo(newLocation));
+    }
+
+    @Test
+    @DisplayName("gameCharacterService의 missionComplete시, 미션이 수행된다 ")
+    void missionComplete() {
+        Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
+        Mafia mafia = getTestMafia();
+        DummyMission mission = DummyMission.getInstance();
+        Citizen citizen = getTestCitizenWithMission(
+                new HashMap<>(Map.of(mission.getId(), mission)));
+        gameCharacterMap.put(mafia.getPlayerId(), mafia);
+        gameCharacterMap.put(citizen.getPlayerId(), citizen);
+        when(gameRepository.findById(any()))
+                .thenReturn(getTestGameDataWithGameCharacter(gameCharacterMap));
+
+        gameCharacterService.missionComplete(UUID.randomUUID(), citizen.getPlayerId(),
+                mission.getId());
+        assertTrue(mission.isSolved());
+    }
+
+    private Player getPlayerOf(String name) {
+        return Player.create(name, name);
+    }
+
+    @Test
+    @DisplayName("gameCharacterService의 missionComplete시, 미션 progress가 증가한다 ")
+    void missionProgress() {
+        Citizen citizen = null;
+        GameManager gameManager = new GameManager(new BasicGameCharacterAssignStrategy());
+        Room room = Room.create("testRoom", getPlayerOf("p1"));
+        room.enter(getPlayerOf("p2"));
+        room.enter(getPlayerOf("p3"));
+        room.enter(getPlayerOf("p4"));
+        GameData gameData = gameManager.createGameDataFrom(room);
+        var gameCharacters = gameData.getGameCharacters();
+        for (Entry<String, GameCharacter> entry : gameCharacters.entrySet()) {
+            GameCharacter v = entry.getValue();
+            if (v instanceof Citizen) {
+                citizen = (Citizen) v;
+                break;
+            }
+        }
+
+        when(gameRepository.findById(any()))
+                .thenReturn(gameData);
+
+        assert citizen != null;
+        String missionKey = citizen.getMissions().keySet()
+                .toArray()[0].toString();
+
+        int completedMissionCount = gameData.getCompletedMissionCount();
+        int totalMissionCount = gameData.getTotalMissionCount();
+        int expectedProgress = (int) (completedMissionCount * 100.0 / totalMissionCount);
+        int before = gameData.getMissionProgress();
+        assertThat(before, equalTo(expectedProgress));
+        gameCharacterService.missionComplete(UUID.randomUUID(), citizen.getPlayerId(),
+                missionKey);
+        int after = gameData.getMissionProgress();
+        expectedProgress = (int) ((completedMissionCount + 1) * 100.0 / totalMissionCount);
+        assertThat(after, equalTo(expectedProgress));
     }
 }
