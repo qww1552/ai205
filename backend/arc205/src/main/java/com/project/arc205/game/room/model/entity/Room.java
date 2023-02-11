@@ -46,4 +46,7 @@ public class Room {
         player.setRoom(this); // 양방향 매핑이므로 player에도 room을 추가함
     }
 
+    public void remove(Player player) {
+        this.players.remove(player.getSessionId());
+    }
 }
