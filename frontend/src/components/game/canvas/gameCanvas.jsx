@@ -53,7 +53,7 @@ const GameCanvas = () => {
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas flat linear>
-          <ambientLight intensity={0.3} />
+          {/* <ambientLight intensity={0.3} /> */}
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}
