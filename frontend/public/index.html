@@ -93,7 +93,7 @@
               prediction[i].className + ": " + prediction[i].probability.toFixed(2);
             if (prediction[i].probability >= 0.9) {
               classPrediction += " <= 당신의 포즈"
-              document.getElementById("poseResult").innerHTML = "보낸 거"
+              document.getElementById("poseResult").innerHTML = prediction[i].className
             }
             labelContainer.childNodes[i].innerHTML = classPrediction;
           }
