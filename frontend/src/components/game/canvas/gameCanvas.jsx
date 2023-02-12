@@ -14,6 +14,7 @@ import DeadMesh from "../mesh/deadMesh";
 import { selectDead } from "app/dead";
 import { selectMe } from "app/me";
 import DeadCharacter from "components/game/canvas/deadCharacter";
+import GameMap from "./map/gameMap";
 
 const GameCanvas = () => {
   const stateMe = useSelector(selectMe);
@@ -78,7 +79,8 @@ const GameCanvas = () => {
                 key={`${dead.player.id}${idx}`}
               />
             ))}
-            <SimpleMap />
+            <GameMap/>
+            {/* <SimpleMap /> */}
           </Physics>
           <OrthographicCamera />
           {/* <OrbitControls /> */}
