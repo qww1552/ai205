@@ -7,7 +7,6 @@ import MainSimple from "components/lobby/mainSimple";
 import RoomList from "components/lobby/roomList";
 import { createBrowserRouter, Link, Outlet } from "react-router-dom";
 import GameResult from "components/game/gameResult";
-import MyTest from "components/game/canvas/map/MyTest";
 
 const router = createBrowserRouter([
   {
@@ -17,10 +16,6 @@ const router = createBrowserRouter([
   {
     path: "rooms",
     element: <RoomList />,
-  },
-  {
-    path: "test",
-    element: <MyTest/>,
   },
   {
     path: "rooms/:roomId/lobby",
