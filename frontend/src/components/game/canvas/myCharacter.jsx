@@ -83,7 +83,7 @@ const MyCharacter = ({ color }) => {
   return (
     <>
       <RigidBody ref={ref} type="dynamic" lockRotations={true}>
-        <pointLight distance={4} decay={0.01} position={[0, 0, 1]} />
+        <pointLight distance={4} intensity={1.4} decay={0.01} position={[0, 0, 1]} />
 
         <Suspense>
           <CharacterMesh
@@ -103,16 +103,25 @@ const MyCharacter = ({ color }) => {
 
             if (!e.colliderObject.name) return
 
-            if (e.colliderObject.name?.search('dead_') < 0)
-              action("me/setAdjustPlayer", e.colliderObject.name)
-            else {
+
+            if (e.colliderObject.name.search('dead_') >= 0) {         // 시체
+              action('me/setAdjustBody', e.colliderObject.name)
+            } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
+              action('gameInfo/setAdjacentMeetingBtn', true)
+            } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
+              action('missionInfo/setAdjacentMissionBtn', true)
+              console.log(e.colliderObject.name)
+            } else {                                                  // 유저들
               action('me/setAdjustBody', e.colliderObject.name)
             }
+
 
           }}
           onIntersectionExit={() => {
             action("me/setAdjustPlayer", null)
             action('me/setAdjustBody', null)
+            action('gameInfo/setAdjacentMeetingBtn', false)
+            action('missionInfo/setAdjacentMissionBtn', false)
           }}
         />}
         <CylinderCollider
