@@ -32,8 +32,8 @@ public class GameManager {
         Map<String, GameCharacter> charactersFromPlayers = gameCharacterAssignStrategy.getCharactersFromPlayers(
                 room.getPlayers(), missions, numberOfMissions);
 
-        GameData gameData = GameData.of(room.getId(), room.getGameSetting(), charactersFromPlayers);
-        gameData.moveGameCharactersTo(gameMap.getStartLocation());
+        GameData gameData = GameData.of(room.getId(), room.getGameSetting(), charactersFromPlayers,
+                gameMap.getStartLocation());
 
         return gameData;
     }

@@ -1,5 +1,6 @@
 package com.project.arc205.game.dummy;
 
+import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
@@ -10,7 +11,8 @@ public class DummyGameData {
 
     public static GameData getTestGameDataWithGameCharacter(
             Map<String, GameCharacter> gameCharacterMap) {
-        return GameData.of(UUID.randomUUID(), new GameSetting(), gameCharacterMap);
+        return GameData.of(UUID.randomUUID(), new GameSetting(), gameCharacterMap,
+                new Location(0.0, 0.0));
     }
 
 }
