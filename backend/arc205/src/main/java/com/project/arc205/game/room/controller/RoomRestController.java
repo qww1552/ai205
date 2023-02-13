@@ -2,6 +2,7 @@ package com.project.arc205.game.room.controller;
 
 import com.project.arc205.common.dto.BaseRestResponse;
 import com.project.arc205.game.room.dto.request.RoomCreateRequest;
+import com.project.arc205.game.room.dto.response.RoomCreateResponse;
 import com.project.arc205.game.room.dto.response.RoomListItemResponse;
 import com.project.arc205.game.room.dto.response.RoomResponse;
 import com.project.arc205.game.room.service.RoomService;
@@ -41,7 +42,7 @@ public class RoomRestController {
     @PostMapping
     public ResponseEntity<URI> create(@RequestBody RoomCreateRequest roomCreateRequest) {
         log.info("room create request : {}", roomCreateRequest);
-        RoomResponse response = roomService.create(roomCreateRequest.getTitle());
+        RoomCreateResponse response = roomService.create(roomCreateRequest.getTitle());
         return ResponseEntity.created(URI.create("/rooms/" + response.getId())).build();
     }
 }

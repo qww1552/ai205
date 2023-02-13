@@ -2,6 +2,7 @@ package com.project.arc205.game.room.service;
 
 import com.project.arc205.common.service.PlayerRoomMappingRepository;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
+import com.project.arc205.game.room.dto.response.RoomCreateResponse;
 import com.project.arc205.game.room.dto.response.RoomListItemResponse;
 import com.project.arc205.game.room.dto.response.RoomResponse;
 import com.project.arc205.game.room.model.entity.Room;
@@ -59,14 +60,8 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
-    public RoomResponse create(String title) {
+    public RoomCreateResponse create(String title) {
         Room room = roomRepository.create(title, null);
-        return RoomResponse.builder()
-                .title(title)
-                .id(room.getId().toString())
-                .players(room.getPlayers().values().stream()
-                        .map((player) -> new RoomResponse.Player(player.getId())).collect(
-                                Collectors.toList()))
-                .build();
+        return new RoomCreateResponse(room.getId().toString());
     }
 }
