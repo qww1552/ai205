@@ -39,4 +39,7 @@ public class RoomRepository {
         return new ArrayList<>(roomStorage.values());
     }
 
+    public void deleteById(UUID id) {
+        roomStorage.remove(id);
+    }
 }
