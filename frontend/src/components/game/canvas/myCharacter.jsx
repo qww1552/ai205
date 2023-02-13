@@ -11,12 +11,12 @@ import { selectGameInfo } from "app/gameInfo";
 
 const MyCharacter = ({ color }) => {
 
-  const isInVoteResult = useSelector(selectGameInfo).isInVoteResult;
+  const isInMeeting = useSelector(selectGameInfo).isInMeeting;
   const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
   const light = useRef();
-  const [intersecting, setIntersection] = useState(false);
+  // const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
   const sideVector = new Vector3();
@@ -43,13 +43,10 @@ const MyCharacter = ({ color }) => {
   }, []);
 
   useEffect(() => {
-    if (isInVoteResult) {
+    if (isInMeeting) {
       ref.current.setTranslation({ x: 0, y: 0, z: 0 })
     }
-  }, [isInVoteResult])
-
-  const { viewport } = useThree()
-
+  }, [isInMeeting])
 
   useFrame((state) => {
     state.camera.position.lerp(

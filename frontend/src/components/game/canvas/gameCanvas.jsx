@@ -19,7 +19,7 @@ import GameMap from "./map/gameMap";
 const GameCanvas = () => {
   const stateMe = useSelector(selectMe);
   const players = useSelector(selectOhterPlayers);
-  const gameInfo = useSelector(selectGameInfo);
+  const isGameStop = useSelector(selectGameInfo).isGameStop;
   const deadList = useSelector(selectDead).deadList;
 
 
@@ -31,7 +31,7 @@ const GameCanvas = () => {
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}
-            paused={gameInfo.isInMeeting}
+            paused={isGameStop}
           >
             {/* <Debug /> */}
             <MyCharacter color={stateMe.player.color} />
