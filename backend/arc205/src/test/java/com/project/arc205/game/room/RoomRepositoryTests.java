@@ -1,18 +1,17 @@
 package com.project.arc205.game.room;
 
-import com.project.arc205.game.gamecharacter.model.entity.Player;
-import com.project.arc205.game.room.model.entity.Room;
-import com.project.arc205.game.room.model.exception.RoomNotFoundException;
-import com.project.arc205.game.room.repository.RoomRepository;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.project.arc205.game.gamecharacter.model.entity.Player;
+import com.project.arc205.game.room.model.entity.Room;
+import com.project.arc205.game.room.model.exception.RoomNotFoundException;
+import com.project.arc205.game.room.repository.RoomRepository;
+import java.util.UUID;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class RoomRepositoryTests {
 
@@ -49,5 +48,14 @@ public class RoomRepositoryTests {
     void findByIdFailTest() {
         assertThrows(RoomNotFoundException.class,
                 () -> roomRepository.findById(UUID.randomUUID()));
+    }
+
+    @Test
+    @DisplayName("룸 삭제")
+    void deleteByIdTest() {
+        Room room = roomRepository.create("test", null);
+        roomRepository.deleteById(room.getId());
+        assertThrows(RoomNotFoundException.class,
+                () -> roomRepository.findById(room.getId()));
     }
 }
