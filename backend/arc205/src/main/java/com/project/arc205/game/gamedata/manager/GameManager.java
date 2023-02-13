@@ -18,20 +18,22 @@ import com.project.arc205.game.room.model.entity.Room;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@RequiredArgsConstructor
+@Setter
+@AllArgsConstructor
 @Component
 public class GameManager {
 
-    private final RoleAssignStrategy roleAssignStrategy;
-    private final MissionDistributionStrategy missionDistributionStrategy;
-    private final ColorAssignStrategy colorAssignStrategy;
     private final GameMapMissionRepository gameMapMissionRepository;
     private final GameMapRepository gameMapRepository;
+    private RoleAssignStrategy roleAssignStrategy;
+    private MissionDistributionStrategy missionDistributionStrategy;
+    private ColorAssignStrategy colorAssignStrategy;
 
     public GameData createGameDataFrom(Room room) {
         GameMap gameMap = gameMapRepository.findById(room.getGameSetting().getGameId())

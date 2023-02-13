@@ -142,10 +142,9 @@ public class GameCharacterServiceTests {
     @DisplayName("gameCharacterService의 missionComplete시, 미션 progress가 증가한다 ")
     void missionProgress() {
         Citizen citizen = null;
-        GameManager gameManager = new GameManager(new BasicRoleAssignStrategy(),
-                new BasicMissionDistributionStrategy(),
-                new BasicColorAssignStrategy(),
-                gameMapMissionRepository, gameMapRepository);
+        GameManager gameManager = new GameManager(gameMapMissionRepository, gameMapRepository,
+                new BasicRoleAssignStrategy(), new BasicMissionDistributionStrategy(),
+                new BasicColorAssignStrategy());
         Room room = Room.create("testRoom", getPlayerOf("p1"));
         room.enter(getPlayerOf("p2"));
         room.enter(getPlayerOf("p3"));

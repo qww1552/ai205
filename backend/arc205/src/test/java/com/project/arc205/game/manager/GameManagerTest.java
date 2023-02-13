@@ -36,10 +36,9 @@ public class GameManagerTest {
     void missionDistributionTest() {
         int numberOfPlayers = 6;
         Room room = DummyRoom.createTestRoom("testRoom", numberOfPlayers);
-        GameManager gameManager = new GameManager(new BasicRoleAssignStrategy(),
-                new BasicMissionDistributionStrategy(),
-                new BasicColorAssignStrategy(),
-                gameMapMissionRepository, gameMapRepository);
+        GameManager gameManager = new GameManager(gameMapMissionRepository, gameMapRepository,
+                new BasicRoleAssignStrategy(), new BasicMissionDistributionStrategy(),
+                new BasicColorAssignStrategy());
         GameData gameData = gameManager.createGameDataFrom(room);
 
         int citizenMissionCount = (numberOfPlayers - room.getGameSetting().getNumberOfMafias())
