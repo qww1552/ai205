@@ -48,6 +48,8 @@ const Game = () => {
     const [missionName, setMissionName] = useState("")
     let OV;
 
+    const myRef = useRef();
+   
 
     const otherPlayers = useSelector(selectOhterPlayers);
     
@@ -230,10 +232,18 @@ const Game = () => {
 
 
     useEffect(() => {      
+        const btn = document.getElementById("aaa");
+        if(btn && myRef){
+            
+            myRef.current.addEventListener("click",()=>{setTestModalOpen(false)})
+            btn.setAttribute("onclick","deleteCanvas()");
+        }
+        
+       
         return () => {
         leaveSession();
         };
-    }, []);
+    }, [testModalOpen,myRef]);
     // ※isInGame이 false 가 되면 gameResult 컴포넌트로 이동
     // useEffect(() => {
     //     leaveSession();
@@ -294,17 +304,7 @@ const Game = () => {
             </Button>
             <Modal
                 open={testModalOpen}
-                footer={[
-                    <Button
-                        key="submit"
-                        onClick={() => {
-                            // hideCanvas()
-                            setTestModalOpen(false)
-                        }}
-                    >
-                        창 닫기
-                    </Button>
-            ]}>
+        >
                 <h1> 당신의 미션은 {missionName}입니다! </h1>
                 <h2> 먼저 아래 버튼을 눌러 카메라를 테스트하세요! </h2>    
                 
@@ -319,8 +319,11 @@ const Game = () => {
                     ) }</>)    
                 })}
                 </Row>
+                <button id = "aaa" ref={myRef} >
+                        창 닫기
+                </button>
             </Modal>
-              
+          
                 {/* URL 정보 없이 실행하려 하는 문제가 있어 임시로 주석 처리 */}
                 {/* {stateMe.streamManager !== undefined && (<Teachable streamManager={stateMe.streamManager}/>)} */}
             </div>

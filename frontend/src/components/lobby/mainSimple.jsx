@@ -33,7 +33,7 @@ const MainSimple = () => {
             </Outlet>
             <br></br>
             {/* Teachable.js의 useEffect 구문에 [props] 추가함 */}
-            <Button
+            {/* <Button
                 type="primary"
                 onClick={() => {
                     // showCanvas()
@@ -73,7 +73,7 @@ const MainSimple = () => {
                 <h1> 당신의 미션은 {missionName}입니다! </h1>
                 <h2> 먼저 아래 버튼을 눌러 카메라를 테스트하세요! </h2>    
                 <Teachable myurl={fileUrl} poseInfo={poseInfo}/>
-            </Modal>
+            </Modal> */}
         </div>
     </>)
 }
