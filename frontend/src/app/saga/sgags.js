@@ -92,7 +92,6 @@ const channelHandling = {
         yield put({ type: "gameSet/setGameSet", payload: data.gameSetting})
         break;
       case 'START_PERSONAL':
-
         yield put({
           type: "me/setPlayer",
           payload: {
@@ -101,8 +100,10 @@ const channelHandling = {
             color: data.color,
             isAlive: true,
             isVoted: false,
+            missions: data.missions
           }
         })
+        console.log(data.missions)
         break;
       // ※게임 종료신호 데이터 받아오기
       case 'END':

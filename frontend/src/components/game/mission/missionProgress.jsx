@@ -1,11 +1,15 @@
+import { useSelect } from '@react-three/drei';
 import { Progress } from 'antd'
+import { selectMissionInfo } from 'app/missionInfo';
 
-const missionProgress = () => {
+
+const MissionProgress = () => {
+  const missionProgress = useSelect(selectMissionInfo).totalMissionProgress
   return (
     <>
-      <Progress percent={90} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
+      <Progress percent={missionProgress} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
     </>
   );
 };
 
-export default missionProgress;
+export default MissionProgress;
