@@ -58,4 +58,15 @@ public class RoomService {
                                 .build())
                 .collect(Collectors.toList());
     }
+
+    public RoomResponse create(String title) {
+        Room room = roomRepository.create(title, null);
+        return RoomResponse.builder()
+                .title(title)
+                .id(room.getId().toString())
+                .players(room.getPlayers().values().stream()
+                        .map((player) -> new RoomResponse.Player(player.getId())).collect(
+                                Collectors.toList()))
+                .build();
+    }
 }
