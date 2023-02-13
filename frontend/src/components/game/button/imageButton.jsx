@@ -150,7 +150,7 @@ const ImageButton = () => {
       </button>
       <MissionComponent/>
 
-      {/* 왼쪽 영역 : 마피아 전용 */}
+      {/* 왼쪽 버튼 : 마피아 전용 */}
       {me.role === "MAFIA"?
       <>
         <button
