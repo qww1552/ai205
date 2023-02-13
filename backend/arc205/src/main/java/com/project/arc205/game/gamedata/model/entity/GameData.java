@@ -56,7 +56,7 @@ public class GameData {
     public static GameData of(UUID roomId, GameSetting gameSetting,
             Map<String, GameCharacter> gameCharacters) {
 
-        int citizenCount = gameSetting.getMaxPlayers() - gameSetting.getNumberOfMafias();
+        int citizenCount = gameCharacters.size() - gameSetting.getNumberOfMafias();
 
         return GameData.builder()
                 .roomId(roomId)
@@ -68,8 +68,25 @@ public class GameData {
     }
 
     public int incrementAndGetMissionProgress() {
-        return ++completedMissionCount / totalMissionCount * 100;
+        completedMissionCount++;
+        return getMissionProgress();
     }
+
+    public int getMissionProgress() {
+        return (int) (completedMissionCount * 100.0 / totalMissionCount);
+    }
+
+//    public int getMissionProgress() {
+//        AtomicInteger total = new AtomicInteger();
+//        AtomicInteger complete = new AtomicInteger();
+//        gameCharacters.values().stream().filter(v -> v.getRole() == Role.CITIZEN).forEach(v -> {
+//            Map<String, ActiveMission> missions = v.getMissions();
+//            total.addAndGet(missions.size());
+//            complete.addAndGet(
+//                (int) missions.values().stream().filter(ActiveMission::isSolved).count());
+//        });
+//        return (int) (complete.doubleValue() / total.doubleValue() * 100.0);
+//    }
 
     public boolean meetingStart() {
         if (inMeeting) {
