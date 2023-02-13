@@ -33,10 +33,13 @@ const Teachable = (props) => {
   let currentPoseTimer = 0
   let missionPoseTimer = 3 // 3초 유지
 
+  
   useEffect(() => {
     const btn = document.getElementById("teachable");
     // 이 버튼 onclick에 setTeachableProgress를 또 넣을 수 있을까?
     btn.setAttribute("onclick", `init("${props.myurl}")`);
+    const btn1 = document.getElementById("off")
+    btn1.setAttribute("onclick",`deleteCanvas()` )
   }, [props]);
 
   const getPoseResult = () => {
@@ -68,12 +71,15 @@ const Teachable = (props) => {
       {/* <div>
         <video id="teachable" autoPlay={true} muted={props.mutedSound} ref={videoRef} />
       </div> */}
+      <Button id="off">
+        삭제
+      </Button>
       <Button id="teachable">
         동작 정보 불러오기
       </Button>
       <div id="poseResult" style={{display:"none"}}> </div>
       <div id="divCanvas">
-        <canvas id="canvas"></canvas>
+        
       </div>
       <div id="label-container"></div>
       <Button onClick={getPoseResult}>

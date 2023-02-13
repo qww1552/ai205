@@ -13,17 +13,22 @@ import createUser from 'components/webchat/user-model';
 import { addPlayerVideo, removePlayerVideo } from 'app/me'
 import { KeyboardControls } from "@react-three/drei";
 import GameResult from 'components/game/gameResult'
+import OvVideo from 'components/webchat/OvVideo'
+import { Modal, Button,Col,Row } from 'antd'
 
   import {
     selectMySessionId,
   } from "app/videoInfo";
 import { selectMe} from 'app/me';
-import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOtherPlayerVideoInfo } from 'app/others'
+import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOtherPlayerVideoInfo,selectOhterPlayers} from 'app/others'
 import { selectGameInfo } from 'app/gameInfo';
 import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 import gameResult from 'app/gameResult';
 import Teachable from "components/teachable/Teachable";
-  const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+import MissionComponentTeachable from './mission/missionComponentTeachable';
+import UserVideoComponent from 'components/webchat/UserVideoComponent'
+const APPLICATION_SERVER_URL = "http://localhost:8080/api/v1/";
+
 
 const Game = () => {
 
@@ -36,9 +41,16 @@ const Game = () => {
     const mySessionId = useSelector(selectMySessionId);
     let isInGame = useSelector(selectGameInfo).isInGame;
     const navigate = useNavigate();
-    
+
+    const [testModalOpen, setTestModalOpen] = useState(false)
+    const [fileUrl, setFileUrl] = useState("")
+    const [poseInfo, setPoseInfo] = useState("")
+    const [missionName, setMissionName] = useState("")
     let OV;
 
+
+    const otherPlayers = useSelector(selectOhterPlayers);
+    
     const onClickbtn = () => {
         action('me/setPlayer',{id: ref.current.value, isVoted : false, isAlive : true})
         joinSession(ref.current.value);
@@ -255,7 +267,60 @@ const Game = () => {
                 {stateMe.streamManager!==undefined &&(<ImageButton/>)}
                 {stateMe.streamManager!==undefined &&(<ModalMeeting/>)}
                 {stateMe.streamManager !== undefined && (<GameResult />)}
+
+                <Button
+                type="primary"
+                onClick={() => {
+                    // showCanvas()
+                    setTestModalOpen(true)
+                    setFileUrl("/my_model/")
+                    setPoseInfo("Class 2")
+                    setMissionName("X자 포즈")
+                }}
+            >
+                X자 모델 열기
+            </Button>
+            <Button
+                type="primary"
+                onClick={() => {
+                    // showCanvas()
+                    setTestModalOpen(true)
+                    setFileUrl("/heart_model/")
+                    setPoseInfo("heartLeft")
+                    setMissionName("왼쪽 팔 하트")
+                }}
+            >
+                하트 모델 열기
+            </Button>
+            <Modal
+                open={testModalOpen}
+                footer={[
+                    <Button
+                        key="submit"
+                        onClick={() => {
+                            // hideCanvas()
+                            setTestModalOpen(false)
+                        }}
+                    >
+                        창 닫기
+                    </Button>
+            ]}>
+                <h1> 당신의 미션은 {missionName}입니다! </h1>
+                <h2> 먼저 아래 버튼을 눌러 카메라를 테스트하세요! </h2>    
                 
+             
+                <Teachable myurl={fileUrl} poseInfo={poseInfo}/>
+                <Row gutter={[8, 8]}>
+                {otherPlayers.map((sub) => {     
+                    return (<>{sub.streamManager!==undefined && (
+                    <div style={{width:"200px",height:"200px"}}>
+                    <OvVideo streamManager = {sub.streamManager}/>
+                    </div>
+                    ) }</>)    
+                })}
+                </Row>
+            </Modal>
+              
                 {/* URL 정보 없이 실행하려 하는 문제가 있어 임시로 주석 처리 */}
                 {/* {stateMe.streamManager !== undefined && (<Teachable streamManager={stateMe.streamManager}/>)} */}
             </div>
