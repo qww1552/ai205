@@ -90,11 +90,29 @@ export const meSlice = createSlice({
         isSpeaking: false
       }      
 
+    },
+    setMission:(state, action) => {
+      
+      state.player.missions = [...state.player.missions, {...action.payload, isComplete: false}]
+      console.log(state.player.missions)
+    },
+    // 미션컴플리트
+    setMissionComplete:(state, action) => {
+      for(let i=0; i<state.player.missions.length; i++) {
+        if (state.player.missions[i].id === action.payload.id) {
+          state.player.missions = [
+            ...state.player.missions.filter((mission) => mission.id !== action.payload.id), 
+            {id:action.payload.id, isComplete:true} ];
+            break;
+        }
+      }
     }
   },
+
+  
 });
 
-export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo, setMySoundOn, setMySoundOff, setMyVideoOn, setMyVideoOff, setMyIsSpeakingTrue, setMyIsSpeakingFalse} = meSlice.actions;
+export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo, setMySoundOn, setMySoundOff, setMyVideoOn, setMyVideoOff, setMyIsSpeakingTrue, setMyIsSpeakingFalse, setMission, setMissionComplete} = meSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

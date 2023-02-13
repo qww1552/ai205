@@ -108,8 +108,8 @@ const MyCharacter = ({ color }) => {
             } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
               action('gameInfo/setAdjacentMeetingBtn', true)
             } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
-              action('missionInfo/setAdjacentMissionBtn', true)
-              console.log(e.colliderObject.name)
+              action('missionInfo/setAdjacentMissionBtn', e.colliderObject.name[e.colliderObject.name.length-1])
+              console.log(e.colliderObject.name[e.colliderObject.name.length-1])
             } else {                                                  // 유저들
               action('me/setAdjustPlayer', e.colliderObject.name)
             }
@@ -124,6 +124,8 @@ const MyCharacter = ({ color }) => {
               action('gameInfo/setAdjacentMeetingBtn', false)
             } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
               action('missionInfo/setAdjacentMissionBtn', false)
+              console.log(e.colliderObject.name)
+              console.log('마이캐릭터')
             } else {                                                  // 유저들
               action("me/setAdjustPlayer", null)
             }

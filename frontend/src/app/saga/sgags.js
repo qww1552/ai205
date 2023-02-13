@@ -100,10 +100,12 @@ const channelHandling = {
             color: data.color,
             isAlive: true,
             isVoted: false,
-            missions: data.missions
+            missions: []
           }
         })
-        console.log(data.missions)
+        for(const mission of data.missions) {
+          console.log('startperson')
+          yield put({type:"me/setMission", payload: mission})}
         break;
       // ※게임 종료신호 데이터 받아오기
       case 'END':
@@ -139,8 +141,20 @@ const channelHandling = {
         // const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
         yield put({ type: "me/setPlayer", payload : {...stateMe.player, isAlive: false } })
         break;
+
+      case 'MISSION_COMPLETE':
+        yield put({ type: "me/setMissionComplete", payload : {id: data.id}})
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
+        console.log('사가에서 동작 들어옴')
+        break;
+      
+      case 'PROGRESS':
+        yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
+        break;
+      
       default:
         break;
+        
     }
   },
   MEETING: function* (operation, data) {
@@ -179,14 +193,9 @@ const channelHandling = {
     }
   },
   MISSION: function* (operation, data) {
-    switch (operation) {
-      case 'PROGRESS':
-        yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
-        break;
-      default:
-        break;
+    return
     }
-  },
+  ,
   EXCEPTION: function* (operation, data) {
     return
   }
