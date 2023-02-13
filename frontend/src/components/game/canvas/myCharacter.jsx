@@ -1,5 +1,5 @@
 import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3, Euler } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier";
@@ -48,6 +48,9 @@ const MyCharacter = ({ color }) => {
     }
   }, [isInVoteResult])
 
+  const { viewport } = useThree()
+
+
   useFrame((state) => {
     state.camera.position.lerp(
       cameraVec.set(
@@ -58,8 +61,8 @@ const MyCharacter = ({ color }) => {
       0.02
     );
 
-
     const { forward, backward, left, right } = get();
+
 
     ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
 
@@ -132,7 +135,7 @@ const MyCharacter = ({ color }) => {
         />}
         <CylinderCollider
           name={`sight_${stateMe.player.id}`}
-          args={[3.8, 3.8, 0.05]}
+          args={[0.08, 3.8]}
           sensor
           restitution={0}
           rotation={sylinderRot}

@@ -27,13 +27,13 @@ const GameCanvas = () => {
     <>
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas flat linear>
-          {/* <ambientLight intensity={0.3} /> */}
+          <ambientLight intensity={0.2} />
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}
             paused={gameInfo.isInMeeting}
           >
-            {/* <Debug /> */}
+            <Debug />
             <MyCharacter color={stateMe.player.color} />
             {players.map((data, idx) => (
               ((!stateMe.player.isAlive)||(stateMe.player.isAlive == data.player.isAlive)) &&
