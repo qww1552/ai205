@@ -24,7 +24,11 @@ import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import com.project.arc205.game.gamedata.manager.GameManager;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
-import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicColorAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicMissionDistributionStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicRoleAssignStrategy;
+import com.project.arc205.game.gamemap.model.repository.GameMapRepository;
+import com.project.arc205.game.mission.model.repository.GameMapMissionRepository;
 import com.project.arc205.game.room.model.entity.Room;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,15 +39,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class GameCharacterServiceTests {
 
     @Mock
     GameRepository gameRepository;
-
     GameCharacterService gameCharacterService;
+    @Autowired
+    private GameMapMissionRepository gameMapMissionRepository;
+    @Autowired
+    private GameMapRepository gameMapRepository;
 
     @BeforeEach
     void init() {
@@ -129,7 +142,9 @@ public class GameCharacterServiceTests {
     @DisplayName("gameCharacterService의 missionComplete시, 미션 progress가 증가한다 ")
     void missionProgress() {
         Citizen citizen = null;
-        GameManager gameManager = new GameManager(new BasicGameCharacterAssignStrategy());
+        GameManager gameManager = new GameManager(gameMapMissionRepository, gameMapRepository,
+                new BasicRoleAssignStrategy(), new BasicMissionDistributionStrategy(),
+                new BasicColorAssignStrategy());
         Room room = Room.create("testRoom", getPlayerOf("p1"));
         room.enter(getPlayerOf("p2"));
         room.enter(getPlayerOf("p3"));

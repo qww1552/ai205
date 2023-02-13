@@ -7,9 +7,11 @@ import lombok.Setter;
 @Setter
 public class GameSetting {
 
+    private Long gameId = 1L;
+
     private Integer maxPlayers = 6;
     private Integer numberOfMafias = 1;
-    private Integer numberOfMissions = 1;
+    private Integer numberOfMissions = 3;
     private Double visionRange = 1.0;
     private Double playerSpeed = 1.0;
     private Integer meetingLimitTime = 15;

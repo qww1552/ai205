@@ -42,7 +42,8 @@ public class GameData {
 
     @Builder
     private GameData(UUID roomId, int totalMissionCount,
-            int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters) {
+            int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters,
+            Location startLocation) {
         this.roomId = roomId;
         this.totalMissionCount = totalMissionCount;
         this.completedMissionCount = 0;
@@ -51,10 +52,11 @@ public class GameData {
         this.gameCharacters = gameCharacters;
         this.voted = null;
         this.inMeeting = false;
+        moveGameCharactersTo(startLocation);
     }
 
     public static GameData of(UUID roomId, GameSetting gameSetting,
-            Map<String, GameCharacter> gameCharacters) {
+            Map<String, GameCharacter> gameCharacters, Location startLocation) {
 
         int citizenCount = gameCharacters.size() - gameSetting.getNumberOfMafias();
 
@@ -64,6 +66,7 @@ public class GameData {
                 .meetingLimitTime(gameSetting.getMeetingLimitTime())
                 .votingLimitTime(gameSetting.getVoteLimitTime())
                 .gameCharacters(gameCharacters)
+                .startLocation(startLocation)
                 .build();
     }
 
