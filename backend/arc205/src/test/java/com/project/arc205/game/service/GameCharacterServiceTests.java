@@ -24,7 +24,9 @@ import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import com.project.arc205.game.gamedata.manager.GameManager;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
-import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicColorAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicMissionDistributionStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicRoleAssignStrategy;
 import com.project.arc205.game.gamemap.model.repository.GameMapRepository;
 import com.project.arc205.game.mission.model.repository.GameMapMissionRepository;
 import com.project.arc205.game.room.model.entity.Room;
@@ -140,7 +142,9 @@ public class GameCharacterServiceTests {
     @DisplayName("gameCharacterService의 missionComplete시, 미션 progress가 증가한다 ")
     void missionProgress() {
         Citizen citizen = null;
-        GameManager gameManager = new GameManager(new BasicGameCharacterAssignStrategy(),
+        GameManager gameManager = new GameManager(new BasicRoleAssignStrategy(),
+                new BasicMissionDistributionStrategy(),
+                new BasicColorAssignStrategy(),
                 gameMapMissionRepository, gameMapRepository);
         Room room = Room.create("testRoom", getPlayerOf("p1"));
         room.enter(getPlayerOf("p2"));

@@ -6,7 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import com.project.arc205.game.dummy.DummyRoom;
 import com.project.arc205.game.gamedata.manager.GameManager;
 import com.project.arc205.game.gamedata.model.entity.GameData;
-import com.project.arc205.game.gamedata.strategy.BasicGameCharacterAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicColorAssignStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicMissionDistributionStrategy;
+import com.project.arc205.game.gamedata.strategy.BasicRoleAssignStrategy;
 import com.project.arc205.game.gamemap.model.repository.GameMapRepository;
 import com.project.arc205.game.mission.model.repository.GameMapMissionRepository;
 import com.project.arc205.game.room.model.entity.Room;
@@ -31,10 +33,12 @@ public class GameManagerTest {
 
     @Test
     @DisplayName("게임데이터 생성시, 미션 분배")
-    void missionProgress() {
+    void missionDistributionTest() {
         int numberOfPlayers = 6;
         Room room = DummyRoom.createTestRoom("testRoom", numberOfPlayers);
-        GameManager gameManager = new GameManager(new BasicGameCharacterAssignStrategy(),
+        GameManager gameManager = new GameManager(new BasicRoleAssignStrategy(),
+                new BasicMissionDistributionStrategy(),
+                new BasicColorAssignStrategy(),
                 gameMapMissionRepository, gameMapRepository);
         GameData gameData = gameManager.createGameDataFrom(room);
 
