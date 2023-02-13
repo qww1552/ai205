@@ -1,12 +1,11 @@
 package com.project.arc205.game.gamecharacter.model.entity;
 
 import com.project.arc205.game.room.model.entity.Room;
+import java.security.Principal;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.security.Principal;
 
 @Getter
 @Setter
@@ -30,6 +29,9 @@ public class Player implements Principal {
     }
 
     public void exit() {
+        if (room == null) {
+            return;
+        }
         room.remove(this);
         this.room = null;
     }

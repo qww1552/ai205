@@ -26,4 +26,7 @@ public class GameRepository {
         return gameStorage.get(id);
     }
 
+    public void deleteById(UUID id) {
+        gameStorage.remove(id);
+    }
 }
