@@ -7,6 +7,7 @@ import MainSimple from "components/lobby/mainSimple";
 import RoomList from "components/lobby/roomList";
 import { createBrowserRouter, Link, Outlet } from "react-router-dom";
 import GameResult from "components/game/gameResult";
+
 const router = createBrowserRouter([
   {
     path: "/",

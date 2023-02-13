@@ -4,7 +4,9 @@ const MainSimple = () => {
     return (<>
         <div>
             <h1>MainPage</h1>
-            <Link to="rooms">rooms</Link>
+            <div>
+                <Link to="rooms">rooms</Link>
+            </div>
             <Outlet>
                 
             </Outlet>

@@ -25,7 +25,7 @@ const MyCharacter = ({ color }) => {
 
   const speed = 6.0;
 
-  const sylinderRot = new Euler(1.5,0,0);
+  const sylinderRot = new Euler(1.5, 0, 0);
 
   // ref.current.charState = "IDLE";
   // ref.current.charDir = "RIGHT";
@@ -83,7 +83,7 @@ const MyCharacter = ({ color }) => {
   return (
     <>
       <RigidBody ref={ref} type="dynamic" lockRotations={true}>
-        <pointLight distance={4} decay={0.01} position={[0, 0, 1]} />
+        <pointLight distance={4} intensity={1.4} decay={0.01} position={[0, 0, 1]} />
 
         <Suspense>
           <CharacterMesh
@@ -99,20 +99,35 @@ const MyCharacter = ({ color }) => {
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
-            // console.log(e.colliderObject.name ? e.colliderObject.name : null);
-
             if (!e.colliderObject.name) return
 
-            if (e.colliderObject.name?.search('dead_') < 0)
-              action("me/setAdjustPlayer", e.colliderObject.name)
-            else {
+            // console.log(e.colliderObject.name)
+
+            if (e.colliderObject.name.search('dead') >= 0) {         // 시체
               action('me/setAdjustBody', e.colliderObject.name)
+            } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
+              action('gameInfo/setAdjacentMeetingBtn', true)
+            } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
+              action('missionInfo/setAdjacentMissionBtn', true)
+              console.log(e.colliderObject.name)
+            } else {                                                  // 유저들
+              action('me/setAdjustPlayer', e.colliderObject.name)
             }
 
+
           }}
-          onIntersectionExit={() => {
-            action("me/setAdjustPlayer", null)
-            action('me/setAdjustBody', null)
+          onIntersectionExit={(e) => {
+
+            if (e.colliderObject.name.search('dead') >= 0) {         // 시체
+              action('me/setAdjustBody', null)
+            } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
+              action('gameInfo/setAdjacentMeetingBtn', false)
+            } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
+              action('missionInfo/setAdjacentMissionBtn', false)
+            } else {                                                  // 유저들
+              action("me/setAdjustPlayer", null)
+            }
+            
           }}
         />}
         <CylinderCollider
@@ -123,7 +138,7 @@ const MyCharacter = ({ color }) => {
           rotation={sylinderRot}
           onIntersectionEnter={(e) => {
             if (!e.colliderObject.name) return
-            
+
             if (e.colliderObject.name?.search('dead_') < 0) {
               // action("me/setAdjustPlayer", e.colliderObject.name)
               // console.log("in ", e.colliderObject.name)
@@ -134,7 +149,7 @@ const MyCharacter = ({ color }) => {
           }}
           onIntersectionExit={(e) => {
             if (!e.colliderObject.name) return
-            
+
             if (e.colliderObject.name?.search('dead_') < 0) {
               // action("me/setAdjustPlayer", e.colliderObject.name)
               // console.log("out ", e.colliderObject.name)
