@@ -1,5 +1,67 @@
+* {
+  box-sizing: border-box;
+}
+
+/* padding이 기본적으로 아래쪽에 4픽셀 씩 남아있는 문제가 있음, 해결 방법 불명 */
+
+.floatingComponent {
+  position: absolute;
+}
+
+.missionComponent {
+  left: 10px;
+  top: 10px;
+  width: 300px;
+}
+
+.imgBtn, .imgBtnNoHover {
+  background-color: silver;
+  right: 10px;
+  padding: 4px 0px;
+  opacity: 0.3;
+  font-size: 0;
+  line-height: 0;
+}
+
+.imgBtn:active, .imgBtnReady:active{
+  background-color: red;
+}
+
+.imgBtn:hover, .imgBtnReady{
+  opacity: 1;
+}
+
+#chatBtn {
+  top: 10px;
+}
+
+#killBtn {
+  top: 130px;
+  padding: 0px;
+}
+
+#reportBtn {
+  top: 250px;
+}
+
+#actBtn {
+  top: 370px;
+}
+
+.imgBtnIcon {
+  width: 160px;
+  height: 100px;
+}
+
 .z-index2000{
 
   z-index: 2000;
  
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }

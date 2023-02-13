@@ -1,4 +1,3 @@
-import 'styles/styles.css'
 import ChatComponent from 'components/webchat/ChatComponent'
 import MissionComponent from '../mission/missionComponent'
 import { selectGameInfo } from "app/gameInfo"
