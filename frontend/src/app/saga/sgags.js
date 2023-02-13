@@ -119,6 +119,7 @@ const channelHandling = {
     }
   },
   CHARACTER: function* (operation, data) {
+    console.log(operation)
     const stateMe = yield select(state => state.me);
     switch (operation) {
       case 'MOVE':
@@ -143,12 +144,14 @@ const channelHandling = {
         break;
 
       case 'MISSION_COMPLETE':
+        console.log('사가미션응답(완료) 들어옴')
         yield put({ type: "me/setMissionComplete", payload : {id: data.id}})
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
-        console.log('사가에서 동작 들어옴')
+        console.log('사가미션응답(완료) 들어옴')
         break;
       
-      case 'PROGRESS':
+      case 'MISSION_PROGRESS':
+        console.log('사가미션응답(프로그래스)들어옴')
         yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
         break;
       
@@ -239,7 +242,9 @@ function* vote(client, roomId, action) {
 
 // 미션 완료 전송 요청
 function* mission(client, roomId, action) {
-  yield call(send, client, "meeting/complete", roomId, action.payload)
+  console.log('사가 호출까지는 성공')
+  console.log(action.payload)
+  yield call(send, client, "character/mission/complete", roomId, {id: Number(action.payload.id)})
 }
 
 // 살해 요청
