@@ -84,7 +84,7 @@ public class GameCharacterController {
         return BaseResponse.character(CharacterOperation.MISSION_COMPLETE).data(completeResponse);
     }
 
-    @MessageMapping("/room/{room-id}/character/sabotage")
+    @MessageMapping("/room/{room-id}/character/sabotage/open")
     public void sabotage(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor) {
         log.info("/room/{}/sabotage", roomId);

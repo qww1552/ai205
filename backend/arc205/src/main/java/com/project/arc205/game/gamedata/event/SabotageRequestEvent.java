@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SabotageEvent implements DomainEvent {
+public class SabotageRequestEvent implements DomainEvent {
 
     private String playerId;
 

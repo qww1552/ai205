@@ -6,7 +6,7 @@ import com.project.arc205.common.model.Role;
 import com.project.arc205.game.gamecharacter.exception.CannotKillDeadException;
 import com.project.arc205.game.gamecharacter.exception.MafiaCannotKillEachOtherException;
 import com.project.arc205.game.gamecharacter.exception.MafiaCannotMissionInteractionException;
-import com.project.arc205.game.gamedata.event.SabotageEvent;
+import com.project.arc205.game.gamedata.event.SabotageRequestEvent;
 import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.Map;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public final class Mafia extends GameCharacter {
     }
 
     public void sabotage() {
-        log.info("");
-        Events.raise(new SabotageEvent(playerId));
+        log.info("sabotage request from : {}", playerId);
+        Events.raise(new SabotageRequestEvent(playerId));
     }
 }

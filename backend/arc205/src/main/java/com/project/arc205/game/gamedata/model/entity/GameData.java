@@ -37,6 +37,7 @@ public class GameData {
     private int votingLimitTime;        //투표 시간
     private Map<String, String> voted;  //현재 투표 정보(from, to)    //TODO: refactor Vote
     private boolean inMeeting;      //TODO
+    private Sabotage sabotage;
 
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
@@ -52,6 +53,7 @@ public class GameData {
         this.gameCharacters = gameCharacters;
         this.voted = null;
         this.inMeeting = false;
+        this.sabotage = new Sabotage(this.roomId, 1000L);
         moveGameCharactersTo(startLocation);
     }
 
