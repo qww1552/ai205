@@ -2,7 +2,7 @@ import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { useEffect, useRef } from "react";
 import DeadMesh from "../mesh/deadMesh";
 
-const DeadCharacter = ({ position, color, id }) => {
+const DeadCharacter = ({ position, id }) => {
 
     const ref = useRef()
 
@@ -13,7 +13,7 @@ const DeadCharacter = ({ position, color, id }) => {
 
     return (<>
         <RigidBody ref={ref} colliders={false} type="dynamic" lockRotations={true}>
-            <DeadMesh color={color} />
+            <DeadMesh />
             <CuboidCollider
                 args={[0.5, 0.5, 0.1]}
                 sensor

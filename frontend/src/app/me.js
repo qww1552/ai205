@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   // 내 플레이어 정보
-  player: { id: "player1" , isAlive: true , role : "CITIZEN", missions: []},
+  player: { id: "player1" , isAlive: true , role : "MAFIA"},
   location: {
     y: 0,
     x: 0,

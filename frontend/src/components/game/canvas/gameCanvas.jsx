@@ -47,7 +47,7 @@ const GameCanvas = () => {
             ))}
             {deadList.map((dead, idx) => (
               <DeadCharacter
-                color={dead.player.color}
+                // color={dead.player.color}
                 id={`${dead.player.id}`}
                 position={dead.location}
                 key={`${dead.player.id}${idx}`}
