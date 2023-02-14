@@ -9,7 +9,6 @@ import { selectMe } from 'app/me'
 import { useKeyboardControls } from "@react-three/drei";
 import { Progress, Badge, Button, Modal } from 'antd'
 import './style.css'
-import { selectGameset } from 'app/gameSet'
 import { Col, Row } from 'antd';
 
 const ImageButton = () => {
@@ -63,6 +62,10 @@ const ImageButton = () => {
   }
   const mapButtonToggle = () => {
     setMinimapOpen(!minimapOpen)
+  }
+
+  const sabotageActivate = () => {
+    action('SABOTAGE_REQUEST')
   }
 
   useEffect(() => { console.log(unReadMessage) }, [unReadMessage])
@@ -182,7 +185,7 @@ const ImageButton = () => {
                   <button
                     className="imgBtn "
                     id="sabotageBtn"
-                    onClick={undefined}
+                    onClick={sabotageActivate}
                   >
                     <img className="imgBtnIcon" src="/btnIcons/iconSabotage1.png" alt="방해" />
                   </button>

@@ -15,7 +15,6 @@ const MyCharacter = ({ color }) => {
   const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
-  const light = useRef();
   const isGameStop = useSelector(selectGameInfo).isGameStop;
   // const [intersecting, setIntersection] = useState(false);
 
@@ -90,7 +89,7 @@ const MyCharacter = ({ color }) => {
   return (
     <>
       <RigidBody ref={ref} type="dynamic" lockRotations={true}>
-        <pointLight distance={4} intensity={1.4} decay={0.01} position={[0, 0, 1]} />
+        <pointLight distance={stateMe.player.sight} intensity={1.4} decay={0.01} position={[0, 0, 1]} />
 
         <Suspense>
           <CharacterMesh
@@ -130,7 +129,7 @@ const MyCharacter = ({ color }) => {
         />}
         <CylinderCollider
           name={`sight_${stateMe.player.id}`}
-          args={[0.08, 4]}
+          args={[0.08, stateMe.player.sight]}
           sensor
           restitution={0}
           rotation={sylinderRot}
