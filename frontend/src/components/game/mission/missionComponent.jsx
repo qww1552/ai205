@@ -46,24 +46,22 @@ const MissionComponent = () => {
       {/* Todo: 컴포넌트 수정하기 */}
       {(() => {switch (isMissionModalOpen) {
         case '1':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;
+          return <TeachableMission type="lip_touch" title="식당에서 저녁메뉴의 맛을 보세요" content="입술에 손가락을 갖다대서 맛을 보세요" setComplete={setComplete}/>;
         case '2':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
-          // return <TimerMission setComplete={setComplete}/>;
+          return <TeachableMission type="arm_updown" title="의무실 찬장에서 약품을 꺼내세요" content="찬장 위쪽으로 손을 뻗었다가 내리세요" setComplete={setComplete}/>;
         case '3':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;
+          return <TeachableMission type="cover_eye" title="라운지 현관문에서 바깥을 내다보세요" content="한쪽 눈을 가리고 현관문 구멍을 봐서 확인하세요" setComplete={setComplete}/>;
         case '4':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          return <TeachableMission type="big_heart" title="휴게실에서 영상 메시지에 응답하세요" content="양팔로 하트모양을 만들어 사랑하는 마음을 전하세요" setComplete={setComplete}/>;
         case '5':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
-          // return <TimerMission subType="/heart_model/" setComplete={setComplete}/>;
+          return <TeachableMission type="goblin_horn" title="연구실 위쪽 스크린에서 뇌파를 분석하세요" content="한 손가락으로 뒤통수에 뿔을 만들어 뇌파를 분석하세요" setComplete={setComplete}/>;
         case '6':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          return <TeachableMission type="jammin_punch" title="라운지 인터폰에 대고 벨튀를 혼내주세요" content="나가기 귀찮으니 펀치를 하려는 척만 해서 쫓아내세요" setComplete={setComplete}/>;
           // return <MoveMission setComplete={setComplete}/>;
         case '7':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;
+          return <TeachableMission type="connect_wires" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 끊어진 전선을 이어주세요 (n회)" setComplete={setComplete}/>;
         case '8':
-          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          return <TeachableMission type="screw_bolts" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 거대 나사를 조여주세요 (n회)" setComplete={setComplete}/>;
           // return <DragMission setComplete={setComplete}/>;
         default:
           return <div>미션id에서 오류발생</div>;                      
