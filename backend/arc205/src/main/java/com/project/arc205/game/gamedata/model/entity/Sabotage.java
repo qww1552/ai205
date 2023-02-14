@@ -18,9 +18,9 @@ public class Sabotage {
     private boolean isCoolTime;
     private long coolTime;
 
-    public Sabotage(UUID roomId, long coolTime) {
+    public Sabotage(UUID roomId) {
         this.roomId = roomId;
-        this.coolTime = coolTime;
+        this.coolTime = 1000L;
         this.active = false;
         this.isCoolTime = false;
     }
@@ -33,12 +33,12 @@ public class Sabotage {
             throw new SabotageAlreadyOpenException(roomId.toString());
         }
         this.active = true;
-        this.isCoolTime = true;
         Events.raise(new SabotageOpenEvent(roomId));
     }
 
     public void close() {
         this.active = false;
+        this.isCoolTime = true;
         Events.raise(new SabotageCloseEvent(roomId));
     }
 

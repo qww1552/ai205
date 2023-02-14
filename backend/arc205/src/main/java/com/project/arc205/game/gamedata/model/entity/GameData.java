@@ -53,7 +53,7 @@ public class GameData {
         this.gameCharacters = gameCharacters;
         this.voted = null;
         this.inMeeting = false;
-        this.sabotage = new Sabotage(this.roomId, 1000L);
+        this.sabotage = new Sabotage(this.roomId);
         moveGameCharactersTo(startLocation);
     }
 
