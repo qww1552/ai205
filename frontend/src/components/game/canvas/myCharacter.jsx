@@ -130,7 +130,7 @@ const MyCharacter = ({ color }) => {
         />}
         <CylinderCollider
           name={`sight_${stateMe.player.id}`}
-          args={[0.08, 3.8]}
+          args={[0.08, 4]}
           sensor
           restitution={0}
           rotation={sylinderRot}

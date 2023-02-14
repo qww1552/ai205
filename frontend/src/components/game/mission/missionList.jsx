@@ -10,7 +10,7 @@ const MissionList = () => {
   const missions = useSelector(selectMe).player.missions
   return (
     <div>
-      <Collapse style={{background:"silver"}}>
+      <Collapse style={{background:"silver", zIndex: 200}}>
         {/* Todo: 지금은 직업이 undefined라뜸 초기화되면 지울것 */}
         <Panel header={`${job}:미션 목록`} key="1" >
           {missions.map((mission)=>{
