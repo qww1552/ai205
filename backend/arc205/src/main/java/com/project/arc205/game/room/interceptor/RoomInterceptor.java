@@ -17,13 +17,14 @@ import org.springframework.stereotype.Component;
 public class RoomInterceptor implements ChannelInterceptor {
 
     private final PlayerRepository playerRepository;
+
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.wrap(message);
         Player player = playerRepository.findBySessionId(accessor.getSessionId());
         accessor.setUser(player);
         accessor.setLeaveMutable(true);
-        log.info("accessor presend : {}", accessor);
+//        log.info("accessor presend : {}", accessor);
         return MessageBuilder.fromMessage(message).setHeaders(accessor).build();
     }
 
