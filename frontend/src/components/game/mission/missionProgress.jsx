@@ -1,11 +1,21 @@
 import { Progress } from 'antd'
+import { selectMissionInfo } from 'app/missionInfo';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-const missionProgress = () => {
+
+const MissionProgress = () => {
+  const missionProgress = useSelector(selectMissionInfo).totalMissionProgress
+  
+  // console.log(missionProgress)
+  useEffect(() => {
+  }, [missionProgress])
+
   return (
     <>
-      <Progress percent={90} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
+      <Progress percent={missionProgress} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
     </>
   );
 };
 
-export default missionProgress;
+export default MissionProgress;
