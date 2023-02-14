@@ -22,6 +22,7 @@ const ImageButton = () => {
   const adjustBody = useSelector(selectMe).adjustBody
   const unReadMessage = useSelector(selectGameInfo).unReadMessage
   const [minimapOpen, setMinimapOpen] = useState(false)
+  const missionList = useSelector(selectMe).player.missions
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
@@ -31,8 +32,19 @@ const ImageButton = () => {
       action('START_MEETING_REQUEST')
       console.log('전송')
     } else if (isAdjacentMissionBtn) {
-      action('gameInfo/setMissionModalOpen', true)
-    }
+      console.log(missionList)
+      for (let mission of missionList){
+        console.log(mission)
+        console.log(mission.id, isAdjacentMissionBtn)
+        if ((Number(mission.id) === Number(isAdjacentMissionBtn))&&(mission.isComplete === false)){
+          
+          action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
+        }else{
+          console.log('완료했거나 내 미션이 아닌경우')
+        }
+      }
+      
+    } 
   }
   const closeButtonActivate = () => {
     action('gameInfo/setChatModalOpen', false)
