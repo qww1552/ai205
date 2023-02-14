@@ -2,7 +2,11 @@ import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3, Euler } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
-import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier";
+import {
+  CuboidCollider,
+  CylinderCollider,
+  RigidBody,
+} from "@react-three/rapier";
 import { selectMe } from "../../../app/me";
 import { useSelector } from "react-redux";
 import { action } from "app/store";
@@ -10,7 +14,6 @@ import CharacterMesh from "../mesh/characterMesh";
 import { selectGameInfo } from "app/gameInfo";
 
 const MyCharacter = ({ color }) => {
-
   const isInMeeting = useSelector(selectGameInfo).isInMeeting;
   const player = useSelector(selectMe).player;
   const [, get] = useKeyboardControls();
@@ -32,10 +35,12 @@ const MyCharacter = ({ color }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      action("LOCAITION_SEND_REQUEST", {
-        x: ref.current.translation().x,
-        y: ref.current.translation().y,
-      });
+      if (isInMeeting) {
+        action("LOCAITION_SEND_REQUEST", {
+          x: ref.current.translation().x,
+          y: ref.current.translation().y,
+        });
+      }
     }, 300);
     return () => {
       clearInterval(timer);
@@ -44,13 +49,13 @@ const MyCharacter = ({ color }) => {
 
   useEffect(() => {
     if (isInMeeting) {
-      ref.current.setTranslation({ x: 0, y: 0, z: 0 })
+      ref.current.setTranslation({ x: 0, y: 0, z: 0 });
       action("LOCAITION_SEND_REQUEST", {
         x: 0,
         y: 0,
       });
     }
-  }, [isInMeeting])
+  }, [isInMeeting]);
 
   useFrame((state) => {
     state.camera.position.lerp(
@@ -64,15 +69,13 @@ const MyCharacter = ({ color }) => {
 
     const { forward, backward, left, right } = get();
 
-    if(isGameStop) return;
+    if (isGameStop) return;
 
+    ref.current.charState =
+      forward || backward || left || right ? "DASH" : "IDLE";
 
-    ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
-
-    if (left)
-      ref.current.charDir = 'LEFT'
-    else if (right)
-      ref.current.charDir = 'RIGHT'
+    if (left) ref.current.charDir = "LEFT";
+    else if (right) ref.current.charDir = "RIGHT";
 
     frontVector.set(0, forward - backward, 0);
     sideVector.set(left - right, 0, 0);
@@ -83,13 +86,22 @@ const MyCharacter = ({ color }) => {
       .multiplyScalar(speed);
 
     ref.current.setLinvel({ x: direction.x, y: direction.y, z: 0 });
-
   });
 
   return (
     <>
-      <RigidBody ref={ref} colliders={player.isAlive ? "" : false} type="dynamic" lockRotations={true}>
-        <pointLight distance={4} intensity={1.4} decay={0.01} position={[0, 0, 1]} />
+      <RigidBody
+        ref={ref}
+        colliders={player.isAlive ? "" : false}
+        type="dynamic"
+        lockRotations={true}
+      >
+        <pointLight
+          distance={4}
+          intensity={1.4}
+          decay={0.01}
+          position={[0, 0, 1]}
+        />
 
         <Suspense>
           <CharacterMesh
@@ -105,34 +117,44 @@ const MyCharacter = ({ color }) => {
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
-            if (!e.colliderObject.name) return
+            if (!e.colliderObject.name) return;
 
             // console.log(e.colliderObject.name)
 
-            if (e.colliderObject.name.search('dead') >= 0) {         // 시체
-              action('me/setAdjustBody', e.colliderObject.name)
-            } else if (e.colliderObject.name.search('meeting') >= 0 && player.isAlive) { // 회의 버튼
-              action('gameInfo/setAdjacentMeetingBtn', true)
-            } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
-              action('missionInfo/setAdjacentMissionBtn', e.colliderObject.name[e.colliderObject.name.length-1])
-            } else {                                                  // 유저들
-              action('me/setAdjustPlayer', e.colliderObject.name)
+            if (e.colliderObject.name.search("dead") >= 0) {
+              // 시체
+              action("me/setAdjustBody", e.colliderObject.name);
+            } else if (
+              e.colliderObject.name.search("meeting") >= 0 &&
+              player.isAlive
+            ) {
+              // 회의 버튼
+              action("gameInfo/setAdjacentMeetingBtn", true);
+            } else if (e.colliderObject.name.search("mission") >= 0) {
+              // 미션 버튼
+              action(
+                "missionInfo/setAdjacentMissionBtn",
+                e.colliderObject.name[e.colliderObject.name.length - 1]
+              );
+            } else {
+              // 유저들
+              action("me/setAdjustPlayer", e.colliderObject.name);
             }
-
-
           }}
           onIntersectionExit={(e) => {
-
-            if (e.colliderObject.name.search('dead') >= 0) {         // 시체
-              action('me/setAdjustBody', null)
-            } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
-              action('gameInfo/setAdjacentMeetingBtn', false)
-            } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
-              action('missionInfo/setAdjacentMissionBtn', false)
-            } else {                                                  // 유저들
-              action("me/setAdjustPlayer", null)
+            if (e.colliderObject.name.search("dead") >= 0) {
+              // 시체
+              action("me/setAdjustBody", null);
+            } else if (e.colliderObject.name.search("meeting") >= 0) {
+              // 회의 버튼
+              action("gameInfo/setAdjacentMeetingBtn", false);
+            } else if (e.colliderObject.name.search("mission") >= 0) {
+              // 미션 버튼
+              action("missionInfo/setAdjacentMissionBtn", false);
+            } else {
+              // 유저들
+              action("me/setAdjustPlayer", null);
             }
-            
           }}
         />
         <CylinderCollider
@@ -142,24 +164,23 @@ const MyCharacter = ({ color }) => {
           restitution={0}
           rotation={sylinderRot}
           onIntersectionEnter={(e) => {
-            if (!e.colliderObject.name) return
+            if (!e.colliderObject.name) return;
 
-            if (e.colliderObject.name?.search('dead_') < 0) {
+            if (e.colliderObject.name?.search("dead_") < 0) {
               // action("me/setAdjustPlayer", e.colliderObject.name)
               // console.log("in ", e.colliderObject.name)
-              action('others/setOtherSoundOn', e.colliderObject.name)
-              action('others/setOtherVideoOn', e.colliderObject.name)
+              action("others/setOtherSoundOn", e.colliderObject.name);
+              action("others/setOtherVideoOn", e.colliderObject.name);
             }
-
           }}
           onIntersectionExit={(e) => {
-            if (!e.colliderObject.name) return
+            if (!e.colliderObject.name) return;
 
-            if (e.colliderObject.name?.search('dead_') < 0) {
+            if (e.colliderObject.name?.search("dead_") < 0) {
               // action("me/setAdjustPlayer", e.colliderObject.name)
               // console.log("out ", e.colliderObject.name)
-              action('others/setOtherSoundOff', e.colliderObject.name)
-              action('others/setOtherVideoOff', e.colliderObject.name)
+              action("others/setOtherSoundOff", e.colliderObject.name);
+              action("others/setOtherVideoOff", e.colliderObject.name);
             }
           }}
         />
