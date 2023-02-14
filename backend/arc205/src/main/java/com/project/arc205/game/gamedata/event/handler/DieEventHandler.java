@@ -17,7 +17,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
@@ -58,15 +57,6 @@ public class DieEventHandler {
                 BaseResponse.character(CharacterOperation.YOU_DIED).build(),
                 WebSocketUtil.createHeaders(sessionId));
         log.info("/user/{}/queue: /CHARACTER/YOU_DIED", sessionId);
-    }
-
-    @Async
-    @EventListener
-    @Transactional
-    public void checkGameEnd(DieEvent event) {
-        UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
-        gameRepository.findById(roomId).checkGameEnd();
-        log.info("DieEvent(checkGameEnd): {}, {}", roomId.toString(), event.getPlayerId());
     }
 
 }
