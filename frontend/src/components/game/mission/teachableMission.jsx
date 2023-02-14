@@ -37,6 +37,7 @@ const TeachableMission = (props) => {
         let currentPose = document.getElementById("currentPose").innerHTML
         // 동작이 2가지인 미션일 경우
         if (props.id === "5" || props.id === "10" || props.id === "11") {
+          // 1번째 동작
           if (!secondPoseToggle) {
             if (props.subType1 !== currentPose) {
               currentPoseTimer = 0
@@ -44,6 +45,18 @@ const TeachableMission = (props) => {
             } else if (currentPoseTimer < targetPoseTimer) {
               currentPoseTimer += 1
               setTeachableProgress(props.subType1 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
+            } else {
+              setTeachableProgress("좋아요! 다음은 " + props.subType2 + " 동작을 취해주세요!")
+              secondPoseToggle = true
+              currentPoseTimer = 0
+            }    
+          } else { // 2번째 동작
+            if (props.subType2 !== currentPose) {
+              currentPoseTimer = 0
+              setTeachableProgress(props.subType2 + " 동작이 감지되지 않았어요...")
+            } else if (currentPoseTimer < targetPoseTimer) {
+              currentPoseTimer += 1
+              setTeachableProgress(props.subType2 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
             } else {
               setTeachableProgress(props.type + " 동작 유지 미션 완료!")
               alert("미션완료");
@@ -53,9 +66,7 @@ const TeachableMission = (props) => {
               setIsVisible(false);
     
               return clearInterval(teachableTimer)
-            }    
-          } else {
-
+            }
           }
         } else { // 동작이 1개인 미션일 경우
           if (props.type !== currentPose) {
