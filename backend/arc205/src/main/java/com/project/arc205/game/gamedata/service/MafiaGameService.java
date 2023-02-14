@@ -30,7 +30,7 @@ public class MafiaGameService implements GameService {
     @Override
     public GameStartResponse startGame(UUID roomId) {
         Room room = roomRepository.findById(roomId);
-
+        room.setPlay();
         GameData gameData = gameManager.createGameDataFrom(room);
         gameRepository.save(roomId, gameData);
 
