@@ -7,6 +7,7 @@ import { action } from "app/store"
 import TimerMission from './timerMission';
 import MoveMission from './moveMission';
 import DragMission from './dragMission';
+import TeachableMission from './teachableMission';
 import './style.css'
 // Todo: 죽었을때, 회의시작할때, 게임이 끝났을때 모달 닫는것 작성 
 const MissionComponent = () => {
@@ -45,21 +46,25 @@ const MissionComponent = () => {
       {/* Todo: 컴포넌트 수정하기 */}
       {(() => {switch (isMissionModalOpen) {
         case '1':
-          return <TimerMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;
         case '2':
-          return <TimerMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          // return <TimerMission setComplete={setComplete}/>;
         case '3':
-          return <TimerMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;
         case '4':
-          return <TimerMission setComplete={setComplete}/>;  
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
         case '5':
-          return <TimerMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          // return <TimerMission subType="/heart_model/" setComplete={setComplete}/>;
         case '6':
-          return <MoveMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          // return <MoveMission setComplete={setComplete}/>;
         case '7':
-          return <DragMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;
         case '8':
-          return <DragMission setComplete={setComplete}/>;
+          return <TeachableMission subType="/heart_model/" setComplete={setComplete}/>;  
+          // return <DragMission setComplete={setComplete}/>;
         default:
           return <div>미션id에서 오류발생</div>;                      
       }})()}
