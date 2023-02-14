@@ -99,10 +99,13 @@ export const meSlice = createSlice({
     // 미션컴플리트
     setMissionComplete:(state, action) => {
       for(let i=0; i<state.player.missions.length; i++) {
+
         if (state.player.missions[i].id === action.payload.id) {
+          const title = state.player.missions[i].title
           state.player.missions = [
             ...state.player.missions.filter((mission) => mission.id !== action.payload.id), 
-            {id:action.payload.id, isComplete:true} ];
+            {id:action.payload.id, title:title, isComplete:true} ];
+            console.log(state.player.missions)
             break;
         }
       }

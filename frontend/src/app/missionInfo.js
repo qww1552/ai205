@@ -20,9 +20,7 @@ export const missionInfoSlice = createSlice({
     },
 
     setAdjacentMissionBtn: (state, action) => {
-      
       state.isAdjacentMissionBtn = action.payload;
-      console.log(state.isAdjacentMissionBtn)
     },
 
     setMissionById: (state, action) => {

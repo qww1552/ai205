@@ -16,9 +16,10 @@ const MissionComponent = () => {
   const isMissionModalOpen = useSelector(selectGameInfo).isMissionModalOpen
   useEffect(()=>{
     if (complete===true) {
-      console.log('미션완료 사가를 호출')
-      console.log(isMissionModalOpen)
-      action('MISSION_REQUEST', { id: isMissionModalOpen})
+      // console.log('미션완료 사가를 호출')
+      // console.log(isMissionModalOpen)
+      action('MISSION_REQUEST', { id: isMissionModalOpen })
+      setComplete(false)
     }
   },[complete])
   const mssionBtn = () => {

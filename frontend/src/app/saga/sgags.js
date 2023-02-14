@@ -120,7 +120,7 @@ const channelHandling = {
     }
   },
   CHARACTER: function* (operation, data) {
-    console.log(operation)
+    // console.log(operation)
     const stateMe = yield select(state => state.me);
     switch (operation) {
       case 'MOVE':
@@ -146,14 +146,15 @@ const channelHandling = {
         break;
 
       case 'MISSION_COMPLETE':
-        console.log('사가미션응답(완료) 들어옴')
-        yield put({ type: "me/setMissionComplete", payload : {id: data.id}})
+        console.log('여기까지는 작동')
+        yield put({ type: "me/setMissionComplete", payload : {id: data.mission.id}})
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         console.log('사가미션응답(완료) 들어옴')
         break;
       
       case 'MISSION_PROGRESS':
         console.log('사가미션응답(프로그래스)들어옴')
+        console.log(data)
         yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
         break;
       

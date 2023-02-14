@@ -116,7 +116,7 @@ const MyCharacter = ({ color }) => {
               action('gameInfo/setAdjacentMeetingBtn', true)
             } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
               action('missionInfo/setAdjacentMissionBtn', e.colliderObject.name[e.colliderObject.name.length-1])
-              console.log(e.colliderObject.name[e.colliderObject.name.length-1])
+              // console.log(e.colliderObject.name[e.colliderObject.name.length-1])
             } else {                                                  // 유저들
               action('me/setAdjustPlayer', e.colliderObject.name)
             }
