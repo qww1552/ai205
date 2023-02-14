@@ -122,19 +122,19 @@ const ImageButton = () => {
   return (
     <>
     {contextHolder}
-      {me.isAlive === true ?
+
         <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom : "20px" }}>
 
           <Row>
             <Col offset={21} span={3}>
-              <button
+              {me.isAlive && <button
                 className="imgBtn"
                 id="chatBtn"
                 onClick={chatButtonActivate}
               ><Badge count={unReadMessage}>
                   <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅" />
                 </Badge>
-              </button>
+              </button>}
             </Col>
           </Row>
           <Row>
@@ -178,7 +178,7 @@ const ImageButton = () => {
               </button> : undefined}
             </Col>
             <Col span={3}>
-              <button
+              {me.isAlive && <button
                 className={"imgBtnNoHover " + ((adjustBody) ? "imgBtnReady" : "")}
                 id="reportBtn"
                 onClick={
@@ -187,7 +187,7 @@ const ImageButton = () => {
                     : undefined}
               >
                 <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고" />
-              </button>
+              </button>}
             </Col>
           </Row>
           <Row>
@@ -232,7 +232,7 @@ const ImageButton = () => {
 
 
         </div>
-        : undefined}
+
     </>
   );
 };

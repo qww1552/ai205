@@ -90,10 +90,9 @@ const CharacterMesh = forwardRef(({ id, isAlive=true , color=0}, paramRef) => {
           {id}
         </Text>
       </Suspense>
-      <mesh renderOrder={0}>
-        {/* <boxGeometry args={[1, 1, 0.1]} /> */}
+      <mesh  renderOrder={0}>
         <planeGeometry args={[1, 1]} attach="geometry" />
-        <meshStandardMaterial ref={ref} map={texture} transparent={true} opacity={isAlive ? 1.0 : 0.2}/>
+        <meshStandardMaterial  ref={ref} map={texture} transparent={true} opacity={isAlive ? 1.0 : 0.2}/>
       </mesh>
     </>
   );

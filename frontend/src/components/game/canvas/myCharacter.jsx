@@ -12,10 +12,9 @@ import { selectGameInfo } from "app/gameInfo";
 const MyCharacter = ({ color }) => {
 
   const isInMeeting = useSelector(selectGameInfo).isInMeeting;
-  const stateMe = useSelector(selectMe);
+  const player = useSelector(selectMe).player;
   const [, get] = useKeyboardControls();
   const ref = useRef();
-  const light = useRef();
   const isGameStop = useSelector(selectGameInfo).isGameStop;
   // const [intersecting, setIntersection] = useState(false);
 
@@ -89,20 +88,20 @@ const MyCharacter = ({ color }) => {
 
   return (
     <>
-      <RigidBody ref={ref} type="dynamic" lockRotations={true}>
+      <RigidBody ref={ref} colliders={player.isAlive ? "" : false} type="dynamic" lockRotations={true}>
         <pointLight distance={4} intensity={1.4} decay={0.01} position={[0, 0, 1]} />
 
         <Suspense>
           <CharacterMesh
-            id={stateMe.player.id}
+            id={player.id}
             ref={ref}
             color={color}
-            isAlive={stateMe.player.isAlive}
+            isAlive={player.isAlive}
           />
         </Suspense>
 
-        {stateMe.player.isAlive && <CuboidCollider
-          name={`me_${stateMe.player.id}`}
+        <CuboidCollider
+          name={`me_${player.id}`}
           args={[0.5, 0.5, 0.1]}
           sensor
           onIntersectionEnter={(e) => {
@@ -112,7 +111,7 @@ const MyCharacter = ({ color }) => {
 
             if (e.colliderObject.name.search('dead') >= 0) {         // 시체
               action('me/setAdjustBody', e.colliderObject.name)
-            } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
+            } else if (e.colliderObject.name.search('meeting') >= 0 && player.isAlive) { // 회의 버튼
               action('gameInfo/setAdjacentMeetingBtn', true)
             } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
               action('missionInfo/setAdjacentMissionBtn', e.colliderObject.name[e.colliderObject.name.length-1])
@@ -135,9 +134,9 @@ const MyCharacter = ({ color }) => {
             }
             
           }}
-        />}
+        />
         <CylinderCollider
-          name={`sight_${stateMe.player.id}`}
+          name={`sight_${player.id}`}
           args={[0.08, 4]}
           sensor
           restitution={0}
