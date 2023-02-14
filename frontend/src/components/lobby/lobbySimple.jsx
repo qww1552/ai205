@@ -17,6 +17,8 @@ const LobbySimple = () => {
 
   useEffect(()=> {
     action('SOCKET_CONNECT_REQUEST', {roomId})
+    action("videoInfo/setMySessionId", roomId)
+    setplayerInfo();
   },[])
 
   useEffect(() => {
@@ -25,16 +27,20 @@ const LobbySimple = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      roomRequest(roomId).then(res =>  {
-        const players = res.data.data.players
-        const otherPlayers = players.filter(v => v.id !== me.player.id)
-        setotherPlayers(otherPlayers);
-      }).catch((e) => {
-        setotherPlayers([]);
-      });
+      setplayerInfo();
     }, 2000)
     return () => clearInterval(timer);
   },[]);
+
+  const setplayerInfo = () => {
+    roomRequest(roomId).then(res =>  {
+      const players = res.data.data.players
+      const otherPlayers = players.filter(v => v.id !== me.player.id)
+      setotherPlayers(otherPlayers);
+    }).catch((e) => {
+      setotherPlayers([]);
+    });
+  }
 
   useEffect(() => {
     if(isInGame) {

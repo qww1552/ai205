@@ -16,6 +16,7 @@ const initialState = {
   // 미션창을 열어야 하는지 체크하는 변수
   isMissionModalOpen: false,
   unReadMessage:0,
+  isGameStop : false,
 }
 
 export const gameInfoSlice = createSlice({
@@ -53,6 +54,9 @@ export const gameInfoSlice = createSlice({
       } else {
         state.unReadMessage = state.unReadMessage+1
       }
+    },
+    setGameStop: (state, action) => {
+      state.isGameStop = action.payload
     }
   },
 });
