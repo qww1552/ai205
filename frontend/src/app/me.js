@@ -22,9 +22,7 @@ export const meSlice = createSlice({
       state.location = {...state.location, x : action.payload.x, y : action.payload.y};
     },
     setPlayer: (state, action) => {
-
       state.player = action.payload;
-      console.log(state.player.missions)
     },
     addPlayerVideo: (state, action) => {
       return  {
@@ -105,7 +103,6 @@ export const meSlice = createSlice({
           state.player.missions = [
             ...state.player.missions.filter((mission) => mission.id !== action.payload.id), 
             {id:action.payload.id, title:title, isComplete:true} ];
-            console.log(state.player.missions)
             break;
         }
       }

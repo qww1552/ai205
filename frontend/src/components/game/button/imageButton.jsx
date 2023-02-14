@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import { action } from "app/store"
 import { selectMe } from 'app/me'
 import { useKeyboardControls } from "@react-three/drei";
-import { Progress, Badge, Button, Modal } from 'antd'
+import { Progress, Badge, Button, Modal, message } from 'antd'
 import './style.css'
 import { selectGameset } from 'app/gameSet'
 import { Col, Row } from 'antd';
@@ -23,6 +23,18 @@ const ImageButton = () => {
   const unReadMessage = useSelector(selectGameInfo).unReadMessage
   const [minimapOpen, setMinimapOpen] = useState(false)
   const missionList = useSelector(selectMe).player.missions
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: 'warning',
+      content: '현재 수행할 수 없는 미션입니다. 미션 내용을 다시 확인하세요.',
+      className: 'custom-class',
+      style: {
+        marginTop: '20vh',
+      },
+    });
+  };
+  
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
@@ -33,14 +45,17 @@ const ImageButton = () => {
       console.log('전송')
     } else if (isAdjacentMissionBtn) {
       console.log(missionList)
-      for (let mission of missionList){
-        console.log(mission)
-        console.log(mission.id, isAdjacentMissionBtn)
-        if ((Number(mission.id) === Number(isAdjacentMissionBtn))&&(mission.isComplete === false)){
+      for (let idx in missionList) {
+        console.log(missionList[idx].id, isAdjacentMissionBtn)
+        if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn))&&(missionList[idx].isComplete === false)){
           
           action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
+          break;
         }else{
-          console.log('완료했거나 내 미션이 아닌경우')
+          if (idx === missionList.length-1) {
+            success()
+          }
+            
         }
       }
       
@@ -105,6 +120,7 @@ const ImageButton = () => {
 
   return (
     <>
+    {contextHolder}
       {me.isAlive === true ?
         <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom : "20px" }}>
 
