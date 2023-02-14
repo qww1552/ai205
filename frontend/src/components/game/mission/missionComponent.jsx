@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 // import { selectMissionInfo } from "app/missionInfo"
 import { useSelector } from "react-redux";
-import { Modal, Button } from "antd";
+import { Modal, Button, message } from "antd";
 import { selectGameInfo } from "app/gameInfo"
 import { action } from "app/store"
 import TimerMission from './timerMission';
@@ -10,14 +10,30 @@ import DragMission from './dragMission';
 import './style.css'
 // Todo: 죽었을때, 회의시작할때, 게임이 끝났을때 모달 닫는것 작성 
 const MissionComponent = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: '미션완료!',
+      duration: 0.2,
+      className: 'custom-class',
+      style: {
+        marginTop: '20vh',
+      },
+    });
+  };
 
   const [complete, setComplete] = useState(false)
   
   const isMissionModalOpen = useSelector(selectGameInfo).isMissionModalOpen
   useEffect(()=>{
     if (complete===true) {
-      action('MISSION_REQUEST', { id: isMissionModalOpen })
-      setComplete(false)
+      setTimeout(() => {
+        success()
+        action('MISSION_REQUEST', { id: isMissionModalOpen })
+        setComplete(false)
+      }, 200);
+
     }
   },[complete])
 
@@ -29,6 +45,7 @@ const MissionComponent = () => {
       footer={[
         // <button onClick={()=>{action('gameInfo/setMissionModalOpen', false)}}>임시버튼</button>
     ]}>
+      {contextHolder}
       {/* 여기에 어떤 미션이 수행될것인지 상태에 따라 변경 */}
       {/* Todo: 컴포넌트 수정하기 */}
       {(() => {switch (isMissionModalOpen) {

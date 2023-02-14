@@ -28,6 +28,7 @@ const ImageButton = () => {
     messageApi.open({
       type: 'warning',
       content: '현재 수행할 수 없는 미션입니다. 미션 내용을 다시 확인하세요.',
+      duration: 0.5,
       className: 'custom-class',
       style: {
         marginTop: '20vh',
@@ -46,13 +47,13 @@ const ImageButton = () => {
     } else if (isAdjacentMissionBtn) {
       console.log(missionList)
       for (let idx in missionList) {
-        console.log(missionList[idx].id, isAdjacentMissionBtn)
+        console.log(idx, missionList.length-1)
         if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn))&&(missionList[idx].isComplete === false)){
-          
           action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
           break;
         }else{
-          if (idx === missionList.length-1) {
+          if (Number(idx) === missionList.length-1) {
+            console.log('success')
             success()
           }
             
