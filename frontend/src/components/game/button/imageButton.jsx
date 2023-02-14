@@ -64,6 +64,10 @@ const ImageButton = () => {
     setMinimapOpen(!minimapOpen)
   }
 
+  const mapButtonToggle = () => {
+    setMinimapOpen(!minimapOpen)
+  }
+
   useEffect(()=>{console.log(unReadMessage)},[unReadMessage])
   // 게임 첫 시작의 쿨타임은 15초, 이후 10초로 설정
   const [killTimer, setKillTimer] = useState(-50)
@@ -120,7 +124,24 @@ const ImageButton = () => {
       </button>
       <ChatComponent className="z-index2000"/>
 
+
       <button
+        className="imgBtn floatingComponent"
+        id="mapBtn"
+        onClick={mapButtonToggle}
+        >
+          <img className="imgBtnIcon" src="/btnIcons/iconMap1.png" alt="지도"/>
+          <Modal
+            title="미니맵"
+            width="76.5vh"
+            open={minimapOpen}
+            onCancel={mapButtonToggle}
+            footer={[]}
+          >
+            <div>
+              <img className="minimap" src="/map/labeledMapImage.png" alt="미니맵"/>
+            </div>
+          </Modal>
         className="imgBtn floatingComponent"
         id="mapBtn"
         onClick={mapButtonToggle}
