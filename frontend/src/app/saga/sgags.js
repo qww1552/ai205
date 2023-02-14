@@ -168,8 +168,7 @@ const channelHandling = {
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
-        // 시체들 초기화
-        yield put({ type: "dead/setDeadList", payload: [] })
+
         yield put({ type: "gameInfo/setInMeeting", payload: true })
         yield delay(1000)
         yield put({ type: "gameInfo/setGameStop", payload: true })
@@ -192,6 +191,9 @@ const channelHandling = {
         yield put({ type: "gameInfo/setGameStop", payload: false })
 
         // 투표 관련 초기화
+
+        // 시체들 초기화
+        yield put({ type: "dead/setDeadList", payload: [] })
 
         const stateMe = yield select(state => state.me);
 

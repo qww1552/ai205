@@ -4,10 +4,15 @@ import java.util.Objects;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 
 public class WebSocketUtil {
 
     private final static String SUBSCRIPTION_PREFIX = "/sub";
+
+    public static String getPlayerIdFromHeader(StompHeaderAccessor accessor) {
+        return Objects.requireNonNull(accessor.getUser()).getName();
+    }
 
     public static MessageHeaders createHeaders(String sessionId) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor
