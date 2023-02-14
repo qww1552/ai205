@@ -1,5 +1,5 @@
 import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3, Euler } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
 import { CuboidCollider, CylinderCollider, RigidBody } from "@react-three/rapier";
@@ -11,12 +11,13 @@ import { selectGameInfo } from "app/gameInfo";
 
 const MyCharacter = ({ color }) => {
 
-  const isInVoteResult = useSelector(selectGameInfo).isInVoteResult;
+  const isInMeeting = useSelector(selectGameInfo).isInMeeting;
   const stateMe = useSelector(selectMe);
   const [, get] = useKeyboardControls();
   const ref = useRef();
   const light = useRef();
-  const [intersecting, setIntersection] = useState(false);
+  const isGameStop = useSelector(selectGameInfo).isGameStop;
+  // const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
   const sideVector = new Vector3();
@@ -43,10 +44,14 @@ const MyCharacter = ({ color }) => {
   }, []);
 
   useEffect(() => {
-    if (isInVoteResult) {
+    if (isInMeeting) {
       ref.current.setTranslation({ x: 0, y: 0, z: 0 })
+      action("LOCAITION_SEND_REQUEST", {
+        x: 0,
+        y: 0,
+      });
     }
-  }, [isInVoteResult])
+  }, [isInMeeting])
 
   useFrame((state) => {
     state.camera.position.lerp(
@@ -58,8 +63,10 @@ const MyCharacter = ({ color }) => {
       0.02
     );
 
-
     const { forward, backward, left, right } = get();
+
+    if(isGameStop) return;
+
 
     ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
 
@@ -123,7 +130,7 @@ const MyCharacter = ({ color }) => {
         />}
         <CylinderCollider
           name={`sight_${stateMe.player.id}`}
-          args={[3.8, 3.8, 0.05]}
+          args={[0.08, 3.8]}
           sensor
           restitution={0}
           rotation={sylinderRot}

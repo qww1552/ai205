@@ -1,4 +1,4 @@
-import { call, put, takeEvery, take, takeLatest, select, fork, all, throttle } from 'redux-saga/effects'
+import { call, put, takeEvery, take, takeLatest, select, fork, all, throttle, delay } from 'redux-saga/effects'
 import { eventChannel, buffers } from 'redux-saga'
 import { createClient, send, connectClient } from 'api';
 
@@ -170,6 +170,9 @@ const channelHandling = {
         // 시체들 초기화
         yield put({ type: "dead/setDeadList", payload: [] })
         yield put({ type: "gameInfo/setInMeeting", payload: true })
+        yield delay(1000)
+        yield put({ type: "gameInfo/setGameStop", payload: true })
+
         break;
       // 투표 시작 알림 받음 
       case 'START_VOTING':
@@ -185,6 +188,7 @@ const channelHandling = {
         yield put({ type: "voteInfo/setVoteResult", payload: data })
         yield put({ type: "gameInfo/setInVote", payload: false })
         yield put({ type: "gameInfo/setInVoteResult", payload: true })
+        yield put({ type: "gameInfo/setGameStop", payload: false })
 
         // 투표 관련 초기화
 
