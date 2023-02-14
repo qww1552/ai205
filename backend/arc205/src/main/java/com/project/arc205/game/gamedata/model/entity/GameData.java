@@ -44,6 +44,7 @@ public class GameData {
     @Builder
     private GameData(UUID roomId, int totalMissionCount,
             int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters,
+            int sabotageCoolTime,
             Location startLocation) {
         this.roomId = roomId;
         this.totalMissionCount = totalMissionCount;
@@ -53,7 +54,7 @@ public class GameData {
         this.gameCharacters = gameCharacters;
         this.voted = null;
         this.inMeeting = false;
-        this.sabotage = new Sabotage(this.roomId);
+        this.sabotage = new Sabotage(this.roomId, sabotageCoolTime);
         moveGameCharactersTo(startLocation);
     }
 
@@ -69,6 +70,7 @@ public class GameData {
                 .votingLimitTime(gameSetting.getVoteLimitTime())
                 .gameCharacters(gameCharacters)
                 .startLocation(startLocation)
+                .sabotageCoolTime(gameSetting.getSabotageCoolTime())
                 .build();
     }
 

@@ -49,12 +49,8 @@ public class GameManager {
 
         Map<String, GameCharacter> charactersFromPlayers = createGameCharacter(room.getPlayers());
 
-        GameData gameData = GameData.of(room.getId(), gameSetting, charactersFromPlayers,
+        return GameData.of(room.getId(), gameSetting, charactersFromPlayers,
                 gameMap.getStartLocation());
-
-        gameData.getSabotage().setCoolTime(gameSetting.getSabotageCoolTime() * 1000L);
-        
-        return gameData;
     }
 
     private Map<String, GameCharacter> createGameCharacter(Map<String, Player> players) {

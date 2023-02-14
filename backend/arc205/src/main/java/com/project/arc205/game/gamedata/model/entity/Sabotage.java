@@ -16,11 +16,11 @@ public class Sabotage {
     private UUID roomId;
     private boolean active;
     private boolean isCoolTime;
-    private long coolTime;
+    private int coolTime;
 
-    public Sabotage(UUID roomId) {
+    public Sabotage(UUID roomId, int coolTime) {
         this.roomId = roomId;
-        this.coolTime = 1000L;
+        this.coolTime = coolTime;
         this.active = false;
         this.isCoolTime = false;
     }
