@@ -98,6 +98,7 @@ const channelHandling = {
             ...stateMe.player,
             role: data.role,
             color: data.color,
+            sight: 4,
             isAlive: true,
             isVoted: false,
             missions: []
