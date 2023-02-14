@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMove } from 'react-aria';
 
-const MoveMission = ({setComplete}) => {
+const MoveMission = ({content, setComplete}) => {
   const CONTAINER_SIZE = 200;
   const BALL_SIZE = 30;
 
@@ -42,6 +42,7 @@ const MoveMission = ({setComplete}) => {
 
   return (
     <>
+      <h1> {content} </h1>
       <div
         style={{
           width: CONTAINER_SIZE,

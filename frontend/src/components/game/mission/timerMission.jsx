@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import { useState } from "react";
 
-const TimerMission = ({setComplete}) => {
+const TimerMission = ({content, setComplete}) => {
 
   const [loading, setLoading] = useState(false)
   
@@ -14,8 +14,7 @@ const TimerMission = ({setComplete}) => {
   }
 
   return (<>
-
-    <div>아래 버튼을 누르고 기다리면 5초 뒤 미션이 완료됩니다.</div>
+    <h1> {content} </h1>
     <Button
       key="submit"
       type="primary"

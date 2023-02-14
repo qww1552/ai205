@@ -6,8 +6,9 @@ const DragMission = (props) => {
 
   return (
     <>
-    <Draggable/>
-    <DropTarget {...props}/>
+      <h1> {props.content} </h1>
+      <Draggable/>
+      <DropTarget {...props}/>
     </>
   );
 }
