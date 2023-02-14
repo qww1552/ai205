@@ -2,7 +2,6 @@ package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
-import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MissionRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
@@ -10,6 +9,7 @@ import com.project.arc205.game.gamecharacter.dto.response.MissionCompleteRespons
 import com.project.arc205.game.gamecharacter.dto.response.MissionProgressResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
+import java.util.Objects;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,6 @@ import org.springframework.stereotype.Controller;
 public class GameCharacterController {
 
     private final GameCharacterService gameCharacterService;
-    private final PlayerSessionMappingService mappingService;
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/room/{room-id}/character/move")
@@ -40,7 +39,7 @@ public class GameCharacterController {
             StompHeaderAccessor accessor, MoveRequest moveRequest) {
         UUID roomUuid = UUID.fromString(roomId);
 
-        String playerId = getPlayerIdFromHeader(accessor, roomUuid);
+        String playerId = getPlayerIdFromHeader(accessor);
 
         MoveResponse moveResponse = gameCharacterService.move(roomUuid,
                 playerId, moveRequest.getLocation());
@@ -55,18 +54,13 @@ public class GameCharacterController {
 
         UUID roomUuid = UUID.fromString(roomId);
 
-        String mafiaPlayerId = getPlayerIdFromHeader(accessor, roomUuid);
+        String mafiaPlayerId = getPlayerIdFromHeader(accessor);
         String citizenPlayerId = killRequest.getTo();
 
         gameCharacterService.kill(
                 roomUuid,
                 mafiaPlayerId,
                 citizenPlayerId);
-    }
-
-    private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {
-        return mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
-                accessor.getSessionId());
     }
 
     @MessageMapping("/room/{room-id}/character/mission/complete")
@@ -76,7 +70,7 @@ public class GameCharacterController {
             MissionRequest missionRequest) {
         log.info("/room/{}/mission/complete: {}", roomId, missionRequest);
         UUID uuidRoomId = UUID.fromString(roomId);
-        String playerId = getPlayerIdFromHeader(accessor, uuidRoomId);
+        String playerId = getPlayerIdFromHeader(accessor);
 
         MissionProgressResponse response = gameCharacterService.missionComplete(uuidRoomId,
                 playerId, missionRequest.getId());
@@ -90,4 +84,15 @@ public class GameCharacterController {
         return BaseResponse.character(CharacterOperation.MISSION_COMPLETE).data(completeResponse);
     }
 
+    @MessageMapping("/room/{room-id}/character/sabotage")
+    public void sabotage(@DestinationVariable("room-id") String roomId,
+            StompHeaderAccessor accessor) {
+        log.info("/room/{}/sabotage", roomId);
+
+        gameCharacterService.sabotage(UUID.fromString(roomId), getPlayerIdFromHeader(accessor));
+    }
+
+    private String getPlayerIdFromHeader(StompHeaderAccessor accessor) {
+        return Objects.requireNonNull(accessor.getUser()).getName();
+    }
 }

@@ -4,6 +4,7 @@ import com.project.arc205.common.model.Location;
 import com.project.arc205.game.gamecharacter.dto.response.MissionProgressResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanKillException;
+import com.project.arc205.game.gamecharacter.exception.OnlyMafiaCanSabotageException;
 import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
@@ -57,5 +58,18 @@ public class GameCharacterService {
         gameCharacter.interaction(missionId);
         int progress = gameData.incrementAndGetMissionProgress();
         return MissionProgressResponse.of(progress);
+    }
+
+    @Transactional
+    public void sabotage(UUID roomId, String requestPlayerId) {
+        GameData gameData = gameRepository.findById(roomId);
+        GameCharacter gameCharacter = gameData.getGameCharacter(requestPlayerId);
+
+        if (!(gameCharacter instanceof Mafia)) {
+            throw new OnlyMafiaCanSabotageException();
+        }
+
+        Mafia mafia = (Mafia) gameCharacter;
+        mafia.sabotage();
     }
 }
