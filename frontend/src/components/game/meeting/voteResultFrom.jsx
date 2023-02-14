@@ -9,6 +9,7 @@ import { selectOhterPlayers } from 'app/others';
 import { COLOR } from "config/texture";
 
 const VoteResultFrom = (props) => {
+  
   const mainuser = useSelector(selectMe);
   const others = useSelector(selectOhterPlayers)
   const [li, setLi] = useState({
@@ -17,11 +18,11 @@ const VoteResultFrom = (props) => {
   useEffect(()=>{
     if (props.from){
     setLi((prevState)=>{
+      console.log(li)
       return {...prevState,data:props.from.data}
     })}
     // console.log(li)
   },[props])
-
   const getColors=(name)=>{
     if (mainuser.player.id === name) {
       return(mainuser.player.color)   

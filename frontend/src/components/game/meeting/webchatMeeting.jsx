@@ -20,6 +20,7 @@ import {
 import { useEffect } from 'react';
 import { json } from 'react-router-dom';
 import { selectVoteInfo } from 'app/voteInfo';
+import VoteResultFrom from './voteResultFrom';
 
 // Todo: voteInfo에서 정보를 받아옴
 // import { selectVoteInfo } from '../../../app/voteInfo';
@@ -32,7 +33,7 @@ const WebchatMeeting = () => {
   const [VoteduserInfo, setVoteduserinfo] = useState('skip')
   const me = useSelector(selectMe)
   const otherPlayers = useSelector(selectOhterPlayers);
-  const [skipinfo, setSkipInfo] = useState([])
+  const [skipinfo, setSkipInfo] = useState({data:''})
 
   // 누가 누구한테 투표했는지 투표결과를 저장할 변수, 나중에 주석해제
 
@@ -56,6 +57,7 @@ const WebchatMeeting = () => {
   const dispatch = new useDispatch();
   const isme = {isme:true}
   const isnotme = {isme:false}
+  const skipDummyuser = {player:{color:null, id:'skip'}}
   
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
@@ -74,15 +76,15 @@ const WebchatMeeting = () => {
    
   }
 
-  useEffect(()=>{
+  const getSkipevent=()=>{
     if (isInVoteResult===true) {
     for (let i = 0; i < voteResult.length; i++) {
       if ('skip' === voteResult[i].id) {
-        setSkipInfo([...skipinfo, voteResult[i].from])
+        return ({data: voteResult[i].from})
         break;
       }   
     }
-  }},[isInVoteResult])
+  }}
   // 투표결과를 unpack하는 함수
 
   return (
@@ -104,7 +106,7 @@ const WebchatMeeting = () => {
         <Col span={24}>
           <Card size="small">
           <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-          {skipinfo === []?"아무도 기권하지 않았습니다":skipinfo}
+          {skipinfo === []?"아무도 기권하지 않았습니다":<VoteResultFrom from={getSkipevent()}/>}
         </Card>
         </Col>}
       </Row>
