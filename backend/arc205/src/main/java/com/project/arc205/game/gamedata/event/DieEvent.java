@@ -1,12 +1,12 @@
 package com.project.arc205.game.gamedata.event;
 
 import com.project.arc205.common.event.DomainEvent;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public class DieEvent implements DomainEvent {
+public class DieEvent extends CheckGameEndEvent implements DomainEvent {
 
-    String playerId;
+    public DieEvent(String playerId) {
+        super(playerId);
+    }
 }
