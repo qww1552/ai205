@@ -24,6 +24,7 @@ export const gameInfoSlice = createSlice({
   initialState,
   reducers: {
     setAdjacentMeetingBtn: (state, action) => {
+      console.log(action.payload)
       state.isAdjacentMeetingBtn = action.payload;
     },
     setInMeeting: (state, action) => {

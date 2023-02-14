@@ -115,31 +115,22 @@ const MyCharacter = ({ color }) => {
             } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
               action('gameInfo/setAdjacentMeetingBtn', true)
             } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
-              action('missionInfo/setAdjacentMissionBtn', true)
-              console.log(e.colliderObject.name)
+              action('missionInfo/setAdjacentMissionBtn', e.colliderObject.name[e.colliderObject.name.length-1])
+              // console.log(e.colliderObject.name[e.colliderObject.name.length-1])
             } else {                                                  // 유저들
               action('me/setAdjustPlayer', e.colliderObject.name)
             }
 
 
           }}
-          onIntersectionExit={(e) => {
-
-            if (e.colliderObject.name.search('dead') >= 0) {         // 시체
-              action('me/setAdjustBody', null)
-            } else if (e.colliderObject.name.search('meeting') >= 0) { // 회의 버튼
-              action('gameInfo/setAdjacentMeetingBtn', false)
-            } else if (e.colliderObject.name.search('mission') >= 0) { // 미션 버튼
-              action('missionInfo/setAdjacentMissionBtn', false)
-            } else {                                                  // 유저들
-              action("me/setAdjustPlayer", null)
-            }
-            
+          onIntersectionExit={() => {
+            action("me/setAdjustPlayer", null)
+            action('me/setAdjustBody', null)
           }}
         />}
         <CylinderCollider
           name={`sight_${stateMe.player.id}`}
-          args={[0.08, 3.8]}
+          args={[0.08, 4]}
           sensor
           restitution={0}
           rotation={sylinderRot}

@@ -25,9 +25,9 @@ const GameCanvas = () => {
 
   return (
     <>
-      <div style={{ width: "100vw", height: "80vh" }}>
+      <div id="gameCanvas" style={{ position: "absolute", width: "100vw", height: "100%" }}>
         <Canvas flat linear>
-          <ambientLight intensity={0.2} />
+          {/* <ambientLight intensity={0.2} /> */}
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}

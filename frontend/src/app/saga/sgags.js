@@ -92,7 +92,6 @@ const channelHandling = {
         yield put({ type: "gameSet/setGameSet", payload: data.gameSetting})
         break;
       case 'START_PERSONAL':
-
         yield put({
           type: "me/setPlayer",
           payload: {
@@ -101,11 +100,16 @@ const channelHandling = {
             color: data.color,
             isAlive: true,
             isVoted: false,
+            missions: []
           }
         })
+        for(const mission of data.missions) {
+          console.log('startperson')
+          yield put({type:"me/setMission", payload: mission})}
         break;
       // ※게임 종료신호 데이터 받아오기
       case 'END':
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "gameResult/setGameResult", payload: data })
         yield put({type : "gameInfo/setInGame", payload: false})
         break;
@@ -116,6 +120,7 @@ const channelHandling = {
     }
   },
   CHARACTER: function* (operation, data) {
+    // console.log(operation)
     const stateMe = yield select(state => state.me);
     switch (operation) {
       case 'MOVE':
@@ -136,10 +141,26 @@ const channelHandling = {
       case 'YOU_DIED':
         console.log(operation, data)
         // const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "me/setPlayer", payload : {...stateMe.player, isAlive: false } })
         break;
+
+      case 'MISSION_COMPLETE':
+        console.log('여기까지는 작동')
+        yield put({ type: "me/setMissionComplete", payload : {id: data.mission.id}})
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
+        console.log('사가미션응답(완료) 들어옴')
+        break;
+      
+      case 'MISSION_PROGRESS':
+        console.log('사가미션응답(프로그래스)들어옴')
+        console.log(data)
+        yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
+        break;
+      
       default:
         break;
+        
     }
   },
   MEETING: function* (operation, data) {
@@ -156,6 +177,7 @@ const channelHandling = {
         break;
       // 투표 시작 알림 받음 
       case 'START_VOTING':
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "gameInfo/setInVote", payload: true })
         break;
       // 투표 알림 받음
@@ -182,14 +204,9 @@ const channelHandling = {
     }
   },
   MISSION: function* (operation, data) {
-    switch (operation) {
-      case 'PROGRESS':
-        yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
-        break;
-      default:
-        break;
+    return
     }
-  },
+  ,
   EXCEPTION: function* (operation, data) {
     return
   }
@@ -233,7 +250,9 @@ function* vote(client, roomId, action) {
 
 // 미션 완료 전송 요청
 function* mission(client, roomId, action) {
-  yield call(send, client, "meeting/complete", roomId, action.payload)
+  console.log('사가 호출까지는 성공')
+  console.log(action.payload)
+  yield call(send, client, "character/mission/complete", roomId, {id: Number(action.payload.id)})
 }
 
 // 살해 요청
