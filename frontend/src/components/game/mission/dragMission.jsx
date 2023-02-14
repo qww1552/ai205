@@ -7,8 +7,12 @@ const DragMission = (props) => {
 
   return (
     <>
-    <Draggable/>
-      <DropTarget {...props} />
+
+      
+
+      <h1> {props.content} </h1>
+      <Draggable/>
+      <DropTarget {...props}/>
        <Button id="closeMission" onClick={() => {
         action('gameInfo/setMissionModalOpen', false)
       }}>미션 포기</Button>
