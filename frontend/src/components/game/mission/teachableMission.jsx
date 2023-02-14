@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Progress } from 'antd'
-
+import { action } from "app/store"
 const TeachableMission = (props) => {
 
   const [isVisible, setIsVisible] = useState(false);
@@ -10,7 +10,7 @@ const TeachableMission = (props) => {
   let currentPoseTimer = 0
   let targetPoseTimer = 3 // 3초 유지
   let secondPoseToggle = false
-  
+  let teachableTimer;
   useEffect(() => {
     if (!props.type) return
     console.log(props.type)
@@ -28,12 +28,16 @@ const TeachableMission = (props) => {
     btn.addEventListener("click",getCurrentPose);
   }, [props.type]);
   
+ 
   const getCurrentPose = () => {
     setIsVisible(true);
     setTeachableProgress("동작 시작");
     currentPoseTimer = 0;
+    
+    console.log("첫번쨰!!!")
+    
     setTimeout(() => {
-      let teachableTimer = setInterval(() => {
+      teachableTimer = setInterval(() => {
         let currentPose = document.getElementById("currentPose").innerHTML
         // 동작이 2가지인 미션일 경우
         if (props.id === "5" || props.id === "10" || props.id === "11") {
@@ -61,11 +65,11 @@ const TeachableMission = (props) => {
               setTeachableProgress(props.type + " 동작 유지 미션 완료!")
               alert("미션완료");
               window.deleteCanvas();
-    
+              clearInterval(teachableTimer)
               props.setComplete(true);
               setIsVisible(false);
-    
-              return clearInterval(teachableTimer)
+              console.log("두번쨰!!!!")
+              
             }
           }
         } else { // 동작이 1개인 미션일 경우
@@ -79,11 +83,11 @@ const TeachableMission = (props) => {
             setTeachableProgress(props.type + " 동작 유지 미션 완료!")
             alert("미션완료");
             window.deleteCanvas();
-  
+            clearInterval(teachableTimer)
             props.setComplete(true);
             setIsVisible(false);
   
-            return clearInterval(teachableTimer)
+           
           }    
         }
       }, 1000)
@@ -94,6 +98,7 @@ const TeachableMission = (props) => {
   // 2. 동작에 대한 설명은 들어갔는가? OK
   // 3. 2개 이상의 동작에 대한 로직이 완성되었는가?
   return (
+   
     <>
       <h1> {props.content} </h1>
       <div>
@@ -108,7 +113,17 @@ const TeachableMission = (props) => {
         
       </div>
       <div id="label-container"></div>
-      <div style={{display:isVisible?"block":"none"}}>{teachableProgress}</div>
+      <div style={{ display: isVisible ? "block" : "none" }}>{teachableProgress}</div>
+      <Button id="closeMission" onClick={() => {
+        if (teachableTimer) {
+          clearInterval(teachableTimer);
+          teachableTimer = undefined;
+        }
+        setIsVisible(false);
+        window.deleteCanvas();
+        action('gameInfo/setMissionModalOpen', false)
+      }}>미션 포기</Button>
+    
     </>
   );
 };

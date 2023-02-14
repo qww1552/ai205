@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMove } from 'react-aria';
-
+import { action } from "app/store"
+import { Button } from 'antd';
 const MoveMission = ({setComplete}) => {
   const CONTAINER_SIZE = 200;
   const BALL_SIZE = 30;
@@ -41,7 +42,7 @@ const MoveMission = ({setComplete}) => {
   });
 
   return (
-    <>
+    < >
       <div
         style={{
           width: CONTAINER_SIZE,
@@ -75,6 +76,10 @@ const MoveMission = ({setComplete}) => {
         동그라미를 잡고 움직이세요
         {/* {events.map((e, i) => <li key={i}>{e}</li>)} */}
       </ul>
+       <Button id="closeMission" onClick={() => {
+       
+        action('gameInfo/setMissionModalOpen', false)
+      }}>미션 포기</Button>
     </>
   );
 }

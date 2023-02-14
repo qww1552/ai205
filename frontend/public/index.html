@@ -114,7 +114,9 @@
 
         function deleteCanvas(){
           const canvas = document.getElementById("canvas");
-          canvas.remove();
+          if(canvas){
+            canvas.remove();
+          }
           isInProgress = false;
         }
 
@@ -130,4 +132,5 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+
 </html>
