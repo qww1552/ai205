@@ -6,7 +6,6 @@ import com.project.arc205.common.service.PlayerRoomMappingRepository;
 import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
-import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
 import com.project.arc205.game.gamedata.event.SabotageCloseEvent;
@@ -69,34 +68,31 @@ public class SabotageEventHandler {
 
         GameData gameData = gameRepository.findById(roomId);
 
-        sendSabotageCloseMessageBroadCast(destination);
+        sendBroadCastMessage(destination, CharacterOperation.SABOTAGE_CLOSE);
 
         Sabotage sabotage = gameData.getSabotage();
         taskScheduler.schedule(() -> sabotage.setCoolTime(false),
                 new Date(System.currentTimeMillis() + sabotage.getCoolTime()));
     }
 
-    private void sendSabotageCloseMessageBroadCast(String destination) {
-        template.convertAndSend(destination,
-                BaseResponse.character(CharacterOperation.SABOTAGE_CLOSE).build());
-    }
-
     private void sendSabotageOpenMessage(UUID roomId, Map<String, GameCharacter> gameCharacters) {
-        for (GameCharacter gameCharacter : gameCharacters.values()) {
+        String destination = Constant.DESTINATION_PREFIX + roomId;
 
+        sendBroadCastMessage(destination, CharacterOperation.SABOTAGE_OPEN);
+
+        for (GameCharacter gameCharacter : gameCharacters.values()) {
+            if (gameCharacter instanceof Mafia) {
+                continue;
+            }
             String sessionIdInRoom = mappingService.convertPlayerIdToSessionIdInRoom(roomId,
                     gameCharacter.getPlayerId());
 
-            if (gameCharacter instanceof Mafia) {
-                sendSabotageOpenMessage(sessionIdInRoom);
-            } else if (gameCharacter instanceof Citizen) {
-                sendSightOffMessage(sessionIdInRoom);
-            }
+            sendSightOffMessage(sessionIdInRoom);
         }
     }
 
-    private void sendSabotageOpenMessage(String sessionIdInRoom) {
-        sendSabotageMessage(sessionIdInRoom, CharacterOperation.SABOTAGE_OPEN);
+    private void sendBroadCastMessage(String destination, CharacterOperation operation) {
+        template.convertAndSend(destination, BaseResponse.character(operation).build());
     }
 
     private void sendSightOffMessage(String sessionIdInRoom) {

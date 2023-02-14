@@ -2,7 +2,6 @@ package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
-import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
@@ -36,15 +35,15 @@ public class GameCharacterController {
 
         String playerId = getPlayerIdFromHeader(accessor);
 
-        MoveResponse moveResponse = gameCharacterService.move(roomUuid,
-                playerId, moveRequest.getLocation());
+        MoveResponse moveResponse = gameCharacterService.move(roomUuid, playerId,
+                moveRequest.getLocation());
 
         return BaseResponse.character(CharacterOperation.MOVE).data(moveResponse);
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
-    public void kill(@DestinationVariable("room-id") String roomId,
-            StompHeaderAccessor accessor, @Valid KillRequest killRequest) {
+    public void kill(@DestinationVariable("room-id") String roomId, StompHeaderAccessor accessor,
+            @Valid KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
 
         UUID roomUuid = UUID.fromString(roomId);
@@ -52,10 +51,7 @@ public class GameCharacterController {
         String mafiaPlayerId = getPlayerIdFromHeader(accessor);
         String citizenPlayerId = killRequest.getTo();
 
-        gameCharacterService.kill(
-                roomUuid,
-                mafiaPlayerId,
-                citizenPlayerId);
+        gameCharacterService.kill(roomUuid, mafiaPlayerId, citizenPlayerId);
     }
 
     @MessageMapping("/room/{room-id}/character/sabotage/open")
