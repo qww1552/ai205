@@ -7,11 +7,13 @@ import com.project.arc205.game.meeting.dto.response.MeetingStartResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.service.MeetingService;
 import com.sun.istack.NotNull;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -33,12 +35,14 @@ public class MeetingController {
 
     @MessageMapping("/vote")
     @SendTo("/sub/room/{room-id}")
-    public BaseResponse<VotedResponse> voting(@DestinationVariable("room-id") String roomId,
-            @NotNull VoteRequest voteRequest) {
-        log.info("/room/{}/meeting/vote: {} voted for {}", roomId, voteRequest.getFrom(),
+    public BaseResponse<VotedResponse> vote(@DestinationVariable("room-id") String roomId,
+            StompHeaderAccessor accessor, @NotNull VoteRequest voteRequest) {
+        String playerId = Objects.requireNonNull(accessor.getUser()).getName();
+        log.info("/room/{}/meeting/vote: {} voted for {}", roomId, playerId,
                 voteRequest.getTo());
+        voteRequest.setFrom(playerId);
         return BaseResponse.meeting(MeetingOperation.VOTE)
-                .data(meetingService.vote(roomId, voteRequest));
+                .data(meetingService.vote(roomId, playerId, voteRequest.getTo()));
     }
 
 }
