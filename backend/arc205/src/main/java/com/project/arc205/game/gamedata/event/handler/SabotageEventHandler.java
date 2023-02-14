@@ -6,6 +6,7 @@ import com.project.arc205.common.service.PlayerRoomMappingRepository;
 import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
+import com.project.arc205.game.gamecharacter.model.entity.Citizen;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
 import com.project.arc205.game.gamedata.event.SabotageCloseEvent;
@@ -50,10 +51,12 @@ public class SabotageEventHandler {
     @EventListener
     public void onSabotageOpen(SabotageOpenEvent event) {
         log.info("on sabotage open : {}", event);
-        String destination = Constant.DESTINATION_PREFIX + event.getRoomId();
+        UUID roomId = event.getRoomId();
 
-        template.convertAndSend(destination,
-                BaseResponse.character(CharacterOperation.SABOTAGE_OPEN).build());
+        GameData gameData = gameRepository.findById(roomId);
+
+        sendSabotageOpenMessage(roomId, gameData.getGameCharacters());
+
     }
 
     @Async
@@ -62,29 +65,48 @@ public class SabotageEventHandler {
         log.info("on sabotage close : {}", event);
 
         UUID roomId = event.getRoomId();
+        String destination = Constant.DESTINATION_PREFIX + roomId;
+
         GameData gameData = gameRepository.findById(roomId);
 
-        sendMessageTo(roomId, gameData.getGameCharacters());
+        sendSabotageCloseMessageBroadCast(destination);
 
         Sabotage sabotage = gameData.getSabotage();
-
         taskScheduler.schedule(() -> sabotage.setCoolTime(false),
                 new Date(System.currentTimeMillis() + sabotage.getCoolTime()));
-
     }
 
-    private void sendMessageTo(UUID roomId, Map<String, GameCharacter> gameCharacters) {
+    private void sendSabotageCloseMessageBroadCast(String destination) {
+        template.convertAndSend(destination,
+                BaseResponse.character(CharacterOperation.SABOTAGE_CLOSE).build());
+    }
+
+    private void sendSabotageOpenMessage(UUID roomId, Map<String, GameCharacter> gameCharacters) {
         for (GameCharacter gameCharacter : gameCharacters.values()) {
-            if (gameCharacter instanceof Mafia) {
-                continue;
-            }
 
             String sessionIdInRoom = mappingService.convertPlayerIdToSessionIdInRoom(roomId,
                     gameCharacter.getPlayerId());
 
-            template.convertAndSendToUser(sessionIdInRoom, "/queue",
-                    BaseResponse.character(CharacterOperation.SABOTAGE_CLOSE).build(),
-                    WebSocketUtil.createHeaders(sessionIdInRoom));
+            if (gameCharacter instanceof Mafia) {
+                sendSabotageOpenMessage(sessionIdInRoom);
+            } else if (gameCharacter instanceof Citizen) {
+                sendSightOffMessage(sessionIdInRoom);
+            }
         }
     }
+
+    private void sendSabotageOpenMessage(String sessionIdInRoom) {
+        sendSabotageMessage(sessionIdInRoom, CharacterOperation.SABOTAGE_OPEN);
+    }
+
+    private void sendSightOffMessage(String sessionIdInRoom) {
+        sendSabotageMessage(sessionIdInRoom, CharacterOperation.SIGHT_OFF);
+    }
+
+    private void sendSabotageMessage(String sessionIdInRoom, CharacterOperation operation) {
+        template.convertAndSendToUser(sessionIdInRoom, "/queue",
+                BaseResponse.character(operation).build(),
+                WebSocketUtil.createHeaders(sessionIdInRoom));
+    }
+
 }
