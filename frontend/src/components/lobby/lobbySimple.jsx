@@ -17,6 +17,7 @@ const LobbySimple = () => {
 
   useEffect(()=> {
     action('SOCKET_CONNECT_REQUEST', {roomId})
+    action("videoInfo/setMySessionId", roomId)
     setplayerInfo();
   },[])
 
