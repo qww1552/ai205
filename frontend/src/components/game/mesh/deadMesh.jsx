@@ -3,13 +3,13 @@ import { forwardRef, Suspense, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "react-three-fiber";
 import { Vector3, RepeatWrapping } from "three";
 
-import { TEXTURE_WIDTH, TEXTRUE_HEIGHT, FPS, MOTION } from "config/texture";
+import { TEXTURE_WIDTH, TEXTRUE_HEIGHT, FPS, MOTION, COLOR } from "config/texture";
 
-const DeadMesh = () => {
+const DeadMesh = ({color=0}) => {
   // 텍스쳐 설정
   // const texture = useTexture('/player/players_blue_x1.png')
   const originTexture = useTexture(
-    "/player/AnimationSheet_Character.png",
+    `/testImg/char_color/char_${COLOR[color]}.png`,
     (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping;
     }
