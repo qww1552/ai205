@@ -150,7 +150,7 @@ const channelHandling = {
         // 시체들 초기화
         yield put({ type: "dead/setDeadList", payload: [] })
         yield put({ type: "gameInfo/setInMeeting", payload: true })
-        yield delay(300)
+        yield delay(1000)
         yield put({ type: "gameInfo/setGameStop", payload: true })
 
         break;

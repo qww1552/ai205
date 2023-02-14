@@ -16,6 +16,7 @@ const MyCharacter = ({ color }) => {
   const [, get] = useKeyboardControls();
   const ref = useRef();
   const light = useRef();
+  const isGameStop = useSelector(selectGameInfo).isGameStop;
   // const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
@@ -45,6 +46,10 @@ const MyCharacter = ({ color }) => {
   useEffect(() => {
     if (isInMeeting) {
       ref.current.setTranslation({ x: 0, y: 0, z: 0 })
+      action("LOCAITION_SEND_REQUEST", {
+        x: 0,
+        y: 0,
+      });
     }
   }, [isInMeeting])
 
@@ -59,6 +64,8 @@ const MyCharacter = ({ color }) => {
     );
 
     const { forward, backward, left, right } = get();
+
+    if(isGameStop) return;
 
 
     ref.current.charState = forward || backward || left || right ? "DASH" : "IDLE"
