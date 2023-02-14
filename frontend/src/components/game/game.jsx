@@ -254,8 +254,8 @@ const Game = () => {
             { name: "actKey", keys: ["E", "e", "Space"] },
             { name: "escKey", keys: ["Esc"] },
         ]}>
-            <div>
             {stateMe.streamManager!==undefined &&(<GameVideo/>)}
+            <div id="parent" style={{position : "relative", height:"75vh"}}>
                 <GameCanvas/>
                 <div className="missionComponent floatingComponent">
                     <MissionProgress/>
