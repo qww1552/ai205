@@ -11,7 +11,7 @@ const GameVideo = (props) =>{
     const me = useSelector(selectMe);
     return (
       <div>
-        <Row gutter={[8, 8]} type="flex" justify="center" align="middle" style={{backgroundColor:'black'}}>
+        <Row type="flex" justify="center" align="middle" style={{backgroundColor:'black'}}>
 
         <Col span = {4}>
        <UserVideoComponent user={me}/>

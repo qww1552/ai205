@@ -94,10 +94,10 @@ const ImageButton = () => {
   return (
     <>
       {me.isAlive === true ?
-        <div id="ImageButton" style={{ width: "100vw", position: "absolute" }}>
+        <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom : "20px" }}>
 
           <Row>
-            <Col offset={20} span={4}>
+            <Col offset={21} span={3}>
               <button
                 className="imgBtn"
                 id="chatBtn"
@@ -109,7 +109,7 @@ const ImageButton = () => {
             </Col>
           </Row>
           <Row>
-            <Col  offset={20} span={4}>
+            <Col  offset={21} span={3}>
               <button
                 className="imgBtn"
                 id="mapBtn"
@@ -131,7 +131,7 @@ const ImageButton = () => {
             </Col>
           </Row>
           <Row>
-            <Col offset={16} span={4}>
+            <Col offset={18} span={3}>
               {me.role === "MAFIA" ? <button
                 className={"imgBtnNoHover " + ((adjustPlayer && killTimer >= 100) ? "imgBtnReady" : "")}
                 id="killBtn"
@@ -148,7 +148,7 @@ const ImageButton = () => {
                 <Progress strokeWidth={4} percent={killTimer} steps={10} showInfo={false} strokeColor="red" />
               </button> : undefined}
             </Col>
-            <Col span={4}>
+            <Col span={3}>
               <button
                 className={"imgBtnNoHover " + ((adjustBody) ? "imgBtnReady" : "")}
                 id="reportBtn"
@@ -162,7 +162,7 @@ const ImageButton = () => {
             </Col>
           </Row>
           <Row>
-            <Col offset={16} span={4}>
+            <Col offset={18} span={3}>
               {me.role === "MAFIA" ?
                 <>
 
@@ -177,7 +177,7 @@ const ImageButton = () => {
                 </>
                 : undefined}
             </Col>
-            <Col span={4}>
+            <Col span={3}>
 
               <button
                 className={"imgBtnNoHover " + ((isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ? "imgBtnReady" : "")}
