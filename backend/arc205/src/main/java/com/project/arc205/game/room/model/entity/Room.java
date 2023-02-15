@@ -26,6 +26,8 @@ public class Room {
     private Map<String, Player> players;    //key: sessionId, value: Player
     private GameSetting gameSetting;
 
+    private boolean isPlaying;
+
     public static Room create(String title, Player master) {
         Room room = new Room();
         room.id = UUID.randomUUID();
@@ -35,6 +37,7 @@ public class Room {
         room.players = new HashMap<>();
 //        master.setRoom(room);
         room.gameSetting = new GameSetting();
+        room.isPlaying = false;
         return room;
     }
 
@@ -48,5 +51,9 @@ public class Room {
 
     public void remove(Player player) {
         this.players.remove(player.getSessionId());
+    }
+
+    public void setPlay() {
+        this.isPlaying = true;
     }
 }

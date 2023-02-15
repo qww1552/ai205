@@ -35,7 +35,7 @@ public class GameManagerTest {
     @DisplayName("게임데이터 생성시, 미션 분배")
     void missionDistributionTest() {
         int numberOfPlayers = 6;
-        Room room = DummyRoom.createTestRoom("testRoom", numberOfPlayers);
+        Room room = DummyRoom.createTestRoomWithNumberOfPlayers("testRoom", numberOfPlayers);
         GameManager gameManager = new GameManager(gameMapMissionRepository, gameMapRepository,
                 new BasicRoleAssignStrategy(), new BasicMissionDistributionStrategy(),
                 new BasicColorAssignStrategy());
