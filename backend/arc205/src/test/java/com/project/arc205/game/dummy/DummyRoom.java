@@ -9,7 +9,7 @@ public class DummyRoom {
         return Room.create(title, null);
     }
 
-    public static Room createTestRoom(String title, int n) {
+    public static Room createTestRoomWithNumberOfPlayers(String title, int n) {
         Room room = Room.create(title, null);
         IntStream.range(1, n + 1).mapToObj(i -> DummyPlayer.of("p" + i)).forEach(room::enter);
         return room;

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   // 내 플레이어 정보
-  player: { id: "player1" , isAlive: true , role : "MAFIA"},
+  player: { id: "player1" , isAlive: true , role : "CITIZEN", missions: []},
   location: {
     y: 0,
     x: 0,
@@ -22,9 +22,7 @@ export const meSlice = createSlice({
       state.location = {...state.location, x : action.payload.x, y : action.payload.y};
     },
     setPlayer: (state, action) => {
-
       state.player = action.payload;
-      console.log(state.player.missions)
     },
     addPlayerVideo: (state, action) => {
       return  {
@@ -105,7 +103,6 @@ export const meSlice = createSlice({
           state.player.missions = [
             ...state.player.missions.filter((mission) => mission.id !== action.payload.id), 
             {id:action.payload.id, title:title, isComplete:true} ];
-            console.log(state.player.missions)
             break;
         }
       }

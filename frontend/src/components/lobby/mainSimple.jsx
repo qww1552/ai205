@@ -1,8 +1,9 @@
 import { Link, Outlet } from "react-router-dom";
-
+import "./style.css"
 const MainSimple = () => {
     return (<>
-        <div>
+
+            <div>
             <h1>MainPage</h1>
             <div>
                 <Link to="rooms">rooms</Link>
@@ -10,7 +11,8 @@ const MainSimple = () => {
             <Outlet>
                 
             </Outlet>
-        </div>
+            </div>
+
     </>)
 }
 

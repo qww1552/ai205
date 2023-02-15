@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import { roomRequest } from 'api';
 import { selectGameInfo } from 'app/gameInfo';
 import { selectMe } from 'app/me';
@@ -10,6 +11,17 @@ const LobbySimple = () => {
 
   const [otherPlayers, setotherPlayers] = useState([])
   const roomId = useRouteLoaderData("lobby");
+  const openNotification = (player) => {
+    // console.log(player)
+    notification.open({
+      message: `${player.id}님이 입장했습니다`,
+      description:`${otherPlayers.length}명이 대기중`,
+      duration: 2,
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
+  };
 
   const me = useSelector(selectMe);
   const navigate = useNavigate();
@@ -22,8 +34,12 @@ const LobbySimple = () => {
   },[])
 
   useEffect(() => {
+    
     document.title = `Waiting Room - ${otherPlayers.length} otherPlayers`;
-  }, [otherPlayers]);
+    if (otherPlayers.length>=1) {
+      openNotification(otherPlayers[otherPlayers.length-1])
+    }
+  }, [otherPlayers.length]);
 
   useEffect(() => {
     const timer = setInterval(() => {

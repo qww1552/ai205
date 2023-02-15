@@ -2,7 +2,6 @@ package com.project.arc205.game.meeting.service;
 
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.repository.GameRepository;
-import com.project.arc205.game.meeting.dto.request.VoteRequest;
 import com.project.arc205.game.meeting.dto.response.MeetingStartResponse;
 import com.project.arc205.game.meeting.dto.response.VotedResponse;
 import com.project.arc205.game.meeting.event.MeetingEvent;
@@ -29,13 +28,13 @@ public class MeetingService {
         return MeetingStartResponse.of(curGame.getGameCharacters());
     }
 
-    public VotedResponse vote(String roomId, VoteRequest voteRequest) {
+    public VotedResponse vote(String roomId, String playerId, String target) {
         GameData gameData = gameRepository.findById(UUID.fromString(roomId));
-        int remainingVoteTicket = gameData.vote(voteRequest.getFrom(), voteRequest.getTo());
+        int remainingVoteTicket = gameData.vote(playerId, target);
         if (remainingVoteTicket == 0) {
             publisher.publishEvent(new VotingEndEvent(roomId));
         }
-        return VotedResponse.of(voteRequest.getFrom(), remainingVoteTicket);
+        return VotedResponse.of(playerId, remainingVoteTicket);
     }
 
 }
