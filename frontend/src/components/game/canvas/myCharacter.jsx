@@ -92,7 +92,7 @@ const MyCharacter = ({ color }) => {
     <>
       <RigidBody
         ref={ref}
-        colliders={player.isAlive ? "" : false}
+        colliders={false}
         type="dynamic"
         lockRotations={true}
       >
@@ -115,7 +115,7 @@ const MyCharacter = ({ color }) => {
         <CuboidCollider
           name={`me_${player.id}`}
           args={[0.5, 0.5, 0.1]}
-          sensor
+          sensor={!player.isAlive}
           onIntersectionEnter={(e) => {
             if (!e.colliderObject.name) return;
 

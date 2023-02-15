@@ -17,7 +17,7 @@ const GameVideo = (props) =>{
        <UserVideoComponent user={me}/>
         </Col>
         {otherPlayers.map((sub,i) => {     
-          return (<>{sub.streamManager!==undefined && sub.mutedVideo!==true && (<Col span={4}>
+          return (<>{sub.streamManager!==undefined && sub.player.isAlive && sub.mutedVideo!==true && (<Col span={4}>
             {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
             <UserVideoComponent  user={sub}/>
           </Col>) }</>)    
