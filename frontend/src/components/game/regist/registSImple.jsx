@@ -1,6 +1,7 @@
 import { action } from "app/store";
 import { useState, useRef } from "react";
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
+import { Link} from 'react-router-dom';
 const RegistSimple = () => {
 
     const ref = useRef();
@@ -19,6 +20,7 @@ const RegistSimple = () => {
             <input ref={ref} type="text" name="" id="" />
             <button onClick={onClickbtn}>로비 접속</button>
         </div>
+        <Link to="rooms">방목록</Link>
     </>)
 }
 
