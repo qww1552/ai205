@@ -2,11 +2,11 @@ package com.project.arc205.game.gamedata.event.handler;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
-import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamecharacter.dto.response.KillBroadcastResponse;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
+import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamecharacter.repository.PlayerRepository;
 import com.project.arc205.game.gamedata.event.DieEvent;
 import com.project.arc205.game.gamedata.repository.GameRepository;
@@ -24,7 +24,6 @@ public class DieEventHandler {
 
     private final GameRepository gameRepository;
     private final PlayerRepository playerRepository;
-    private final PlayerSessionMappingService playerSessionMappingService;
     private final SimpMessagingTemplate template;
 
     @EventListener
@@ -47,10 +46,10 @@ public class DieEventHandler {
 
     @EventListener
     public void sendYouDie(DieEvent event) {
-        UUID roomId = playerRepository.findByPlayerId(event.getPlayerId()).getRoom().getId();
-        String sessionId = playerSessionMappingService.convertPlayerIdToSessionIdInRoom(
-                roomId,
-                event.getPlayerId());
+        Player player = playerRepository.findByPlayerId(event.getPlayerId());
+        UUID roomId = player.getRoom().getId();
+
+        String sessionId = player.getSessionId();
 
         log.info("DieEvent(sendYouDie): {}, {}, {}", roomId.toString(), event.getPlayerId(),
                 sessionId);

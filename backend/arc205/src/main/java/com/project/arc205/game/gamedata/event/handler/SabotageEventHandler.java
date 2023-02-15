@@ -3,7 +3,6 @@ package com.project.arc205.game.gamedata.event.handler;
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.model.Location;
 import com.project.arc205.common.operation.operation.CharacterOperation;
-import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
@@ -35,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class SabotageEventHandler {
 
     private final GameRepository gameRepository;
-    private final PlayerSessionMappingService mappingService;
     private final PlayerRepository playerRepository;
     private final SimpMessagingTemplate template;
     private final TaskScheduler taskScheduler;
@@ -104,8 +102,8 @@ public class SabotageEventHandler {
             if (gameCharacter instanceof Mafia || !gameCharacter.getIsAlive()) {
                 continue;
             }
-            String sessionIdInRoom = mappingService.convertPlayerIdToSessionIdInRoom(roomId,
-                    gameCharacter.getPlayerId());
+            String sessionIdInRoom = playerRepository.findByPlayerId(gameCharacter.getPlayerId())
+                    .getSessionId();
 
             sendSightOffMessage(sessionIdInRoom);
         }
