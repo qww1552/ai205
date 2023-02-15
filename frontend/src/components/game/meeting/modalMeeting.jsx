@@ -69,7 +69,7 @@ const ModalMeeting = () => {
       {/* <VideoComponent /> */}
 
       <Modal 
-        title="AI는 누구인가?"
+        title="MimicBot은 누구인가?"
         open={isInMeeting}
         width={1920}
         closable={false}

@@ -15,9 +15,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
 public class Sabotage {
 
     private UUID roomId;
@@ -45,6 +47,8 @@ public class Sabotage {
         this.active = true;
         this.participants = new ConcurrentHashMap<>();
         this.mission = mission;
+
+        log.info("sabotage.open() is called");
         Events.raise(new SabotageOpenEvent(roomId));
     }
 

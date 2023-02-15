@@ -17,6 +17,7 @@ const initialState = {
   isMissionModalOpen: false,
   unReadMessage:0,
   isGameStop : false,
+  isInSabotage: false,
 }
 
 export const gameInfoSlice = createSlice({
@@ -55,6 +56,9 @@ export const gameInfoSlice = createSlice({
     },
     setGameStop: (state, action) => {
       state.isGameStop = action.payload
+    },
+    setSabotage: (state, action) => {
+      state.isInSabotage = action.payload
     }
   },
 });
