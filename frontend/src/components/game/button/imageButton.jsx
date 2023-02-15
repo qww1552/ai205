@@ -9,7 +9,6 @@ import { selectMe } from 'app/me'
 import { useKeyboardControls } from "@react-three/drei";
 import { Progress, Badge, Button, Modal, message } from 'antd'
 import './style.css'
-import { selectGameset } from 'app/gameSet'
 import { Col, Row } from 'antd';
 
 const ImageButton = () => {
@@ -81,10 +80,17 @@ const ImageButton = () => {
     setMinimapOpen(!minimapOpen)
   }
 
+  const sabotageActivate = () => {
+    action('SABOTAGE_REQUEST')
+  }
+
   useEffect(() => { console.log(unReadMessage) }, [unReadMessage])
-  // 게임 첫 시작의 쿨타임은 15초, 이후 10초로 설정
+  // 게임 첫 시작의 킬 쿨타임은 15초, 이후 10초로 설정
   const [killTimer, setKillTimer] = useState(-50)
-  const killInterval = useRef(null) // 회의 interval과 충돌...?
+  const killInterval = useRef(null)
+  // 사보타지의 쿨타임은 20초
+  const [sabotageTimer, setSabotageTimer] = useState(-100)
+  const sabotageInterval = useRef(null)
 
   // 시간 지나면서 쿨타임이 채워지는 부분
   useEffect(() => {
@@ -103,6 +109,24 @@ const ImageButton = () => {
 
   const resetKillTimer = () => {
     setKillTimer(0)
+  }
+
+  useEffect(() => {
+    sabotageInterval.current = setInterval(() => {
+      setSabotageTimer((prev) => prev + 10)
+    }, 1000)
+    return () => clearInterval(sabotageInterval.current) 
+  }, [])
+
+  useEffect(() => {
+    // 협동 미션이 끝나면 초기화해야 함...
+    if (isInVoteResult) {
+      setSabotageTimer(-100)
+    }
+  }, [isInVoteResult])
+
+  const resetSabotageTimer = () => {
+    setSabotageTimer(-100)
   }
 
   const [, get] = useKeyboardControls()
@@ -132,19 +156,25 @@ const ImageButton = () => {
                 id="chatBtn"
                 onClick={chatButtonActivate}
               ><Badge count={unReadMessage}>
+                  <p />
                   <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅" />
+                  <p />
                 </Badge>
               </button>}
             </Col>
           </Row>
           <Row>
-            <Col  offset={21} span={3}>
+            <Col offset={21} span={3}>
               <button
                 className="imgBtn"
                 id="mapBtn"
                 onClick={mapButtonToggle}
               >
+                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+                <p />
                 <img className="imgBtnIcon" src="/btnIcons/iconMap1.png" alt="지도" />
+                <p />
+                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
                 <Modal
                   title="미니맵"
                   width="76.5vh"
@@ -186,25 +216,31 @@ const ImageButton = () => {
                     reportButtonActivate
                     : undefined}
               >
+                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+                <p />
                 <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고" />
+                <p />
+                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
               </button>}
             </Col>
           </Row>
           <Row>
             <Col offset={18} span={3}>
-              {me.role === "MAFIA" ?
-                <>
-
-
-                  <button
-                    className="imgBtn "
-                    id="sabotageBtn"
-                    onClick={undefined}
-                  >
-                    <img className="imgBtnIcon" src="/btnIcons/iconSabotage1.png" alt="방해" />
-                  </button>
-                </>
-                : undefined}
+              {me.role === "MAFIA" ? <button
+                  className={"imgBtnNoHover " + ((sabotageTimer >= 100) ? "imgBtnReady" : "")}
+                  id="sabotageBtn"
+                  onClick={
+                    (sabotageTimer >= 100) ? () => {
+                      sabotageActivate()
+                      resetSabotageTimer()
+                    } : undefined}
+                >
+                  <Progress strokeWidth={4} percent={sabotageTimer} steps={10} showInfo={false} strokeColor="red" />
+                  <p />
+                  <img className="imgBtnIcon" src="/btnIcons/iconSabotage1.png" alt="방해" />
+                  <p />
+                  <Progress strokeWidth={4} percent={sabotageTimer} steps={10} showInfo={false} strokeColor="red" />
+                </button> : undefined}
             </Col>
             <Col span={3}>
 
@@ -216,7 +252,11 @@ const ImageButton = () => {
                     actButtonActivate
                     : undefined}
               >
+                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+                <p />
                 <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동" />
+                <p />
+                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
               </button>
             </Col>
           </Row>

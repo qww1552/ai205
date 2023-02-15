@@ -42,6 +42,7 @@ const MissionComponent = () => {
 
   return (
     <Modal
+      destroyOnClose = {true}
       open={isMissionModalOpen}
 
     //   width={700}
