@@ -150,6 +150,12 @@ const channelHandling = {
         break;
 
       case 'SABOTAGE_OPEN':
+        // 조명 깜빡깜빡
+        // yield put({ type: "me/setSight", payload: 1.5 })
+        break;
+
+      case 'SIGHT_OFF':
+        console.log("시야차단")
         yield put({ type: "me/setSight", payload: 1.5 })
         break;
       
@@ -209,6 +215,8 @@ const channelHandling = {
     }
   ,
   EXCEPTION: function* (operation, data) {
+    console.error(operation)
+    console.error(data)
     return
   }
 }

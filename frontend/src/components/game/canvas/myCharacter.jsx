@@ -35,7 +35,7 @@ const MyCharacter = ({ color }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      if (isInMeeting) {
+      if (!isInMeeting) {
         action("LOCAITION_SEND_REQUEST", {
           x: ref.current.translation().x,
           y: ref.current.translation().y,
