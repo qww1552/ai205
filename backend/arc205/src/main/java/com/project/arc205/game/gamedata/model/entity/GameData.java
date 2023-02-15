@@ -7,9 +7,13 @@ import com.project.arc205.common.util.Constant;
 import com.project.arc205.game.gamecharacter.exception.GameCharacterNotFoundException;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.event.GameEndEvent;
+import com.project.arc205.game.gamedata.model.exception.SabotageNotActiveException;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
+import com.project.arc205.game.mission.model.BasicSabotageMissionGoal;
+import com.project.arc205.game.mission.model.SabotageMission;
+import com.project.arc205.game.mission.model.entity.GameMapMission;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,5 +176,17 @@ public class GameData {
                 GameCharacterNotFoundException::new);
     }
 
+    public void openSabotage(GameMapMission mission) {
+        int targetCount = getSurvivorCount();
+        BasicSabotageMissionGoal goal = new BasicSabotageMissionGoal(targetCount);
+        sabotage.open(SabotageMission.of(mission, goal));
+    }
+
+    public Sabotage getSabotage() {
+        if (!sabotage.isActive()) {
+            throw new SabotageNotActiveException(roomId.toString());
+        }
+        return this.sabotage;
+    }
 
 }

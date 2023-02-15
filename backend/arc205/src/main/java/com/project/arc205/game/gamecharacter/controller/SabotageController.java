@@ -23,6 +23,15 @@ public class SabotageController {
 
     private final SabotageService sabotageService;
 
+    @MessageMapping("/room/{room-id}/character/sabotage/open")
+    public void sabotage(@DestinationVariable("room-id") String roomId,
+            StompHeaderAccessor accessor) {
+        log.info("/room/{}/sabotage", roomId);
+
+        sabotageService.sabotage(UUID.fromString(roomId),
+                WebSocketUtil.getPlayerIdFromHeader(accessor));
+    }
+
     @MessageMapping("/join")
     @SendTo("/sub/room/{room-id}")
     public BaseResponse<PlayerDto> join(@DestinationVariable("room-id") String roomId,

@@ -2,11 +2,11 @@ package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
+import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
-import java.util.Objects;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class GameCharacterController {
             StompHeaderAccessor accessor, MoveRequest moveRequest) {
         UUID roomUuid = UUID.fromString(roomId);
 
-        String playerId = getPlayerIdFromHeader(accessor);
+        String playerId = WebSocketUtil.getPlayerIdFromHeader(accessor);
 
         MoveResponse moveResponse = gameCharacterService.move(roomUuid, playerId,
                 moveRequest.getLocation());
@@ -48,22 +48,10 @@ public class GameCharacterController {
 
         UUID roomUuid = UUID.fromString(roomId);
 
-        String mafiaPlayerId = getPlayerIdFromHeader(accessor);
+        String mafiaPlayerId = WebSocketUtil.getPlayerIdFromHeader(accessor);
         String citizenPlayerId = killRequest.getTo();
 
         gameCharacterService.kill(roomUuid, mafiaPlayerId, citizenPlayerId);
-    }
-
-    @MessageMapping("/room/{room-id}/character/sabotage/open")
-    public void sabotage(@DestinationVariable("room-id") String roomId,
-            StompHeaderAccessor accessor) {
-        log.info("/room/{}/sabotage", roomId);
-
-        gameCharacterService.sabotage(UUID.fromString(roomId), getPlayerIdFromHeader(accessor));
-    }
-
-    private String getPlayerIdFromHeader(StompHeaderAccessor accessor) {
-        return Objects.requireNonNull(accessor.getUser()).getName();
     }
 
 }
