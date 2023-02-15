@@ -8,7 +8,7 @@ const missionsLocation = [
     { id : 7, col : 16.5, row : -13.5}, // 휴게실
     { id : 8, col : -13.5, row : 6}, // 연구실2
     { id : 9, col : 1, row : -20}, // 라운지2
-    { id : 11, col : 0, row : 15}, // 연결통로
+    { id : 10, col : 0, row : 15}, // 연결통로
 
 ]
 

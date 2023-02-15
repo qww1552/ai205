@@ -6,40 +6,36 @@ import { useSelector } from 'react-redux';
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 const CommonMission = (props)=>{
  
+  const [start, setStart] = useState(false)
   const [isVisible, setIsVisible] = useState(false);
   const [teachableProgress, setTeachableProgress] = useState("미션 수행하기!")
   const [poseGuideFirst, setPoseGuideFirst] = useState("")
   const [poseGuideSecond, setPoseGuideSecond] = useState("")
   const otherPlayers = useSelector(selectOhterPlayers);
 
+  const teachableTimer = useRef(null);
+
   useEffect(() => {
     if (!props.type) return
    
     const filePath = "/teachable_models/" + props.type + "_model/"
     // 동작이 2가지인 미션일 경우
-    if (props.id === "5" || props.id === "10" || props.id === "11") {
-      setPoseGuideFirst(filePath + "/" + props.subType1 + "_guide.jpg")
-      setPoseGuideSecond(filePath + "/" + props.subType2 + "_guide.jpg")
-    } else { // 동작이 1개인 미션일 경우
-      setPoseGuideFirst(filePath + "/" + props.type + "_guide.jpg")
-      setPoseGuideSecond("")
-    }
+    setPoseGuideFirst(filePath + "/" + props.subType1 + "_guide.jpg")
+    setPoseGuideSecond(filePath + "/" + props.subType2 + "_guide.jpg")
+
     const btn = document.getElementById("teachable");
     btn.setAttribute("onclick", `init("${filePath}")`);
     btn.addEventListener("click",getCurrentPose);
   }, [props.type]);
-  
- 
-  const getCurrentPose = () => {
-    setIsVisible(true);
-    setTeachableProgress("동작 시작");
-    
-   
-    let secondPoseToggle = false
-    const isFinish = true;
 
-    setTimeout(() => {
-     const teachableTimer = setInterval(() => {
+  useEffect(() => {
+
+    if(start) {
+      let secondPoseToggle = false
+      let isFinish = true;
+
+      teachableTimer.current = setInterval(() => {
+        console.log("수행중")
         let currentPose = document.getElementById("currentPose").innerHTML
         // 동작이 2가지인 미션일 경우
         if (isFinish) {
@@ -63,7 +59,9 @@ const CommonMission = (props)=>{
               setTeachableProgress(props.subType2 + " 동작이 감지되지 않았어요...")
             } else  {
               setTeachableProgress("두번째 동작 성공!")
+              console.log("리퀘스트 요청!!!!!!!!!!!!!!!!!!!!1")
               //카운팅 요청 들어가야됨
+              secondPoseToggle = false; 
             }
             //  else {
             //   setTeachableProgress(props.type + " 동작 유지 미션 완료!")
@@ -78,15 +76,29 @@ const CommonMission = (props)=>{
             // }
           }
         } else { 
+            // 미션이 종료 되었을때 수행
             setTeachableProgress(props.type + " 동작 유지 미션 완료!")
             secondPoseToggle = false
             alert("미션완료");
             window.deleteCanvas();
             props.setComplete(true);
             setIsVisible(false);
-            return clearInterval(teachableTimer)
+            clearInterval(teachableTimer.current)
         }
       }, 1000)
+    }
+
+      return () => clearInterval(teachableTimer.current)
+
+  },[start])
+  
+ 
+  const getCurrentPose = () => {
+    setIsVisible(true);
+    setTeachableProgress("동작 시작");
+    
+    setTimeout(() => {
+      setStart(true)
     }, 1000)
   }
 
@@ -120,6 +132,11 @@ const CommonMission = (props)=>{
         })}
         </Row>
       </div>
+      <Button id="closeMission" onClick={() => {
+        setIsVisible(false);
+        window.deleteCanvas();
+        action('gameInfo/setMissionModalOpen', false)
+      }}>미션 포기</Button>
     </>
   );
 }
