@@ -10,7 +10,6 @@ const RoomList = () => {
   const [rooms, setRooms] = useState([])
   let ids = []
   const [isNewRoomOpen, setIsNewMapOpen] = useState(false)
-  
   const RoomMake = (body) => {
     roomListRequest().then((res) => {
       setRooms(res.data)
@@ -31,7 +30,6 @@ const RoomList = () => {
              navigate(`${room.id}/regist`)
              setRooms(res.data)
              break;
-             
            }
          }
        })
@@ -75,6 +73,8 @@ const RoomList = () => {
       </ul>
       <>
       <button onClick={()=>{setIsNewMapOpen(true)}}>새방만들기</button>
+      <button onClick={()=>{roomListRequest().then((res) => {
+        setRooms(res.data)})}}>방목록 새로고침</button>
     <Modal
     open={isNewRoomOpen}
     width={1920}
@@ -87,7 +87,7 @@ const RoomList = () => {
         <input type="text" value={title} onChange={titleHandler}/>
         <button>만들기</button>
       </form>
-      
+
     </div>
     </Modal>
     </>
