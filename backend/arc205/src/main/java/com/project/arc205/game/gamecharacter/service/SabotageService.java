@@ -36,18 +36,26 @@ public class SabotageService {
     }
 
     public PlayerDto join(UUID roomId, String playerId) {
-        //TODO
+        GameData gameData = gameRepository.findById(roomId);
+        GameCharacter gameCharacter = gameData.getGameCharacter(playerId);
+        gameData.getSabotage().join(gameCharacter);
         return PlayerDto.of(playerId);
     }
 
     public PlayerDto leave(UUID roomId, String playerId) {
-        //TODO
+        GameData gameData = gameRepository.findById(roomId);
+        gameData.getGameCharacter(playerId);
+        gameData.getSabotage().leave(playerId);
         return PlayerDto.of(playerId);
     }
 
+    @Transactional
     public MissionProgressResponse solve(UUID roomId, String playerId) {
-        //TODO
-        int progress = 0;
+        GameData gameData = gameRepository.findById(roomId);
+        gameData.getGameCharacter(playerId);
+        Sabotage sabotage = gameData.getSabotage();
+        sabotage.solve(playerId);
+        int progress = sabotage.getMission().getProgress();
         return MissionProgressResponse.of(progress);
     }
 
