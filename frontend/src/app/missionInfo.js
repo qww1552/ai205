@@ -9,6 +9,7 @@ const initialState = {
   myMissionList: [
   ],
 
+  sabotageMissionProgress: 0,
 }
 
 export const missionInfoSlice = createSlice({
@@ -26,6 +27,10 @@ export const missionInfoSlice = createSlice({
     setMissionById: (state, action) => {
       const idx = state.myMissionList.findIndex(v => v.id === action.payload.id)
       state.myMissionList[idx] = { ...state.myMissionList[idx], solved: action.payload.solved }
+    },
+
+    setSabotageMissionProgress: (state, action) => {
+      state.sabotageMissionProgress = action.payload;
     }
 
   },
