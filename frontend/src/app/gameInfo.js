@@ -14,7 +14,7 @@ const initialState = {
   // 채팅창을 열어야 하는지 체크하는 변수
   isChatModalOpen: false,
   // 미션창을 열어야 하는지 체크하는 변수
-  isMissionModalOpen: false,
+  isMissionModalOpen: 0,
   unReadMessage:0,
   isGameStop : false,
   isInSabotage: false,

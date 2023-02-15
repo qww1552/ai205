@@ -150,7 +150,8 @@ const MyCharacter = ({ color }) => {
               // 미션 버튼
               action(
                 "missionInfo/setAdjacentMissionBtn",
-                e.colliderObject.name[e.colliderObject.name.length - 1]
+                // e.colliderObject.name[e.colliderObject.name.length - 1]
+                e.colliderObject.name.split('_')[1]
               );
             } else {
               // 유저들

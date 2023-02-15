@@ -9,8 +9,11 @@ import MoveMission from './moveMission';
 import DragMission from './dragMission';
 import TeachableMission from './teachableMission';
 import './style.css'
+import CommonMission from './commonMission';
+
 // Todo: 죽었을때, 회의시작할때, 게임이 끝났을때 모달 닫는것 작성 
 const MissionComponent = () => {
+  const [num, setNum] = useState(0)
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
     messageApi.open({
@@ -23,6 +26,10 @@ const MissionComponent = () => {
       },
     });
   };
+
+  useEffect(() => {
+    setNum(Math.floor(Math.random() * 2))
+  }, [])
 
   const [complete, setComplete] = useState(false)
   
@@ -57,7 +64,8 @@ const MissionComponent = () => {
       {contextHolder}
       {/* 여기에 어떤 미션이 수행될것인지 상태에 따라 변경 */}
       {/* Todo: title이 mission 목록에 뜨도록 하기 */}
-      {(() => {switch (isMissionModalOpen) {
+      {(() => {
+        switch (isMissionModalOpen) {
         case '1':
           return <MoveMission  id="1" type="move" title="공터 정화기에 걸린 쓰레기를 꺼내세요" content="쓰레기를 잡고 옆으로 드래그해서 치우세요" setComplete={setComplete}/>;
         case '2':
@@ -77,9 +85,10 @@ const MissionComponent = () => {
         case '9':
           return <TeachableMission  id="9" type="jammin_punch" title="라운지 인터폰에 대고 벨튀를 혼내주세요" content="나가기 귀찮으니 펀치를 하려는 척만 해서 쫓아내세요" setComplete={setComplete}/>;
         case '10':
-          return <TeachableMission  id="10" type="connect_wires" subType1="catch_wires" subType2="connect_wires" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 끊어진 전선을 이어주세요 (n회)" setComplete={setComplete}/>;
-        case '11':
-          return <TeachableMission id="11" type="screw_bolts" subType1="release_bolts" subType2="screw_bolts" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 거대 나사를 조여주세요 (n회)" setComplete={setComplete}/>;
+          return num===0? (<CommonMission  id="10" type="connect_wires" subType1="catch_wires" subType2="connect_wires" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 끊어진 전선을 이어주세요 (n회)" setComplete={setComplete}/>)
+          :(<CommonMission id="10" type="screw_bolts" subType1="release_bolts" subType2="screw_bolts" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 거대 나사를 조여주세요 (n회)" setComplete={setComplete}/>)
+      // case '11':
+          // return <TeachableMission id="11" type="screw_bolts" subType1="release_bolts" subType2="screw_bolts" title="연결통로로 모여서 배전반을 복구하세요" content="배전반의 거대 나사를 조여주세요 (n회)" setComplete={setComplete}/>;
         default:
           return <div>미션id에서 오류발생</div>;                      
       }})()}

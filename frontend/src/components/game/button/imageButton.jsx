@@ -42,11 +42,12 @@ const ImageButton = () => {
   const actButtonActivate = () => {
     if (isAdjacentMeetingBtn) {
       action('START_MEETING_REQUEST')
-      console.log('전송')
+      // console.log('전송')
     } else if (isAdjacentMissionBtn) {
-      console.log(missionList)
+      // console.log(missionList)
       for (let idx in missionList) {
-        console.log(idx, missionList.length-1)
+        // console.log(idx, missionList.length-1)
+        // console.log("isAdjust", isAdjacentMissionBtn)
         if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn))&&(missionList[idx].isComplete === false)){
           action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
           break;
@@ -77,6 +78,7 @@ const ImageButton = () => {
     }
   }
   const mapButtonToggle = () => {
+    // action("me/setPlayer", {...me, isAlive: false })
     setMinimapOpen(!minimapOpen)
   }
 
