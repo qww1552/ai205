@@ -29,7 +29,7 @@ const ModalMeeting = () => {
       setTimeout(()=>{setSeeNextResult(true);
         setTimeout(()=>{
           action('gameInfo/setInMeeting', false)
-        },5000)}, 8000)
+        },5000)}, 28000)
 
     }
   },[isInMeeting,isInVoteResult])

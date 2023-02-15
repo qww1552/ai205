@@ -11,7 +11,7 @@ const TeachableMission = (props) => {
 
   useEffect(() => {
     if (!props.type) return
-    console.log(props.type)
+    // console.log(props.type)
     const filePath = "/teachable_models/" + props.type + "_model/"
     // 동작이 2가지인 미션일 경우
     if (props.id === "5" || props.id === "10" || props.id === "11") {

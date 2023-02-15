@@ -104,7 +104,7 @@ const channelHandling = {
           }
         })
         for(const mission of data.missions) {
-          console.log('startperson')
+          // console.log('startperson')
           yield put({type:"me/setMission", payload: mission})}
         break;
       // ※게임 종료신호 데이터 받아오기
@@ -139,22 +139,22 @@ const channelHandling = {
         yield put({ type: "dead/addDeadList", payload: data })
         break;
       case 'YOU_DIED':
-        console.log(operation, data)
+        // console.log(operation, data)
         // const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "me/setPlayer", payload : {...stateMe.player, isAlive: false } })
         break;
 
       case 'MISSION_COMPLETE':
-        console.log('여기까지는 작동')
+        // console.log('여기까지는 작동')
         yield put({ type: "me/setMissionComplete", payload : {id: data.mission.id}})
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
-        console.log('사가미션응답(완료) 들어옴')
+        // console.log('사가미션응답(완료) 들어옴')
         break;
       
       case 'MISSION_PROGRESS':
-        console.log('사가미션응답(프로그래스)들어옴')
-        console.log(data)
+        // console.log('사가미션응답(프로그래스)들어옴')
+        // console.log(data)
         yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
         break;
       
@@ -252,8 +252,8 @@ function* vote(client, roomId, action) {
 
 // 미션 완료 전송 요청
 function* mission(client, roomId, action) {
-  console.log('사가 호출까지는 성공')
-  console.log(action.payload)
+  // console.log('사가 호출까지는 성공')
+  // console.log(action.payload)
   yield call(send, client, "character/mission/complete", roomId, {id: Number(action.payload.id)})
 }
 

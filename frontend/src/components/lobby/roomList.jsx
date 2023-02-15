@@ -10,34 +10,36 @@ const RoomList = () => {
   const [rooms, setRooms] = useState([])
   let ids = []
   const [isNewRoomOpen, setIsNewMapOpen] = useState(false)
-  const RoomMake = (body) => {
-    roomListRequest().then((res) => {
+  const fn = () =>{}
+  const RoomMake = async (body) => {
+    await roomListRequest().then((res) => {
       setRooms(res.data)
       ids = []
       for (let room of res.data) {
         ids.push(room.id)
       }
      })
-     .then(res => {axios.post(`${BASE_URL}/rooms`,body)
-     console.log('요청완료')})
-     .then(res =>{
-       setIsNewMapOpen(false) 
-     })
-     .then(res =>{
-       roomListRequest().then((res) => {
-         for(let room of res.data) {
-           if (!(room.id in ids)&&(room.title === title)) {
-             navigate(`${room.id}/regist`)
-             setRooms(res.data)
-             break;
-           }
-         }
-       })
+    await axios.post(`${BASE_URL}/rooms`,body)
+    await roomListRequest().then((res)=>{
+      if (res.data.length === ids.length) {
+        setTimeout(()=>{
+        },2000)
+      }
+    }).then((res) =>{
+        // console.log(2)
+        roomListRequest().then((res3) =>{
+          // console.log(3)
+          for(let room of res3.data) {
+            // console.log(res3.data)
+            if (!(room.id in ids)&&(room.title === title)) {
+              navigate(`${room.id}/regist`)
+              setRooms(res3.data)
+              break;
+            }
+          }})})
      }
- 
-     )
+
     
-  }
 
   const titleHandler = (e) => {
     e.preventDefault();
@@ -47,13 +49,14 @@ const RoomList = () => {
   
   useEffect(() => {
     roomListRequest().then((res) => {
+        // console.log(res.data)
         setRooms(res.data)
     })
   },[])
 
   const submitHandler = (e) =>{
     e.preventDefault();
-    console.log(title)
+    // console.log(title)
     let body = {
       title: title
     };

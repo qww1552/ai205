@@ -92,7 +92,7 @@ export const meSlice = createSlice({
     setMission:(state, action) => {
       
       state.player.missions = [...state.player.missions, {...action.payload, isComplete: false}]
-      console.log(state.player.missions)
+      // console.log(state.player.missions)
     },
     // 미션컴플리트
     setMissionComplete:(state, action) => {
