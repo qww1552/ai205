@@ -28,6 +28,99 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    <script type="text/javascript" class="teachableClass">
+      // More API functions here:
+
+        // const myurl = "/my_model/";
+        let model, webcam, ctx, labelContainer, maxPredictions,isInProgress;
+
+        // function quitTeachable() {
+        //   model = null?!
+        // }
+
+        async function init(myurl) {
+          const modelURL = myurl + "model.json";
+          const metadataURL = myurl + "metadata.json";
+
+          model = await tmPose.load(modelURL, metadataURL);
+          maxPredictions = model.getTotalClasses();
+
+          const size = 200;
+          const flip = true; // whether to flip the webcam
+          isInProgress = true;
+          webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+          console.log(webcam);
+          await webcam.setup(); // request access to the webcam
+          await webcam.play();
+         
+          // setInterval(loop,0.01);
+          window.requestAnimationFrame(loop);
+
+          const canvas = document.createElement("canvas");
+          canvas.setAttribute("id","canvas");
+          canvas.width = size; canvas.height = size;
+
+          const divCanvas = document.getElementById("divCanvas");
+          divCanvas.append(canvas);
+          
+          
+          ctx = canvas.getContext("2d");
+          labelContainer = document.getElementById("label-container");
+          // for (let i = 0; i < maxPredictions; i++) { // and class labels
+          //   labelContainer.appendChild(document.createElement("h4"));
+          // }
+        }
+
+        async function loop(timestamp) {
+          if(isInProgress){
+            webcam.update(); // update the webcam frame
+            await predict();
+            window.requestAnimationFrame(loop);
+          }
+        }
+
+        async function predict() {
+
+          const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+
+          const prediction = await model.predict(posenetOutput);
+
+          for (let i = 0; i < maxPredictions; i++) {
+            let classPrediction =
+              prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            if (prediction[i].probability >= 0.9) {
+              classPrediction += " <= 당신의 포즈"
+              document.getElementById("currentPose").innerHTML = prediction[i].className
+            }
+            // labelContainer.childNodes[i].innerHTML = classPrediction;
+          }
+
+          drawPose(pose);
+        }
+
+        function drawPose(pose) {
+          if (webcam.canvas) {
+            ctx.drawImage(webcam.canvas, 0, 0);
+            // draw the keypoints and skeleton
+            if (pose) {
+              const minPartConfidence = 0.5;
+              tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+              tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+            }
+          }
+        }
+
+        function deleteCanvas(){
+          const canvas = document.getElementById("canvas");
+          if(canvas){
+            canvas.remove();
+          }
+          isInProgress = false;
+        }
+
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -39,4 +132,5 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+
 </html>
