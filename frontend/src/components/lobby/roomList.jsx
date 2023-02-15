@@ -8,30 +8,37 @@ const RoomList = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('')
   const [rooms, setRooms] = useState([])
-  const ids = []
+  let ids = []
   const [isNewRoomOpen, setIsNewMapOpen] = useState(false)
   
   const RoomMake = (body) => {
-    console.log('RoomMake함수 호출까지는 성공')
-    axios.post(`${BASE_URL}/rooms`,body)
-    .then(res =>{
-      console.log(res.headers)
-      setIsNewMapOpen(false) 
-    })
-    .then(res =>{
-      roomListRequest().then((res) => {
-        for(let room of res.data) {
-          if (!(room.id in ids)&&(room.title === title)) {
-            navigate(`${room.id}/regist`)
-            setRooms(res.data)
-            break;
-            
-          }
-        }
-      })
-    }
-
-    )
+    roomListRequest().then((res) => {
+      setRooms(res.data)
+      ids = []
+      for (let room of res.data) {
+        ids.push(room.id)
+      }
+     })
+     .then(res => {axios.post(`${BASE_URL}/rooms`,body)
+     console.log('요청완료')})
+     .then(res =>{
+       setIsNewMapOpen(false) 
+     })
+     .then(res =>{
+       roomListRequest().then((res) => {
+         for(let room of res.data) {
+           if (!(room.id in ids)&&(room.title === title)) {
+             navigate(`${room.id}/regist`)
+             setRooms(res.data)
+             break;
+             
+           }
+         }
+       })
+     }
+ 
+     )
+    
   }
 
   const titleHandler = (e) => {
@@ -43,9 +50,6 @@ const RoomList = () => {
   useEffect(() => {
     roomListRequest().then((res) => {
         setRooms(res.data)
-        for (let room of res.data) {
-          ids.push(room.id)
-        }
     })
   },[])
 

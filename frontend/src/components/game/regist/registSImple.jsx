@@ -20,7 +20,7 @@ const RegistSimple = () => {
             <input ref={ref} type="text" name="" id="" />
             <button onClick={onClickbtn}>로비 접속</button>
         </div>
-        <Link to="rooms">방목록</Link>
+        <Link to={`/rooms`}>방목록</Link>
     </>)
 }
 
