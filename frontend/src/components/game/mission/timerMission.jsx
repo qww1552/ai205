@@ -27,9 +27,7 @@ const TimerMission = ({content, setComplete}) => {
     >
       미션 수행하기
     </Button>
-     <Button id="closeMission" onClick={() => {
-        action('gameInfo/setMissionModalOpen', false)
-      }}>미션 포기</Button>
+     
   </>)
 }
 
