@@ -4,6 +4,8 @@ import { action } from "app/store"
 import {selectOhterPlayers} from "app/others"
 import { useSelector } from 'react-redux';
 import UserVideoComponent from "components/webchat/UserVideoComponent";
+import { selectGameInfo } from "app/gameInfo";
+
 const CommonMission = (props)=>{
  
   const [start, setStart] = useState(false)
@@ -12,6 +14,7 @@ const CommonMission = (props)=>{
   const [poseGuideFirst, setPoseGuideFirst] = useState("")
   const [poseGuideSecond, setPoseGuideSecond] = useState("")
   const otherPlayers = useSelector(selectOhterPlayers);
+  const isInSabotage = useSelector(selectGameInfo).isInSabotage
 
   const teachableTimer = useRef(null);
 
@@ -32,52 +35,34 @@ const CommonMission = (props)=>{
 
     if(start) {
       let secondPoseToggle = false
-      let isFinish = true;
 
       teachableTimer.current = setInterval(() => {
         console.log("수행중")
         let currentPose = document.getElementById("currentPose").innerHTML
         // 동작이 2가지인 미션일 경우
-        if (isFinish) {
+        if (isInSabotage) {
           // 1번째 동작
           if (!secondPoseToggle) {
-           
             if (props.subType1 !== currentPose) {
             
               setTeachableProgress(props.subType1 + " 동작이 감지되지 않았어요...")
             } else  {
-              console.log("첫번쨰 동작 @!!!!!!!!!!!!!!!!!!!!!")
+              // console.log("첫번쨰 동작 @!!!!!!!!!!!!!!!!!!!!!")
               secondPoseToggle = true
               setTeachableProgress("첫번째 동작 성공!")
             } 
-            // else {
-            //   setTeachableProgress("좋아요! 다음은 " + props.subType2 + " 동작을 취해주세요!")
-            //   secondPoseToggle = true
-            //   currentPoseTimer = 0
-            // }    
           } else { // 2번째 동작
-           
             if (props.subType2 !== currentPose) {
               setTeachableProgress(props.subType2 + " 동작이 감지되지 않았어요...")
             } else  {
               setTeachableProgress("두번째 동작 성공!")
-              console.log("두번쨰 동작 @!!!!!!!!!!!!!!!!!!!!!")
+              // console.log("두번쨰 동작 @!!!!!!!!!!!!!!!!!!!!!")
 
               // console.log("리퀘스트 요청!!!!!!!!!!!!!!!!!!!!1")
               //카운팅 요청 들어가야됨
+              action('SABOTAGE_SOLVE_REQUEST')
               secondPoseToggle = false; 
             }
-            //  else {
-            //   setTeachableProgress(props.type + " 동작 유지 미션 완료!")
-            //   secondPoseToggle = false
-            //   currentPoseTimer = 0
-            //   alert("미션완료");
-            //   window.deleteCanvas();
-            //   props.setComplete(true);
-            //   setIsVisible(false);
-            //   return clearInterval(teachableTimer)
-              
-            // }
           }
         } else { 
             // 미션이 종료 되었을때 수행
@@ -85,7 +70,6 @@ const CommonMission = (props)=>{
             secondPoseToggle = false
             alert("미션완료");
             window.deleteCanvas();
-            props.setComplete(true);
             setIsVisible(false);
             clearInterval(teachableTimer.current)
         }
@@ -140,6 +124,7 @@ const CommonMission = (props)=>{
       <Button id="closeMission" onClick={() => {
         setIsVisible(false);
         window.deleteCanvas();
+        clearInterval(teachableTimer.current)
         action('gameInfo/setMissionModalOpen', false)
       }}>미션 포기</Button>
     </>

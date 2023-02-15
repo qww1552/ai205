@@ -12,7 +12,7 @@ import './style.css'
 import { Col, Row } from 'antd';
 
 const ImageButton = () => {
-
+  const isInSabotage = useSelector(selectGameInfo).isInSabotage
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
@@ -44,6 +44,11 @@ const ImageButton = () => {
       action('START_MEETING_REQUEST')
       // console.log('전송')
     } else if (isAdjacentMissionBtn) {
+      
+      if(isAdjacentMissionBtn == 10 && isInSabotage) {
+        action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
+      }
+
       // console.log(missionList)
       for (let idx in missionList) {
         // console.log(idx, missionList.length-1)
