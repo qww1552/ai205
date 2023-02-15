@@ -1,6 +1,6 @@
 package com.project.arc205.game.gamedata.event.handler;
 
-import com.project.arc205.common.service.PlayerRoomMappingRepository;
+import com.project.arc205.game.gamecharacter.repository.PlayerRepository;
 import com.project.arc205.game.gamedata.event.CheckGameEndEvent;
 import com.project.arc205.game.gamedata.repository.GameRepository;
 import java.util.UUID;
@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class CheckGameEndEventHandler {
 
     private final GameRepository gameRepository;
-    private final PlayerRoomMappingRepository playerRoomMappingRepository;
+    private final PlayerRepository playerRepository;
 
     @Async
     @EventListener
     @Transactional
     public void checkGameEnd(CheckGameEndEvent event) {
-        UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
+        UUID roomId = playerRepository.findByPlayerId(event.getPlayerId()).getRoom().getId();
         gameRepository.findById(roomId).checkGameEnd();
         log.info("CheckGameEndEvent(checkGameEnd): {}, {}", roomId.toString(), event.getPlayerId());
     }

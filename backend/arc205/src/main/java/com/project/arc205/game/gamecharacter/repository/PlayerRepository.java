@@ -8,20 +8,29 @@ import org.springframework.util.StringUtils;
 @Component
 public class PlayerRepository {
 
-    private final ConcurrentHashMap<String, Player> storage = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Player> sessionStorage = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Player> idStorage = new ConcurrentHashMap<>();
 
     public Player findBySessionId(String sessionId) {
         if (!StringUtils.hasText(sessionId)) {
             throw new IllegalArgumentException();
         }
-        return storage.get(sessionId);
+        return sessionStorage.get(sessionId);
+    }
+
+    public Player findByPlayerId(String playerId) {
+        return idStorage.get(playerId);
     }
 
     public void create(Player player) {
-        storage.put(player.getSessionId(), player);
+        sessionStorage.put(player.getSessionId(), player);
+        idStorage.put(player.getId(), player);
     }
 
     public void deleteBySessionId(String sessionId) {
-        storage.remove(sessionId);
+        Player bySessionId = findBySessionId(sessionId);
+        sessionStorage.remove(sessionId);
+        idStorage.remove(bySessionId.getId());
     }
+
 }

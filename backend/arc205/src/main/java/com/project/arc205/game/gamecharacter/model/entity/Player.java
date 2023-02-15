@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 @Getter
 @Setter
@@ -13,14 +14,20 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "id")
 public class Player implements Principal {
 
+    private final String sessionId;
     private String id;
-    private String sessionId;
     private Room room;
 
+    public Player(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     public static Player create(String id, String sessionId) {
-        Player player = new Player();
+        if (!StringUtils.hasText(id)) {
+            throw new IllegalArgumentException();
+        }
+        Player player = new Player(sessionId);
         player.id = id;
-        player.sessionId = sessionId;
         return player;
     }
 
