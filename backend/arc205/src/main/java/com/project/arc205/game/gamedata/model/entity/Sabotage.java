@@ -73,9 +73,10 @@ public class Sabotage {
     }
 
     public void solve(String playerId) {
-        if (!participants.containsKey(playerId)) {
-            throw new NotParticipateException(playerId);
-        }
+        //TODO: 프론트 요청으로 예외처리 패스
+//        if (!participants.containsKey(playerId)) {
+//            throw new NotParticipateException(playerId);
+//        }
         //TODO: 미션 수행 response 이벤트로 처리, 미션 완료보다 먼저 가기 위해..
         if (mission.solve()) {
             this.close();
