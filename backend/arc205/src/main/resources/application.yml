@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/arc?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/arc?useSSL=false&serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=UTF-8
     username: ssafy
     password: ssafy
     data: classpath:data.sql
@@ -31,6 +31,10 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+    encoding:
+      charset: UTF-8
+      force: true
+      enable: true
   port: 8080
   ssl:
     enabled: false
