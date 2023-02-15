@@ -3,6 +3,7 @@ package com.project.arc205.game.room.model.entity;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.room.model.exception.PlayerIdAlreadyExistException;
+import com.project.arc205.game.room.model.exception.RoomIsFullException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,6 +46,9 @@ public class Room {
         if (this.players.containsValue(player)) {
             throw new PlayerIdAlreadyExistException(player.getId());
         }
+        if (isFull()) {
+            throw new RoomIsFullException(this.getId().toString());
+        }
         this.players.put(player.getSessionId(), player);
         player.setRoom(this); // 양방향 매핑이므로 player에도 room을 추가함
     }
@@ -55,5 +59,13 @@ public class Room {
 
     public void setPlay() {
         this.isPlaying = true;
+    }
+
+    public boolean isFull() {
+        return this.players.size() >= gameSetting.getMaxPlayers();
+    }
+
+    public void setGameSetting(GameSetting gameSetting) {
+        this.gameSetting = gameSetting;
     }
 }
