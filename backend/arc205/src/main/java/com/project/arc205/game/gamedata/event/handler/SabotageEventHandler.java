@@ -44,11 +44,9 @@ public class SabotageEventHandler {
 
         Mission mission = new Mission();
         mission.setId(10L);
-        mission.setTitle("sabotage mission");
-
+        mission.setTitle("연결통로 배전반 복구");
         gameMapMission.setMission(mission);
-        gameMapMission.setLocation(new Location(0.0, 0.0));
-
+        gameMapMission.setLocation(new Location(15.0, 0.0));
         return gameMapMission;
     }
 
