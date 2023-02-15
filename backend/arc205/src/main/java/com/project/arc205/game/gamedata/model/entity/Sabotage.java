@@ -8,9 +8,11 @@ import com.project.arc205.game.gamedata.model.exception.SabotageCoolTimeExceptio
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
 public class Sabotage {
 
     private UUID roomId;
@@ -33,6 +35,7 @@ public class Sabotage {
             throw new SabotageAlreadyOpenException(roomId.toString());
         }
         this.active = true;
+        log.info("sabotage.open() is called");
         Events.raise(new SabotageOpenEvent(roomId));
     }
 
