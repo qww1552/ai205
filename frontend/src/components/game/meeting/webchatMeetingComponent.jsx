@@ -48,7 +48,7 @@ const WebchatMeetingcomponent = (props) => {
 
       {isInVoteResult === true&&<div className='z-index2'><VoteResultFrom from={getFrom()}/></div>}
       {props.user.player.isAlive === true ||props.user.player.isAlive===undefined?<div className='z-index1' onClick={()=>{props.voteEvent(props.user.player)}}><UserVideoComponent  user={props.user} /></div>
-      :<img className='video' src='/testImg/ghost.jpg'/>}
+      :<img className='video' src='/testImg/youDied.png'/>}
       </>
       
     </Card>}
