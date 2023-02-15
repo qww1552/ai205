@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Modal, Button, Input } from 'antd';
 import { roomListRequest } from 'api';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -79,16 +79,20 @@ const RoomList = () => {
       <button onClick={()=>{roomListRequest().then((res) => {
         setRooms(res.data)})}}>방목록 새로고침</button>
     <Modal
+    title='Room Name 입력'
     open={isNewRoomOpen}
-    width={1920}
-    closable={false}
+    width={300}
+    closable={true}
     footer={[
     ]}>
     <div> 
       <form onSubmit={submitHandler}>
-        <label>방이름</label>
-        <input type="text" value={title} onChange={titleHandler}/>
-        <button>만들기</button>
+        <div align="center">
+        <Input style={{ width: 'calc(100% - 200px)' }} value={title} onChange={titleHandler} defaultChecked/>
+        </div>
+        <div align="center">
+        <Button type='primary'>만들기</Button>
+        </div>
       </form>
 
     </div>
