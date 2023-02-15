@@ -17,7 +17,7 @@
 
 .imgBtn, .imgBtnNoHover {
   background-color: silver;
-  padding: 4px 0px;
+  padding: 0px;
   opacity: 0.3;
   font-size: 0;
   line-height: 0;
@@ -32,34 +32,7 @@
 }
 
 #chatBtn {
-  right: 10px;
-  top: 210px;
-}
-
-#mapBtn {
-  right: 10px;
-  top: 330px;
-}
-
-#reportBtn {
-  right: 10px;
-  bottom: 130px;
-}
-
-#actBtn {
-  right: 10px;
-  bottom: 10px;
-}
-
-#sabotageBtn {
-  right: 180px;
-  bottom: 130px;
-}
-
-#killBtn {
-  right: 180px;
-  bottom: 10px;
-  padding: 0px;
+  padding: 4px 0px 3px 0px;
 }
 
 .imgBtnIcon {

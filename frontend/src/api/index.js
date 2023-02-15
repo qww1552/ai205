@@ -1,6 +1,7 @@
 import SockJS from "sockjs-client"
 import axios from "axios"
 import { over } from "stompjs"
+import { useNavigate } from "react-router-dom"
 
 const BASE_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost'}:8080/api/v1`
 const SUBSCRIBE_URL = '/sub/room'
@@ -39,4 +40,13 @@ const roomListRequest = () => {
   return axios.get(`${BASE_URL}/rooms/`);
 }
 
-export { createClient, send, connectClient, roomRequest, roomListRequest };
+const RoomMake = (body) => {
+  const navigate = useNavigate();
+  axios.post(`${BASE_URL}/rooms`,body)
+  .then(res =>{
+    navigate('/')
+    return('응답')
+  })
+}
+
+export { createClient, send, connectClient, roomRequest, roomListRequest, RoomMake };

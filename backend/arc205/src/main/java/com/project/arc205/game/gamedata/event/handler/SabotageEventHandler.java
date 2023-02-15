@@ -27,6 +27,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
@@ -50,6 +51,7 @@ public class SabotageEventHandler {
         return gameMapMission;
     }
 
+    @Transactional
     @Async
     @EventListener
     public void onSabotageRequest(SabotageRequestEvent event) {
@@ -94,7 +96,7 @@ public class SabotageEventHandler {
         sendBroadCastMessage(destination, CharacterOperation.SABOTAGE_OPEN);
 
         for (GameCharacter gameCharacter : gameCharacters.values()) {
-            if (gameCharacter instanceof Mafia) {
+            if (gameCharacter instanceof Mafia || !gameCharacter.getIsAlive()) {
                 continue;
             }
             String sessionIdInRoom = mappingService.convertPlayerIdToSessionIdInRoom(roomId,
