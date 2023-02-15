@@ -151,16 +151,17 @@ const channelHandling = {
 
       case 'SABOTAGE_OPEN':
         // 조명 깜빡깜빡
-        // yield put({ type: "me/setSight", payload: 1.5 })
+        yield put({ type: "gameInfo/setSabotage", payload: true })
         break;
 
       case 'SIGHT_OFF':
-        console.log("시야차단")
+        // console.log("시야차단")
         yield put({ type: "me/setSight", payload: 1.5 })
         break;
       
       case 'SABOTAGE_CLOSE':
         yield put({ type: "me/setSight", payload: 4 })
+        yield put({ type: "gameInfo/setSabotage", payload: false })
         break;
 
       default:
