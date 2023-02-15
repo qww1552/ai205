@@ -1,6 +1,6 @@
 import { Line, SpotLight, useKeyboardControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Vector3, Euler } from "three";
+import { Vector3, Euler, Color } from "three";
 import { useRef, useEffect, useState, Suspense, createRef } from "react";
 import {
   CuboidCollider,
@@ -14,11 +14,14 @@ import CharacterMesh from "../mesh/characterMesh";
 import { selectGameInfo } from "app/gameInfo";
 
 const MyCharacter = ({ color }) => {
+
   const isInMeeting = useSelector(selectGameInfo).isInMeeting;
   const player = useSelector(selectMe).player;
   const [, get] = useKeyboardControls();
   const ref = useRef();
+  // const sightRef = useRef();
   const isGameStop = useSelector(selectGameInfo).isGameStop;
+  const isInSabotage = useSelector(selectGameInfo).isInSabotage;
   // const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
@@ -29,13 +32,24 @@ const MyCharacter = ({ color }) => {
   const speed = 6.0;
 
   const sylinderRot = new Euler(1.5, 0, 0);
-
+  // const sightColor = new Color(1,1,1);
   // ref.current.charState = "IDLE";
   // ref.current.charDir = "RIGHT";
 
+  const [sightColor, setSightColor] = useState("white")
+
+  useEffect(() => {
+    if(isInSabotage) {
+      setSightColor("red")
+    } else {
+      setSightColor("white")
+    }
+
+  },[isInSabotage])
+
   useEffect(() => {
     const timer = setInterval(() => {
-      if (isInMeeting) {
+      if (!isInMeeting) {
         action("LOCAITION_SEND_REQUEST", {
           x: ref.current.translation().x,
           y: ref.current.translation().y,
@@ -92,12 +106,14 @@ const MyCharacter = ({ color }) => {
     <>
       <RigidBody
         ref={ref}
-        colliders={player.isAlive ? "" : false}
+        colliders={false}
         type="dynamic"
         lockRotations={true}
       >
         <pointLight
-          distance={4}
+          color={sightColor}
+          // ref={sightRef}
+          distance={player.sight}
           intensity={1.4}
           decay={0.01}
           position={[0, 0, 1]}
@@ -115,7 +131,7 @@ const MyCharacter = ({ color }) => {
         <CuboidCollider
           name={`me_${player.id}`}
           args={[0.5, 0.5, 0.1]}
-          sensor
+          sensor={!player.isAlive}
           onIntersectionEnter={(e) => {
             if (!e.colliderObject.name) return;
 

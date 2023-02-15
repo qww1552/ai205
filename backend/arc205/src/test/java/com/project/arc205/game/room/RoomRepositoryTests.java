@@ -1,5 +1,6 @@
 package com.project.arc205.game.room;
 
+import static com.project.arc205.game.dummy.DummyPlayer.getTestPlayer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +21,7 @@ public class RoomRepositoryTests {
     @Test
     @DisplayName("룸 생성 시 gameRoomRepository 의 hashmap에 게임 룸이 저장된다.")
     void createTest() {
-        Player master = new Player();
+        Player master = getTestPlayer();
         Room room = roomRepository.create("test", master);
         assertThat(roomRepository.findById(room.getId()), is(equalTo(room)));
     }
@@ -28,7 +29,7 @@ public class RoomRepositoryTests {
     @Test
     @DisplayName("룸 전체 조회")
     void findAllTest() {
-        Player master = new Player();
+        Player master = getTestPlayer();
         roomRepository.create("test1", master);
         roomRepository.create("test2", master);
         roomRepository.create("test3", master);
@@ -38,7 +39,7 @@ public class RoomRepositoryTests {
     @Test
     @DisplayName("룸 개별 조회")
     void findByIdTest() {
-        Player master = new Player();
+        Player master = getTestPlayer();
         Room room = roomRepository.create("test", master);
         assertThat(roomRepository.findById(room.getId()), is(equalTo(room)));
     }

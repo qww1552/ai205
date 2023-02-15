@@ -1,19 +1,21 @@
 package com.project.arc205.game.gamedata.event.handler;
 
 import com.project.arc205.common.dto.BaseResponse;
+import com.project.arc205.common.model.Location;
 import com.project.arc205.common.operation.operation.CharacterOperation;
-import com.project.arc205.common.service.PlayerRoomMappingRepository;
-import com.project.arc205.common.service.PlayerSessionMappingService;
 import com.project.arc205.common.util.Constant;
 import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
+import com.project.arc205.game.gamecharacter.repository.PlayerRepository;
 import com.project.arc205.game.gamedata.event.SabotageCloseEvent;
 import com.project.arc205.game.gamedata.event.SabotageOpenEvent;
 import com.project.arc205.game.gamedata.event.SabotageRequestEvent;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.model.entity.Sabotage;
 import com.project.arc205.game.gamedata.repository.GameRepository;
+import com.project.arc205.game.mission.model.entity.GameMapMission;
+import com.project.arc205.game.mission.model.entity.Mission;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -32,20 +34,35 @@ import org.springframework.transaction.annotation.Transactional;
 public class SabotageEventHandler {
 
     private final GameRepository gameRepository;
-    private final PlayerSessionMappingService mappingService;
-    private final PlayerRoomMappingRepository playerRoomMappingRepository;
+    private final PlayerRepository playerRepository;
     private final SimpMessagingTemplate template;
     private final TaskScheduler taskScheduler;
+
+    private GameMapMission getGameMapMission() {
+        //TODO: change get from db
+        GameMapMission gameMapMission = new GameMapMission();
+
+        Mission mission = new Mission();
+        mission.setId(10L);
+        mission.setTitle("sabotage mission");
+
+        gameMapMission.setMission(mission);
+        gameMapMission.setLocation(new Location(0.0, 0.0));
+
+        return gameMapMission;
+    }
 
     @Transactional
     @Async
     @EventListener
     public void onSabotageRequest(SabotageRequestEvent event) {
         log.info("on sabotage request : {}", event);
-        UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
+        UUID roomId = playerRepository.findByPlayerId(event.getPlayerId()).getRoom().getId();
         GameData gameData = gameRepository.findById(roomId);
-        Sabotage sabotage = gameData.getSabotage();
-        sabotage.open();
+
+        GameMapMission mission = this.getGameMapMission();
+
+        gameData.openSabotage(mission);
     }
 
     @Async
@@ -57,7 +74,6 @@ public class SabotageEventHandler {
         GameData gameData = gameRepository.findById(roomId);
 
         sendSabotageOpenMessage(roomId, gameData.getGameCharacters());
-
     }
 
     @Async
@@ -86,8 +102,8 @@ public class SabotageEventHandler {
             if (gameCharacter instanceof Mafia || !gameCharacter.getIsAlive()) {
                 continue;
             }
-            String sessionIdInRoom = mappingService.convertPlayerIdToSessionIdInRoom(roomId,
-                    gameCharacter.getPlayerId());
+            String sessionIdInRoom = playerRepository.findByPlayerId(gameCharacter.getPlayerId())
+                    .getSessionId();
 
             sendSightOffMessage(sessionIdInRoom);
         }

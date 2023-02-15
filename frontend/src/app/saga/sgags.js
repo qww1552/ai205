@@ -98,6 +98,7 @@ const channelHandling = {
             ...stateMe.player,
             role: data.role,
             color: data.color,
+            sight: 4,
             isAlive: true,
             isVoted: false,
             missions: []
@@ -128,36 +129,41 @@ const channelHandling = {
           yield put({ type: "others/setOtherPlayer", payload: data })
         }
         break;
+
       case 'DIE':
-        // if (stateMe.player.id !== data.player.id) {
-        //   const otherPlayerData = {
-        //     player: {...stateMe.player, id: data.player.id, isAlive: false },
-        //     location: data.location
-        //   }
-        //   yield put({ type: "others/setOtherPlayer", payload: otherPlayerData })
-        // }
         yield put({ type: "dead/addDeadList", payload: data })
         break;
+
       case 'YOU_DIED':
-        // console.log(operation, data)
         // const payload = { ...stateMe, player: { ...stateMe.player, isAlive: false } }
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "me/setPlayer", payload : {...stateMe.player, isAlive: false } })
         break;
 
       case 'MISSION_COMPLETE':
-        // console.log('여기까지는 작동')
         yield put({ type: "me/setMissionComplete", payload : {id: data.mission.id}})
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
-        // console.log('사가미션응답(완료) 들어옴')
         break;
       
       case 'MISSION_PROGRESS':
-        // console.log('사가미션응답(프로그래스)들어옴')
-        // console.log(data)
         yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
         break;
+
+      case 'SABOTAGE_OPEN':
+        // 조명 깜빡깜빡
+        yield put({ type: "gameInfo/setSabotage", payload: true })
+        break;
+
+      case 'SIGHT_OFF':
+        // console.log("시야차단")
+        yield put({ type: "me/setSight", payload: 1.5 })
+        break;
       
+      case 'SABOTAGE_CLOSE':
+        yield put({ type: "me/setSight", payload: 4 })
+        yield put({ type: "gameInfo/setSabotage", payload: false })
+        break;
+
       default:
         break;
         
@@ -210,6 +216,8 @@ const channelHandling = {
     }
   ,
   EXCEPTION: function* (operation, data) {
+    console.error(operation)
+    console.error(data)
     return
   }
 }
@@ -223,6 +231,7 @@ function* sendChannel(client, roomId) {
   yield throttle(3000, "VOTE_REQUEST", vote, client, roomId)
   yield takeEvery("MISSION_REQUEST", mission, client, roomId)
   yield throttle(3000, "KILL_REQUEST", kill, client, roomId)
+  yield throttle(3000, "SABOTAGE_REQUEST", sabotage, client, roomId)
 }
 
 // 게임 시작 요청
@@ -260,6 +269,11 @@ function* mission(client, roomId, action) {
 // 살해 요청
 function* kill(client, roomId, action) {
   yield call(send, client, "character/kill", roomId, action.payload)
+}
+
+// sabotage 요청
+function* sabotage(client, roomId, action) {
+  yield call(send, client, "character/sabotage/open", roomId, action.payload)
 }
 
 function* mySaga() {

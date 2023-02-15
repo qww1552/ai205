@@ -5,10 +5,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.project.arc205.game.dummy.DummyPlayer;
+import com.project.arc205.game.dummy.DummyRoom;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.room.model.entity.Room;
 import com.project.arc205.game.room.model.exception.PlayerIdAlreadyExistException;
+import com.project.arc205.game.room.model.exception.RoomIsFullException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -86,4 +89,17 @@ public class RoomTests {
         gameSetting.update(incoming);
         assertThat(room.getGameSetting().getMaxPlayers(), is(equalTo(originalMaxPlayers)));
     }
+
+    @Test
+    @DisplayName("자리가 없는 방에 입장 시 예외가 발생한다")
+    void exceptionWillThrowWhenPlayerEnterFullRoom() {
+        GameSetting gameSetting = new GameSetting();
+        gameSetting.setMaxPlayers(1);
+        Room testRoom = DummyRoom.createTestRoomWithGameSetting("testRoom", gameSetting);
+        testRoom.enter(DummyPlayer.getTestPlayer("testPlayer1"));
+
+        assertThrows(RoomIsFullException.class,
+                () -> testRoom.enter(DummyPlayer.getTestPlayer()));
+    }
+
 }

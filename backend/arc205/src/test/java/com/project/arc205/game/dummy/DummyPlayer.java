@@ -17,4 +17,8 @@ public class DummyPlayer {
     public static Player getTestPlayer(String sessionId) {
         return Player.create(sessionId, sessionId);
     }
+
+    public static Player getTestPlayer() {
+        return Player.create("testId", "sessionId");
+    }
 }

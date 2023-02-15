@@ -1,10 +1,15 @@
 package com.project.arc205.game.service;
 
-import com.project.arc205.common.service.PlayerRoomMappingRepository;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
+
 import com.project.arc205.game.dummy.DummyRoom;
 import com.project.arc205.game.room.model.entity.Room;
 import com.project.arc205.game.room.repository.RoomRepository;
 import com.project.arc205.game.room.service.RoomService;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,25 +17,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(SpringExtension.class)
 public class RoomServiceTests {
 
     @Mock
     RoomRepository roomRepository;
-    @Mock
-    PlayerRoomMappingRepository playerRoomMappingRepository;
+
     RoomService roomService;
 
     @BeforeEach
     void init() {
-        roomService = new RoomService(roomRepository, playerRoomMappingRepository);
+        roomService = new RoomService(roomRepository);
     }
 
     @Test
