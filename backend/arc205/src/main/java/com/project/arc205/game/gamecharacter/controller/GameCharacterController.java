@@ -2,13 +2,8 @@ package com.project.arc205.game.gamecharacter.controller;
 
 import com.project.arc205.common.dto.BaseResponse;
 import com.project.arc205.common.operation.operation.CharacterOperation;
-import com.project.arc205.common.service.PlayerSessionMappingService;
-import com.project.arc205.common.util.WebSocketUtil;
 import com.project.arc205.game.gamecharacter.dto.request.KillRequest;
-import com.project.arc205.game.gamecharacter.dto.request.MissionRequest;
 import com.project.arc205.game.gamecharacter.dto.request.MoveRequest;
-import com.project.arc205.game.gamecharacter.dto.response.MissionCompleteResponse;
-import com.project.arc205.game.gamecharacter.dto.response.MissionProgressResponse;
 import com.project.arc205.game.gamecharacter.dto.response.MoveResponse;
 import com.project.arc205.game.gamecharacter.service.GameCharacterService;
 import java.util.Objects;
@@ -18,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
@@ -33,8 +26,6 @@ import org.springframework.stereotype.Controller;
 public class GameCharacterController {
 
     private final GameCharacterService gameCharacterService;
-    private final PlayerSessionMappingService mappingService;
-    private final SimpMessagingTemplate template;
 
     @MessageMapping("/room/{room-id}/character/move")
     @SendTo("/sub/room/{room-id}")
@@ -42,55 +33,37 @@ public class GameCharacterController {
             StompHeaderAccessor accessor, MoveRequest moveRequest) {
         UUID roomUuid = UUID.fromString(roomId);
 
-        String playerId = getPlayerIdFromHeader(accessor, roomUuid);
+        String playerId = getPlayerIdFromHeader(accessor);
 
-        MoveResponse moveResponse = gameCharacterService.move(roomUuid,
-                playerId, moveRequest.getLocation());
+        MoveResponse moveResponse = gameCharacterService.move(roomUuid, playerId,
+                moveRequest.getLocation());
 
         return BaseResponse.character(CharacterOperation.MOVE).data(moveResponse);
     }
 
     @MessageMapping("/room/{room-id}/character/kill")
-    public void kill(@DestinationVariable("room-id") String roomId,
-            StompHeaderAccessor accessor, @Valid KillRequest killRequest) {
+    public void kill(@DestinationVariable("room-id") String roomId, StompHeaderAccessor accessor,
+            @Valid KillRequest killRequest) {
         log.info("전달 받은 kill : {}", killRequest);
 
         UUID roomUuid = UUID.fromString(roomId);
 
-        String mafiaPlayerId = getPlayerIdFromHeader(accessor, roomUuid);
+        String mafiaPlayerId = getPlayerIdFromHeader(accessor);
         String citizenPlayerId = killRequest.getTo();
 
-        gameCharacterService.kill(
-                roomUuid,
-                mafiaPlayerId,
-                citizenPlayerId);
+        gameCharacterService.kill(roomUuid, mafiaPlayerId, citizenPlayerId);
     }
 
-    private String getPlayerIdFromHeader(StompHeaderAccessor accessor, UUID roomUuid) {
-        return mappingService.convertSessionIdToPlayerIdInRoom(roomUuid,
-                accessor.getSessionId());
+    @MessageMapping("/room/{room-id}/character/sabotage/open")
+    public void sabotage(@DestinationVariable("room-id") String roomId,
+            StompHeaderAccessor accessor) {
+        log.info("/room/{}/sabotage", roomId);
+
+        gameCharacterService.sabotage(UUID.fromString(roomId), getPlayerIdFromHeader(accessor));
     }
 
-    @MessageMapping("/room/{room-id}/character/mission/complete")
-    public void missionComplete(
-            @DestinationVariable("room-id") String roomId, StompHeaderAccessor accessor,
-            @Payload MissionRequest missionRequest) {
-        log.info("/room/{}/mission/complete: {}", roomId, missionRequest);
-        UUID uuidRoomId = UUID.fromString(roomId);
-        String playerId = getPlayerIdFromHeader(accessor, uuidRoomId);
-
-        MissionProgressResponse response = gameCharacterService.missionComplete(uuidRoomId,
-                playerId, missionRequest.getId());
-        template.convertAndSend("/sub/room/" + roomId,
-                BaseResponse.character(CharacterOperation.MISSION_PROGRESS).data(response));
-        log.info("/sub/room/{}: {}", roomId, response);
-
-        MissionCompleteResponse completeResponse = MissionCompleteResponse.of(
-                missionRequest.getId(), true);
-        log.info("/user/{}/queue: {}", accessor.getSessionId(), completeResponse);
-        String sessionId = Objects.requireNonNull(accessor.getSessionId());
-        template.convertAndSendToUser(sessionId, "/queue",
-                BaseResponse.character(CharacterOperation.MISSION_COMPLETE).data(completeResponse),
-                WebSocketUtil.createHeaders(sessionId));
+    private String getPlayerIdFromHeader(StompHeaderAccessor accessor) {
+        return Objects.requireNonNull(accessor.getUser()).getName();
     }
+
 }

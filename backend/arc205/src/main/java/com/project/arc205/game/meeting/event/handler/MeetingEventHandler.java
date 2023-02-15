@@ -95,6 +95,10 @@ public class MeetingEventHandler {
         } else if (sorted.get(0).getValue().size() != sorted.get(1).getValue().size()) {
             elected = sorted.get(0).getKey();
         }
+        //kill elected player
+        if (elected != null && !elected.equals(Constant.VOTED_SKIP_ID)) {
+            curGame.getGameCharacter(elected).die();
+        }
 
         //broadcast voting result
         VoteResultResponse response = VoteResultResponse.of(voteResults, elected);
@@ -102,10 +106,5 @@ public class MeetingEventHandler {
                 BaseResponse.meeting(MeetingOperation.END).data(response));
         curGame.votingEnd();
         curGame.meetingEnd();
-
-        //kill elected player
-        if (elected != null && !elected.equals(Constant.VOTED_SKIP_ID)) {
-            curGame.getGameCharacter(elected).die();
-        }
     }
 }

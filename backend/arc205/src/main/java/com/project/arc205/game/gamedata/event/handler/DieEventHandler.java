@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -28,7 +27,6 @@ public class DieEventHandler {
     private final PlayerSessionMappingService playerSessionMappingService;
     private final SimpMessagingTemplate template;
 
-    @Async
     @EventListener
     public void sendDie(DieEvent event) {
         UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());
@@ -44,7 +42,6 @@ public class DieEventHandler {
         log.info("{}: {}", destination, responseData);
     }
 
-    @Async
     @EventListener
     public void sendYouDie(DieEvent event) {
         UUID roomId = playerRoomMappingRepository.findRoomIdByPlayerId(event.getPlayerId());

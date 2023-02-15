@@ -37,12 +37,14 @@ public class GameData {
     private int votingLimitTime;        //투표 시간
     private Map<String, String> voted;  //현재 투표 정보(from, to)    //TODO: refactor Vote
     private boolean inMeeting;      //TODO
+    private Sabotage sabotage;
 
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
     @Builder
     private GameData(UUID roomId, int totalMissionCount,
             int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters,
+            int sabotageCoolTime,
             Location startLocation) {
         this.roomId = roomId;
         this.totalMissionCount = totalMissionCount;
@@ -52,6 +54,7 @@ public class GameData {
         this.gameCharacters = gameCharacters;
         this.voted = null;
         this.inMeeting = false;
+        this.sabotage = new Sabotage(this.roomId, sabotageCoolTime);
         moveGameCharactersTo(startLocation);
     }
 
@@ -67,6 +70,7 @@ public class GameData {
                 .votingLimitTime(gameSetting.getVoteLimitTime())
                 .gameCharacters(gameCharacters)
                 .startLocation(startLocation)
+                .sabotageCoolTime(gameSetting.getSabotageCoolTime())
                 .build();
     }
 

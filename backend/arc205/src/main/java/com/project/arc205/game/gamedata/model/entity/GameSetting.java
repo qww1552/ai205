@@ -18,6 +18,7 @@ public class GameSetting {
     private Integer voteLimitTime = 120;
     private Integer killCoolTime = 10;
     private Integer meetingCoolTime = 15;
+    private Integer sabotageCoolTime = 15;
 
     public void update(GameSetting incoming) {
         if (incoming.maxPlayers != null) {

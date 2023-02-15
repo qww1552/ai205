@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import { action } from "app/store"
 import { selectMe } from 'app/me'
 import { useKeyboardControls } from "@react-three/drei";
-import { Progress, Badge, Button, Modal } from 'antd'
+import { Progress, Badge, Button, Modal, message } from 'antd'
 import './style.css'
 import { Col, Row } from 'antd';
 
@@ -22,6 +22,19 @@ const ImageButton = () => {
   const unReadMessage = useSelector(selectGameInfo).unReadMessage
   const [minimapOpen, setMinimapOpen] = useState(false)
   const missionList = useSelector(selectMe).player.missions
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: 'warning',
+      content: '현재 수행할 수 없는 미션입니다. 미션 내용을 다시 확인하세요.',
+      duration: 0.5,
+      className: 'custom-class',
+      style: {
+        marginTop: '20vh',
+      },
+    });
+  };
+  
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
@@ -32,14 +45,17 @@ const ImageButton = () => {
       console.log('전송')
     } else if (isAdjacentMissionBtn) {
       console.log(missionList)
-      for (let mission of missionList){
-        console.log(mission)
-        console.log(mission.id, isAdjacentMissionBtn)
-        if ((Number(mission.id) === Number(isAdjacentMissionBtn))&&(mission.isComplete === false)){
-          
+      for (let idx in missionList) {
+        console.log(idx, missionList.length-1)
+        if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn))&&(missionList[idx].isComplete === false)){
           action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
+          break;
         }else{
-          console.log('완료했거나 내 미션이 아닌경우')
+          if (Number(idx) === missionList.length-1) {
+            console.log('success')
+            success()
+          }
+            
         }
       }
       
@@ -129,12 +145,13 @@ const ImageButton = () => {
 
   return (
     <>
-      {me.isAlive === true ?
+    {contextHolder}
+
         <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom : "20px" }}>
 
           <Row>
             <Col offset={21} span={3}>
-              <button
+              {me.isAlive && <button
                 className="imgBtn"
                 id="chatBtn"
                 onClick={chatButtonActivate}
@@ -143,7 +160,7 @@ const ImageButton = () => {
                   <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅" />
                   <p />
                 </Badge>
-              </button>
+              </button>}
             </Col>
           </Row>
           <Row>
@@ -191,7 +208,7 @@ const ImageButton = () => {
               </button> : undefined}
             </Col>
             <Col span={3}>
-              <button
+              {me.isAlive && <button
                 className={"imgBtnNoHover " + ((adjustBody) ? "imgBtnReady" : "")}
                 id="reportBtn"
                 onClick={
@@ -204,7 +221,7 @@ const ImageButton = () => {
                 <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고" />
                 <p />
                 <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-              </button>
+              </button>}
             </Col>
           </Row>
           <Row>
@@ -255,7 +272,7 @@ const ImageButton = () => {
 
 
         </div>
-        : undefined}
+
     </>
   );
 };

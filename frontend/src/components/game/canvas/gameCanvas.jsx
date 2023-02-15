@@ -27,7 +27,7 @@ const GameCanvas = () => {
     <>
       <div id="gameCanvas" style={{ position: "absolute", width: "100vw", height: "100%" }}>
         <Canvas flat linear>
-          {/* <ambientLight intensity={0.2} /> */}
+          {!stateMe.player.isAlive && <ambientLight intensity={0.5} />}
           <Physics
             timeStep={1 / 60}
             gravity={[0, 0, 0]}
@@ -47,7 +47,7 @@ const GameCanvas = () => {
             ))}
             {deadList.map((dead, idx) => (
               <DeadCharacter
-                // color={dead.player.color}
+                color={dead.player.color}
                 id={`${dead.player.id}`}
                 position={dead.location}
                 key={`${dead.player.id}${idx}`}

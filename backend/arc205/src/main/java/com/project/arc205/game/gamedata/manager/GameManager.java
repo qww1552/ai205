@@ -6,6 +6,7 @@ import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamecharacter.model.entity.Mafia;
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamedata.model.entity.GameData;
+import com.project.arc205.game.gamedata.model.entity.GameSetting;
 import com.project.arc205.game.gamedata.strategy.ColorAssignStrategy;
 import com.project.arc205.game.gamedata.strategy.MissionDistributionStrategy;
 import com.project.arc205.game.gamedata.strategy.RoleAssignStrategy;
@@ -36,10 +37,11 @@ public class GameManager {
     private ColorAssignStrategy colorAssignStrategy;
 
     public GameData createGameDataFrom(Room room) {
-        GameMap gameMap = gameMapRepository.findById(room.getGameSetting().getGameId())
+        GameSetting gameSetting = room.getGameSetting();
+        GameMap gameMap = gameMapRepository.findById(gameSetting.getGameId())
                 .orElseThrow();
         List<GameMapMission> missions = gameMapMissionRepository.findByGamemap(gameMap);
-        int numberOfMissions = room.getGameSetting().getNumberOfMissions();
+        int numberOfMissions = gameSetting.getNumberOfMissions();
 
         roleAssignStrategy.init(room.getPlayers().size());
         missionDistributionStrategy.init(missions, numberOfMissions);
@@ -47,7 +49,7 @@ public class GameManager {
 
         Map<String, GameCharacter> charactersFromPlayers = createGameCharacter(room.getPlayers());
 
-        return GameData.of(room.getId(), room.getGameSetting(), charactersFromPlayers,
+        return GameData.of(room.getId(), gameSetting, charactersFromPlayers,
                 gameMap.getStartLocation());
     }
 
