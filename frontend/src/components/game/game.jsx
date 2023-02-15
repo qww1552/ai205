@@ -22,8 +22,8 @@ import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOthe
 import { selectGameInfo } from 'app/gameInfo';
 import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 import gameResult from 'app/gameResult';
-  const APPLICATION_SERVER_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRES : 'localhost'}:8080/api/v1/`;
-
+  const APPLICATION_SERVER_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost:8080'}/api/v1`;
+  
 const Game = () => {
 
     const ref = useRef();
