@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(()=>{
     if(isChatModalOpen) {
-      console.log('useEffect 0으로 초기화')
+      // console.log('useEffect 0으로 초기화')
       action('gameInfo/setunReadMessage', true)
     }
   },[isChatModalOpen])

@@ -42,17 +42,17 @@ const ImageButton = () => {
   const actButtonActivate = () => {
     if (isAdjacentMeetingBtn) {
       action('START_MEETING_REQUEST')
-      console.log('전송')
+      // console.log('전송')
     } else if (isAdjacentMissionBtn) {
-      console.log(missionList)
+      // console.log(missionList)
       for (let idx in missionList) {
-        console.log(idx, missionList.length-1)
+        // console.log(idx, missionList.length-1)
         if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn))&&(missionList[idx].isComplete === false)){
           action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
           break;
         }else{
           if (Number(idx) === missionList.length-1) {
-            console.log('success')
+            // console.log('success')
             success()
           }
             
@@ -84,8 +84,8 @@ const ImageButton = () => {
     action('SABOTAGE_REQUEST')
   }
 
-  useEffect(() => { console.log(unReadMessage) }, [unReadMessage])
-  // 게임 첫 시작의 킬 쿨타임은 15초, 이후 10초로 설정
+  // useEffect(() => { console.log(unReadMessage) }, [unReadMessage])
+  // 게임 첫 시작의 쿨타임은 15초, 이후 10초로 설정
   const [killTimer, setKillTimer] = useState(-50)
   const killInterval = useRef(null)
   // 사보타지의 쿨타임은 20초

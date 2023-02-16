@@ -18,7 +18,7 @@ const LobbySimple = () => {
       description:`${otherPlayers.length}명이 대기중`,
       duration: 2,
       onClick: () => {
-        console.log('Notification Clicked!');
+        // console.log('Notification Clicked!');
       },
     });
   };

@@ -13,26 +13,20 @@ const GameResult = () => {
   const gameResult = useSelector(selectGameResult).gameResult
   const navigate = useNavigate();
   const [Text, setText] = useState("")
+  const [winSide, setWinSide] = useState("")
 
 
+  const getWinSide=()=>{
+    
+    if (gameResult&&(gameResult.win === "MAFIA")) {
+      return('MimicBot 이 이겼습니다')
+    } else {
+      return('Human 이 이겼습니다')
+    }
+  }
 
   // ※렌더링 되고 10초 지난후 라우터 이동
-  useEffect(()=>{
-    
-    if (!isInGame&&gameResult) {
-    // console.log('결과창내놔')
-    // console.log(gameResult)
-    setText(`${gameResult.win}가 이겼습니다`)
-    // setTimeout(() => {
-    //   navigate('/rooms')
-    //   // Todo:
-    //   // 웹소켓 연결 끊기...? 자동으로 되는건지 잘모르겠다
-    //   // 게임에 사용된 변수 초기화
-    //   // 웹캠컴포넌트랑 채팅창 띄울까 고민중
-      
-    // },10000)
-  }
-  },[isInGame, gameResult])
+
   return (
     <>
     <Modal
@@ -43,7 +37,7 @@ const GameResult = () => {
     ]}>
 
     <div>
-      <TypingText text={Text} speed={60} fontSize="1.25rem" color="green" />
+      <TypingText text={getWinSide()} speed={60} fontSize="1.25rem" color="green" />
       {/* {gameResult.players.map((player) => {
         <div>{player.id}:{player.role}</div>
       })} */}

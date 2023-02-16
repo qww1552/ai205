@@ -51,7 +51,7 @@
           const flip = true; // whether to flip the webcam
           isInProgress = true;
           webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
-          console.log(webcam);
+          // console.log(webcam);
           await webcam.setup(); // request access to the webcam
           await webcam.play();
          
