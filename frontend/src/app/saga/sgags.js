@@ -105,7 +105,7 @@ const channelHandling = {
           }
         })
         for(const mission of data.missions) {
-          console.log('startperson')
+          // console.log('startperson')
           yield put({type:"me/setMission", payload: mission})}
         break;
       // ※게임 종료신호 데이터 받아오기
@@ -149,21 +149,27 @@ const channelHandling = {
         yield put({ type: "missionInfo/setTotalMissionProgress", payload: data.progress })
         break;
 
+      // 사보타지 발생
       case 'SABOTAGE_OPEN':
         // 조명 깜빡깜빡
         yield put({ type: "gameInfo/setSabotage", payload: true })
         break;
 
+      // 사보타지 상황 발생시 시야차단
       case 'SIGHT_OFF':
         // console.log("시야차단")
         yield put({ type: "me/setSight", payload: 1.5 })
         break;
       
+      // 사보타지 해결
       case 'SABOTAGE_CLOSE':
         yield put({ type: "me/setSight", payload: 4 })
         yield put({ type: "gameInfo/setSabotage", payload: false })
         break;
 
+      case 'SABOTAGE_SOLVE':
+        yield put({ type: "missionInfo/setSabotageMissionProgress", payload: data.progress })
+        break;
       default:
         break;
         
@@ -232,6 +238,7 @@ function* sendChannel(client, roomId) {
   yield takeEvery("MISSION_REQUEST", mission, client, roomId)
   yield throttle(3000, "KILL_REQUEST", kill, client, roomId)
   yield throttle(3000, "SABOTAGE_REQUEST", sabotage, client, roomId)
+  yield throttle(1000, "SABOTAGE_SOLVE_REQUEST", sobotageSolve, client, roomId)
 }
 
 // 게임 시작 요청
@@ -261,8 +268,8 @@ function* vote(client, roomId, action) {
 
 // 미션 완료 전송 요청
 function* mission(client, roomId, action) {
-  console.log('사가 호출까지는 성공')
-  console.log(action.payload)
+  // console.log('사가 호출까지는 성공')
+  // console.log(action.payload)
   yield call(send, client, "character/mission/complete", roomId, {id: Number(action.payload.id)})
 }
 
@@ -274,6 +281,11 @@ function* kill(client, roomId, action) {
 // sabotage 요청
 function* sabotage(client, roomId, action) {
   yield call(send, client, "character/sabotage/open", roomId, action.payload)
+}
+
+// sabotage 미션 수행 요청
+function* sobotageSolve(client, roomId, action) {
+  yield call(send, client, "character/sabotage/solve", roomId)
 }
 
 function* mySaga() {

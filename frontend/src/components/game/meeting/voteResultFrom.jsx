@@ -18,7 +18,7 @@ const VoteResultFrom = (props) => {
   useEffect(()=>{
     if (props.from){
     setLi((prevState)=>{
-      console.log(li)
+      // console.log(li)
       return {...prevState,data:props.from.data}
     })}
     // console.log(li)
@@ -36,7 +36,7 @@ const VoteResultFrom = (props) => {
   }}
   return (
 
-    <div>
+    <div style={{float:'left'}}>
     <Avatar.Group>
       {li.data.map((user) => {
         return(

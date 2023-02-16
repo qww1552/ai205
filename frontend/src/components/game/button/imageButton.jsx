@@ -12,7 +12,7 @@ import './style.css'
 import { Col, Row } from 'antd';
 
 const ImageButton = () => {
-
+  const isInSabotage = useSelector(selectGameInfo).isInSabotage
   const isAdjacentMeetingBtn = useSelector(selectGameInfo).isAdjacentMeetingBtn
   const isInVoteResult = useSelector(selectGameInfo).isInVoteResult
   const isAdjacentMissionBtn = useSelector(selectMissionInfo).isAdjacentMissionBtn
@@ -34,32 +34,42 @@ const ImageButton = () => {
       },
     });
   };
-  
+
 
   const chatButtonActivate = () => {
     action('gameInfo/setChatModalOpen', true)
   }
   const actButtonActivate = () => {
+
+
     if (isAdjacentMeetingBtn) {
       action('START_MEETING_REQUEST')
-      console.log('전송')
+
     } else if (isAdjacentMissionBtn) {
-      console.log(missionList)
-      for (let idx in missionList) {
-        console.log(idx, missionList.length-1)
-        if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn))&&(missionList[idx].isComplete === false)){
-          action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
-          break;
-        }else{
-          if (Number(idx) === missionList.length-1) {
-            console.log('success')
-            success()
+      // console.log('전송')
+      if (isAdjacentMissionBtn == 10 && isInSabotage) {
+        action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
+      } else if (1 <= isAdjacentMissionBtn && isAdjacentMissionBtn <= 9) {
+        // console.log(missionList)
+        for (let idx in missionList) {
+          // console.log(idx, missionList.length-1)
+          // console.log("isAdjust", isAdjacentMissionBtn)
+          if ((Number(missionList[idx].id) === Number(isAdjacentMissionBtn)) && (missionList[idx].isComplete === false)) {
+            action('gameInfo/setMissionModalOpen', isAdjacentMissionBtn)
+            break;
+          } else {
+            if (Number(idx) === missionList.length - 1) {
+              // console.log('success')
+              success()
+            }
+
           }
-            
         }
       }
-      
-    } 
+
+
+
+    }
   }
   const closeButtonActivate = () => {
     action('gameInfo/setChatModalOpen', false)
@@ -77,6 +87,7 @@ const ImageButton = () => {
     }
   }
   const mapButtonToggle = () => {
+    // action("me/setPlayer", {...me, isAlive: false })
     setMinimapOpen(!minimapOpen)
   }
 
@@ -84,8 +95,8 @@ const ImageButton = () => {
     action('SABOTAGE_REQUEST')
   }
 
-  useEffect(() => { console.log(unReadMessage) }, [unReadMessage])
-  // 게임 첫 시작의 킬 쿨타임은 15초, 이후 10초로 설정
+  // useEffect(() => { console.log(unReadMessage) }, [unReadMessage])
+  // 게임 첫 시작의 쿨타임은 15초, 이후 10초로 설정
   const [killTimer, setKillTimer] = useState(-50)
   const killInterval = useRef(null)
   // 사보타지의 쿨타임은 20초
@@ -115,7 +126,7 @@ const ImageButton = () => {
     sabotageInterval.current = setInterval(() => {
       setSabotageTimer((prev) => prev + 10)
     }, 1000)
-    return () => clearInterval(sabotageInterval.current) 
+    return () => clearInterval(sabotageInterval.current)
   }, [])
 
   useEffect(() => {
@@ -145,133 +156,133 @@ const ImageButton = () => {
 
   return (
     <>
-    {contextHolder}
+      {contextHolder}
 
-        <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom : "20px" }}>
+      <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom: "20px" }}>
 
-          <Row>
-            <Col offset={21} span={3}>
-              {me.isAlive && <button
-                className="imgBtn"
-                id="chatBtn"
-                onClick={chatButtonActivate}
-              ><Badge count={unReadMessage}>
-                  <p />
-                  <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅" />
-                  <p />
-                </Badge>
-              </button>}
-            </Col>
-          </Row>
-          <Row>
-            <Col offset={21} span={3}>
-              <button
-                className="imgBtn"
-                id="mapBtn"
-                onClick={mapButtonToggle}
+        <Row>
+          <Col offset={21} span={3}>
+            {me.isAlive && <button
+              className="imgBtn"
+              id="chatBtn"
+              onClick={chatButtonActivate}
+            ><Badge count={unReadMessage}>
+                <p />
+                <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅" />
+                <p />
+              </Badge>
+            </button>}
+          </Col>
+        </Row>
+        <Row>
+          <Col offset={21} span={3}>
+            <button
+              className="imgBtn"
+              id="mapBtn"
+              onClick={mapButtonToggle}
+            >
+              <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+              <p />
+              <img className="imgBtnIcon" src="/btnIcons/iconMap1.png" alt="지도" />
+              <p />
+              <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+              <Modal
+                title="미니맵"
+                width="76.5vh"
+                open={minimapOpen}
+                onCancel={mapButtonToggle}
+                footer={[]}
               >
-                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-                <p />
-                <img className="imgBtnIcon" src="/btnIcons/iconMap1.png" alt="지도" />
-                <p />
-                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-                <Modal
-                  title="미니맵"
-                  width="76.5vh"
-                  open={minimapOpen}
-                  onCancel={mapButtonToggle}
-                  footer={[]}
-                >
-                  <div>
-                    <img className="minimap" src="/map/labeledMapImage.png" alt="미니맵" />
-                  </div>
-                </Modal>
-              </button>
-            </Col>
-          </Row>
-          <Row>
-            <Col offset={18} span={3}>
-              {me.role === "MAFIA" ? <button
-                className={"imgBtnNoHover " + ((adjustPlayer && killTimer >= 100) ? "imgBtnReady" : "")}
-                id="killBtn"
-                onClick={
-                  (adjustPlayer && killTimer >= 100) ? () => {
-                    killButtonActivate()
-                    resetKillTimer()
-                  } : undefined}
-              >
-                <Progress strokeWidth={4} percent={killTimer} steps={10} showInfo={false} strokeColor="red" />
-                <p />
-                <img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해" />
-                <p />
-                <Progress strokeWidth={4} percent={killTimer} steps={10} showInfo={false} strokeColor="red" />
-              </button> : undefined}
-            </Col>
-            <Col span={3}>
-              {me.isAlive && <button
-                className={"imgBtnNoHover " + ((adjustBody) ? "imgBtnReady" : "")}
-                id="reportBtn"
-                onClick={
-                  (adjustBody) ?
-                    reportButtonActivate
-                    : undefined}
-              >
-                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-                <p />
-                <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고" />
-                <p />
-                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-              </button>}
-            </Col>
-          </Row>
-          <Row>
-            <Col offset={18} span={3}>
-              {me.role === "MAFIA" ? <button
-                  className={"imgBtnNoHover " + ((sabotageTimer >= 100) ? "imgBtnReady" : "")}
-                  id="sabotageBtn"
-                  onClick={
-                    (sabotageTimer >= 100) ? () => {
-                      sabotageActivate()
-                      resetSabotageTimer()
-                    } : undefined}
-                >
-                  <Progress strokeWidth={4} percent={sabotageTimer} steps={10} showInfo={false} strokeColor="red" />
-                  <p />
-                  <img className="imgBtnIcon" src="/btnIcons/iconSabotage1.png" alt="방해" />
-                  <p />
-                  <Progress strokeWidth={4} percent={sabotageTimer} steps={10} showInfo={false} strokeColor="red" />
-                </button> : undefined}
-            </Col>
-            <Col span={3}>
+                <div>
+                  <img className="minimap" src="/map/labeledMapImage.png" alt="미니맵" />
+                </div>
+              </Modal>
+            </button>
+          </Col>
+        </Row>
+        <Row>
+          <Col offset={18} span={3}>
+            {me.role === "MAFIA" ? <button
+              className={"imgBtnNoHover " + ((adjustPlayer && killTimer >= 100) ? "imgBtnReady" : "")}
+              id="killBtn"
+              onClick={
+                (adjustPlayer && killTimer >= 100) ? () => {
+                  killButtonActivate()
+                  resetKillTimer()
+                } : undefined}
+            >
+              <Progress strokeWidth={4} percent={killTimer} steps={10} showInfo={false} strokeColor="red" />
+              <p />
+              <img className="imgBtnIcon" src="/btnIcons/iconKill1.png" alt="살해" />
+              <p />
+              <Progress strokeWidth={4} percent={killTimer} steps={10} showInfo={false} strokeColor="red" />
+            </button> : undefined}
+          </Col>
+          <Col span={3}>
+            {me.isAlive && <button
+              className={"imgBtnNoHover " + ((adjustBody) ? "imgBtnReady" : "")}
+              id="reportBtn"
+              onClick={
+                (adjustBody) ?
+                  reportButtonActivate
+                  : undefined}
+            >
+              <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+              <p />
+              <img className="imgBtnIcon" src="/btnIcons/iconReport1.png" alt="신고" />
+              <p />
+              <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+            </button>}
+          </Col>
+        </Row>
+        <Row>
+          <Col offset={18} span={3}>
+            {me.role === "MAFIA" ? <button
+              className={"imgBtnNoHover " + ((sabotageTimer >= 100) ? "imgBtnReady" : "")}
+              id="sabotageBtn"
+              onClick={
+                (sabotageTimer >= 100) ? () => {
+                  sabotageActivate()
+                  resetSabotageTimer()
+                } : undefined}
+            >
+              <Progress strokeWidth={4} percent={sabotageTimer} steps={10} showInfo={false} strokeColor="red" />
+              <p />
+              <img className="imgBtnIcon" src="/btnIcons/iconSabotage1.png" alt="방해" />
+              <p />
+              <Progress strokeWidth={4} percent={sabotageTimer} steps={10} showInfo={false} strokeColor="red" />
+            </button> : undefined}
+          </Col>
+          <Col span={3}>
 
-              <button
-                className={"imgBtnNoHover " + ((isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ? "imgBtnReady" : "")}
-                id="actBtn"
-                onClick={
-                  (isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ?
-                    actButtonActivate
-                    : undefined}
-              >
-                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-                <p />
-                <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동" />
-                <p />
-                <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
-              </button>
-            </Col>
-          </Row>
-          {/* {me.isAlive === true? */}
-          {/* 버튼의 가로세로 비율은 8:5로 지정할 것 (원본 560x350px) */}
+            <button
+              className={"imgBtnNoHover " + ((isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ? "imgBtnReady" : "")}
+              id="actBtn"
+              onClick={
+                (isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ?
+                  actButtonActivate
+                  : undefined}
+            >
+              <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+              <p />
+              <img className="imgBtnIcon" src="/btnIcons/iconAct1.png" alt="행동" />
+              <p />
+              <Progress strokeWidth={4} percent={0} steps={10} showInfo={false} />
+            </button>
+          </Col>
+        </Row>
+        {/* {me.isAlive === true? */}
+        {/* 버튼의 가로세로 비율은 8:5로 지정할 것 (원본 560x350px) */}
 
-          {/* 오른쪽 버튼 : 시민, 마피아 공용 */}
+        {/* 오른쪽 버튼 : 시민, 마피아 공용 */}
 
-          <ChatComponent className="z-index2000" />
-          <MissionComponent />
+        <ChatComponent className="z-index2000" />
+        <MissionComponent />
 
-          {/* 왼쪽 버튼 : 마피아 전용 */}
+        {/* 왼쪽 버튼 : 마피아 전용 */}
 
 
-        </div>
+      </div>
 
     </>
   );
