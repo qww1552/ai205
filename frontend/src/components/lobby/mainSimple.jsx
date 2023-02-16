@@ -4,6 +4,7 @@ const MainSimple = () => {
     return (<>
 
             <div>
+                
             <h1>MainPage</h1>
             <div>
                 <Link to="rooms">rooms</Link>

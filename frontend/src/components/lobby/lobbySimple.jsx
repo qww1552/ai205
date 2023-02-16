@@ -1,4 +1,5 @@
 import { notification } from 'antd';
+import { Modal, Input, Collapse, Row, Col, Divider,Button,Card } from 'antd';
 import { roomRequest } from 'api';
 import { selectGameInfo } from 'app/gameInfo';
 import { selectMe } from 'app/me';
@@ -8,8 +9,12 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate, useRouteLoaderData } from 'react-router-dom';
 import {
   PlusCircleFilled,
-  MinusCircleFilled
+  MinusCircleFilled,
+  HomeOutlined,
+  ExportOutlined
 } from '@ant-design/icons';
+import './roomListstyle.css'
+const { Meta } = Card;
 let dummyData = {}
 
 const LobbySimple = () => {
@@ -100,9 +105,13 @@ const LobbySimple = () => {
   }
 
   return (
-    <div className="waiting-room">
-      <h1>Waiting Room</h1>
-      <h2>Me</h2>
+    <div className="waiting-room div1">
+        <div className="header">
+        <h1>Waiting Room</h1>
+      <h2>A subtitle for your page goes here</h2>
+    </div>
+      
+      {/* <h2>Me</h2>
         {me.player.id}
       <h2>OtherPlayers</h2>
       <ul>
@@ -113,9 +122,53 @@ const LobbySimple = () => {
       {otherPlayers.length >= 1 && (
         <button onClick={gameStartBtn}>Start Game</button>
         // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
-      )}
+      )} */}
+      <div className="content div5">
+<br></br>
+<Row gutter={[16, 16]}>
+<Col span={6}>
+<Link to={'/'}><Button type="primary" size='large' ghost icon={<HomeOutlined/>}>HOME</Button></Link>
+</Col>
+<Col span={6}>
+<Link to={`/rooms`}><Button danger size='large' ghost icon={<ExportOutlined />}>EXIT</Button></Link>
+</Col>
+<Col span={6} order={2}>
+
+</Col>
+<Col span={6} order={1}>
+
+</Col>
+</Row>
+<Divider>PLAYER</Divider>
+<Row gutter={[16, 16]}>
+<Col span={8} key={me.player.id}>
+<Card key={me.player.id} hoverable >        
+    <Meta title={me.player.id}
+></Meta>
+  </Card>
+  </Col>
+{otherPlayers.map((player, i) => (
+
+  <Col span={8} key={player.id}>
+<Card key={player.id} hoverable >        
+    <Meta title={player.id}></Meta>
+  </Card>
+  </Col>
+  
+
+))}
+</Row>
+{otherPlayers.length >= 1 && (
+        <Button onClick={gameStartBtn} type="primary" ghost>Start Game</Button>
+        // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
+      )} 
+</div>
     </div>
   );
 };
 
 export default LobbySimple;
+
+
+
+
