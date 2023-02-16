@@ -53,7 +53,7 @@ const MissionComponent = () => {
       destroyOnClose = {true}
       open={isMissionModalOpen}
 
-    //   width={700}
+      width={700}
     //   footer={null}
     //   closable={false}
     // >
