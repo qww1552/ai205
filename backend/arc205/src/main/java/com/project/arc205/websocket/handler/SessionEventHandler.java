@@ -1,4 +1,4 @@
-package com.project.arc205.game.room.handler;
+package com.project.arc205.websocket.handler;
 
 import static com.project.arc205.common.util.WebSocketUtil.isRoomSubscriptionMessage;
 
