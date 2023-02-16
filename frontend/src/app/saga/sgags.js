@@ -105,7 +105,7 @@ const channelHandling = {
           }
         })
         for(const mission of data.missions) {
-          console.log('startperson')
+          // console.log('startperson')
           yield put({type:"me/setMission", payload: mission})}
         break;
       // ※게임 종료신호 데이터 받아오기
@@ -268,8 +268,8 @@ function* vote(client, roomId, action) {
 
 // 미션 완료 전송 요청
 function* mission(client, roomId, action) {
-  console.log('사가 호출까지는 성공')
-  console.log(action.payload)
+  // console.log('사가 호출까지는 성공')
+  // console.log(action.payload)
   yield call(send, client, "character/mission/complete", roomId, {id: Number(action.payload.id)})
 }
 
