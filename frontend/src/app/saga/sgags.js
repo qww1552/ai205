@@ -181,7 +181,7 @@ const channelHandling = {
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
-
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "gameInfo/setInMeeting", payload: true })
         yield delay(1000)
         yield put({ type: "gameInfo/setGameStop", payload: true })
