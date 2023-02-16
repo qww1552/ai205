@@ -106,7 +106,6 @@ const RoomList = () => {
 <div className='div1'>
         <div className="header">
         <h1>Game Rooms</h1>
-            <h2>A subtitle for your page goes here</h2>
         </div>
 
 

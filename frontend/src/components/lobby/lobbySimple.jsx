@@ -108,7 +108,7 @@ const LobbySimple = () => {
     <div className="waiting-room div1">
         <div className="header">
         <h1>Waiting Room</h1>
-      <h2>A subtitle for your page goes here</h2>
+      {/* <h2>4명 이상의 플레이어</h2> */}
     </div>
       
       {/* <h2>Me</h2>
@@ -158,7 +158,7 @@ const LobbySimple = () => {
 
 ))}
 </Row>
-{otherPlayers.length >= 1 && (
+{otherPlayers.length >= 3 && (
         <Button onClick={gameStartBtn} type="primary" ghost>Start Game</Button>
         // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
       )} 
