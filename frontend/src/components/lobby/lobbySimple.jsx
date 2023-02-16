@@ -110,7 +110,7 @@ const LobbySimple = () => {
           <li key={`${player.id}${i}`}>{player.id}</li>
         ))}
       </ul>
-      {otherPlayers.length > 3 && (
+      {otherPlayers.length >= 3 && (
         <button onClick={gameStartBtn}>Start Game</button>
         // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
       )}
