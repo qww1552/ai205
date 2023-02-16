@@ -165,6 +165,7 @@ const channelHandling = {
       case 'SABOTAGE_CLOSE':
         yield put({ type: "me/setSight", payload: 4 })
         yield put({ type: "gameInfo/setSabotage", payload: false })
+        yield put({ type: "missionInfo/setSabotageMissionProgress", payload: 0 })
         break;
 
       case 'SABOTAGE_SOLVE':
@@ -180,7 +181,7 @@ const channelHandling = {
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':
-
+        yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "gameInfo/setInMeeting", payload: true })
         yield delay(1000)
         yield put({ type: "gameInfo/setGameStop", payload: true })
@@ -201,6 +202,9 @@ const channelHandling = {
         yield put({ type: "gameInfo/setInVote", payload: false })
         yield put({ type: "gameInfo/setInVoteResult", payload: true })
         yield put({ type: "gameInfo/setGameStop", payload: false })
+
+        // 시체 인접 판정 초기화
+        yield put({ type: "me/setAdjustBody", payload: null })
 
         // 투표 관련 초기화
 

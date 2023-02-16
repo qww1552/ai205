@@ -114,6 +114,7 @@ const LobbySimple = () => {
         <button onClick={gameStartBtn}>Start Game</button>
         // <Link to={`/rooms/${roomId}/game`}><button>Start Game</button></Link>
       )}
+      <div>최소 4명의 인원이 필요합니다</div>
     </div>
   );
 };

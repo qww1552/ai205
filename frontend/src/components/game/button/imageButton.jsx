@@ -115,6 +115,8 @@ const ImageButton = () => {
   useEffect(() => {
     if (isInVoteResult) {
       setKillTimer(-150) // 회의 창 닫히는데 약 10초정도 걸림
+      setSabotageTimer(-100)
+
     }
   }, [isInVoteResult])
 
@@ -122,19 +124,29 @@ const ImageButton = () => {
     setKillTimer(0)
   }
 
-  useEffect(() => {
-    sabotageInterval.current = setInterval(() => {
-      setSabotageTimer((prev) => prev + 10)
-    }, 1000)
-    return () => clearInterval(sabotageInterval.current)
-  }, [])
+  // useEffect(() => {
+  //   sabotageInterval.current = setInterval(() => {
+  //     if(isInSabotage) {
+  //       setSabotageTimer(0)
+  //     } else {
+  //       setSabotageTimer((prev) => prev + 10)
+  //     }
+  //   }, 1000)
+  //   return () => clearInterval(sabotageInterval.current)
+  // }, [])
 
   useEffect(() => {
-    // 협동 미션이 끝나면 초기화해야 함...
-    if (isInVoteResult) {
-      setSabotageTimer(-100)
+    if(isInSabotage) {
+      resetSabotageTimer();
+      clearInterval(sabotageInterval.current)
+    } else {
+      sabotageInterval.current = setInterval(() => {
+        setSabotageTimer((prev) => prev + 10)
+      }, 1000)
     }
-  }, [isInVoteResult])
+    return () => clearInterval(sabotageInterval.current)
+
+  },[isInSabotage])
 
   const resetSabotageTimer = () => {
     setSabotageTimer(-100)
@@ -256,10 +268,10 @@ const ImageButton = () => {
           <Col span={3}>
 
             <button
-              className={"imgBtnNoHover " + ((isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ? "imgBtnReady" : "")}
+              className={"imgBtnNoHover " + (isAdjacentMeetingBtn || isAdjacentMissionBtn ? "imgBtnReady" : "")}
               id="actBtn"
               onClick={
-                (isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ?
+                (isAdjacentMeetingBtn || isAdjacentMissionBtn) ?
                   actButtonActivate
                   : undefined}
             >
