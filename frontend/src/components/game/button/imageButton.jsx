@@ -157,7 +157,6 @@ const ImageButton = () => {
   return (
     <>
       {contextHolder}
-
       <div id="ImageButton" style={{ width: "100vw", position: "absolute", bottom: "20px" }}>
 
         <Row>
@@ -165,7 +164,9 @@ const ImageButton = () => {
             {me.isAlive && <button
               className="imgBtn"
               id="chatBtn"
-              onClick={chatButtonActivate}
+              onClick={()=>{chatButtonActivate()
+                console.log(isInSabotage)}
+              }
             ><Badge count={unReadMessage}>
                 <p />
                 <img className="imgBtnIcon" src="/btnIcons/iconChat1.png" alt="채팅" />

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 const initialState = {
   mySessionId: "SessionA",
@@ -95,6 +96,9 @@ export const videoInfoSlice = createSlice({
     }
     // 여기까지
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 export const {

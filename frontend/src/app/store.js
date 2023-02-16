@@ -10,7 +10,7 @@ import missionInfoReducer from 'app/missionInfo'
 import voteReducer from 'app/voteInfo'
 import videoReducer from 'app/videoInfo'
 import deadReducer from 'app/dead'
-import { persistReducer } from 'redux-persist';
+import { PERSIST, persistReducer, PURGE } from 'redux-persist';
 import persistStore from 'redux-persist/es/persistStore';
 import gameSetReducer from'app/gameSet'
 

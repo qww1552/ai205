@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 const initialState = {
   //무효표는 아이디 "skip" 으로
@@ -34,6 +35,9 @@ export const voteInfoSlice = createSlice({
       }
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 // export const { changeLocation, setPlayer } = meSlice.actions;

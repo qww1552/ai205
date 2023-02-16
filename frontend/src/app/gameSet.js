@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 
 const initialState = {
   // Todo: 대충 게임에 필요한 세팅을 저장하는 변수
@@ -38,6 +39,9 @@ export const gamesetSlice = createSlice({
     }
 
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 export const { setGameSet, setInit} = gamesetSlice.actions;

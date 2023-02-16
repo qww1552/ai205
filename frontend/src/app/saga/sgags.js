@@ -113,6 +113,8 @@ const channelHandling = {
         yield put({ type:'gameInfo/setMissionModalOpen', payload:false})
         yield put({ type: "gameResult/setGameResult", payload: data })
         yield put({type : "gameInfo/setInGame", payload: false})
+        yield put({ type: "gameInfo/setSabotage", payload: false })
+        yield put({ type: "dead/setInit", payload: false })
         break;
 
       default:

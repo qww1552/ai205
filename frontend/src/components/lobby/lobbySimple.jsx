@@ -46,15 +46,18 @@ const LobbySimple = () => {
     });
   }
 
+
+  
   const me = useSelector(selectMe);
   const navigate = useNavigate();
   let isInGame = useSelector(selectGameInfo).isInGame;
 
   useEffect(()=> {
-    console.log(otherPlayers)
-    action('SOCKET_CONNECT_REQUEST', {roomId})
-    action("videoInfo/setMySessionId", roomId)
-    setplayerInfo();
+
+      setplayerInfo()
+      action('SOCKET_CONNECT_REQUEST', {roomId})
+      action("videoInfo/setMySessionId", roomId)
+
   },[])
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const LobbySimple = () => {
       dummyData = {}};
   },[]);
 
-  const setplayerInfo = () => {
+  const setplayerInfo = async() => {
     roomRequest(roomId).then(res =>  {
       const players = res.data.data.players
       const otherPlayers = players.filter(v => v.id !== me.player.id)
@@ -129,10 +132,10 @@ const LobbySimple = () => {
 <br></br>
 <Row gutter={[16, 16]}>
 <Col span={6}>
-<Link to={'/'}><Button type="primary" size='large' ghost icon={<HomeOutlined/>}>HOME</Button></Link>
+<Button type="primary" size='large' ghost icon={<HomeOutlined/>}><a href="/">HOME</a></Button>
 </Col>
 <Col span={6}>
-<Link to={`/rooms`}><Button danger size='large' ghost icon={<ExportOutlined />}>EXIT</Button></Link>
+<Button danger size='large' ghost icon={<ExportOutlined />}><a href='/rooms'>EXIT</a></Button>
 </Col>
 <Col span={6} order={2}>
 
@@ -148,17 +151,17 @@ const LobbySimple = () => {
     <Meta title={me.player.id}
 ></Meta>
   </Card>
-  </Col>
-{otherPlayers.map((player, i) => (
+  </Col>{otherPlayers?otherPlayers.map((player, i) => (
 
-  <Col span={8} key={player.id}>
+<Col span={8} key={player.id}>
 <Card key={player.id} hoverable >        
-    <Meta title={player.id}></Meta>
-  </Card>
-  </Col>
-  
+  <Meta title={player.id}></Meta>
+</Card>
+</Col>
 
-))}
+
+)):''}
+
 </Row>
 {otherPlayers.length >= 3 && (
         <Button onClick={gameStartBtn} type="primary" ghost>Start Game</Button>

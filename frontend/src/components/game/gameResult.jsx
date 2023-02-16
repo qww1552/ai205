@@ -15,18 +15,7 @@ const GameResult = () => {
   const navigate = useNavigate();
   const [Text, setText] = useState("")
   const [winSide, setWinSide] = useState("")
-  const gameOver=() =>{
-    action("dead/setInit",'')
-    action("gameInfo/setInit",'')
-    action("gameResult/setInit",'')
-    action("gameSet/setInit",'')
-    action("me/setInit",'')
-    action("missionInfo/setInit",'')
-    action("others/setInit",'')
-    action("result/setInit",'')
-    action("voteInfo/setInit",'')
-    navigate(`/rooms`)
-  }
+
 
   const getWinSide=()=>{
     
@@ -54,7 +43,7 @@ const GameResult = () => {
         <div>{player.id}:{player.role}</div>
       })} */}
       <Row justify="center">
-      <Button type="primary" onClick={()=>{gameOver()}}>메인화면으로 돌아가기</Button>
+      <Button type="primary"><a href="/">메인화면으로 돌아가기</a></Button>
       </Row>     
     </div>
     </Modal>

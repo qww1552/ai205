@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 const initialState = {
   // 내 플레이어 정보
@@ -130,9 +131,13 @@ export const meSlice = createSlice({
         adjustBody: null,
       };
 
-    }
+    },
 
-  }
+
+  },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 export const { changeLocation, setPlayer, addPlayerVideo, removePlayerVideo, setMySoundOn, setMySoundOff, setMyVideoOn, setMyVideoOff, setMyIsSpeakingTrue, setMyIsSpeakingFalse, setMission, setMissionComplete, setInit } = meSlice.actions;

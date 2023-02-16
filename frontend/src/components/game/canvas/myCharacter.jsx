@@ -22,6 +22,7 @@ const MyCharacter = ({ color }) => {
   // const sightRef = useRef();
   const isGameStop = useSelector(selectGameInfo).isGameStop;
   const isInSabotage = useSelector(selectGameInfo).isInSabotage;
+  const gameInfo = useSelector(selectGameInfo)
   // const [intersecting, setIntersection] = useState(false);
 
   const frontVector = new Vector3();
@@ -39,7 +40,11 @@ const MyCharacter = ({ color }) => {
   const [sightColor, setSightColor] = useState("white")
 
   const timer = useRef();
-
+  useEffect(()=>{
+    console.log(isInSabotage, '사보타지여부')
+    console.log(sightColor, '눈색')
+    console.log(gameInfo)
+  },[])
   useEffect(() => {
     if(isInSabotage) {
       setSightColor("red")
@@ -106,6 +111,7 @@ const MyCharacter = ({ color }) => {
 
   return (
     <>
+      
       <RigidBody
         ref={ref}
         colliders={false}

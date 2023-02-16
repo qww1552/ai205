@@ -18,11 +18,6 @@ const ModalMeeting = () => {
   const [completeNoticeMeet, setCompleteNoticeMeet] = useState(false)
   const isChatModalOpen = useSelector(selectGameInfo).isChatModalOpen
 
-  useEffect(() => {
-    if (!isInVoteResult && !isInMeeting) {
-      Modal.destroyAll()
-    }
-  },[isInVoteResult, isInMeeting])
 
   useEffect(() => {
     if (isInMeeting &&(isInVoteResult)) {

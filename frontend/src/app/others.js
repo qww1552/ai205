@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 
 const initialState = {
@@ -172,6 +173,9 @@ export const othersSlice = createSlice({
       };
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 export const { setOtherPlayer, setOtherPlayerVideoInfo, setIsSpeakingFalse, setIsSpeakingTrue, removeOtherPlayerVideoInfo, setOtherSoundOn, setOtherSoundOff, setOtherVideoOn, setOtherVideoOff, setInit } = othersSlice.actions;

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 import { action } from './store';
+
 
 const initialState = {
   deadList : []
@@ -21,6 +23,9 @@ export const deadSlice = createSlice({
       }
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 

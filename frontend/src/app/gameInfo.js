@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 
 const initialState = {
   // 회의 버튼에 인접해 있는지 체크하는 변수
@@ -58,10 +59,11 @@ export const gameInfoSlice = createSlice({
       state.isGameStop = action.payload
     },
     setSabotage: (state, action) => {
+      console.log(state.isInSabotage, action.payload, '사보타지 바꾸기')
       state.isInSabotage = action.payload
     },
     setInit: (state, action) => {
-      state = {
+      state = {...state,
         // 회의 버튼에 인접해 있는지 체크하는 변수
         isAdjacentMeetingBtn: false,
         // 회의가 진행중인지 체크하는 변수
@@ -72,7 +74,7 @@ export const gameInfoSlice = createSlice({
         isInVoteResult: false,
         // 게임 시작했는지 체크하는 변수
         isInGame: false,
-        // 채팅창을 열어야 하는지 체크하는 변수
+        // 채팅창을 열어야 하는지 체크하는                          변수
         isChatModalOpen: false,
         // 미션창을 열어야 하는지 체크하는 변수
         isMissionModalOpen: false,
@@ -80,8 +82,10 @@ export const gameInfoSlice = createSlice({
         isGameStop : false,
         isInSabotage: false,
       }
-      console.log(state.isInSabotage)
-    }
+    },
+    extraReducers: (builder) => {
+      builder.addCase(PURGE, () => initialState);
+  }
   },
 });
 

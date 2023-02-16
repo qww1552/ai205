@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 const initialState = {
 
@@ -25,6 +26,9 @@ export const gameResultSlice = createSlice({
       }
     }
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 // export const { changeLocation, setPlayer } = meSlice.actions;

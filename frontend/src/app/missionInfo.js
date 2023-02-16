@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { PURGE } from 'redux-persist';
 
 const initialState = {
   // 전체 미션 진행도 (백분율)
@@ -47,6 +48,9 @@ export const missionInfoSlice = createSlice({
     }
 
   },
+  extraReducers: (builder) => {
+    builder.addCase(PURGE, () => initialState);
+}
 });
 
 export const { setTotalMissionProgress, setAdjacentMissionBtn, setMissionById, setInit } = missionInfoSlice.actions;
