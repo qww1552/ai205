@@ -256,10 +256,10 @@ const ImageButton = () => {
           <Col span={3}>
 
             <button
-              className={"imgBtnNoHover " + ((isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ? "imgBtnReady" : "")}
+              className={"imgBtnNoHover " + (isAdjacentMeetingBtn || isAdjacentMissionBtn ? "imgBtnReady" : "")}
               id="actBtn"
               onClick={
-                (isAdjacentMeetingBtn || (me.role !== "MAFIA" && isAdjacentMissionBtn)) ?
+                (isAdjacentMeetingBtn || isAdjacentMissionBtn) ?
                   actButtonActivate
                   : undefined}
             >
