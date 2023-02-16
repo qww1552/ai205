@@ -3,18 +3,8 @@ import { roomListRequest } from 'api';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import RegistSimple from 'components/game/regist/registSImple';
-import './roomListstyle.css'
-import { Avatar, Card } from 'antd';
-import {
-  CrownOutlined,
-  SyncOutlined
-} from '@ant-design/icons'
+const BASE_URL = `${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'http://localhost:8080'}/api/v1`
 
-const { Meta } = Card;
-
-
-const BASE_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost'}:8080/api/v1`
 const RoomList = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState('')
