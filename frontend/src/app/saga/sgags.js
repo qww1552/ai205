@@ -165,6 +165,7 @@ const channelHandling = {
       case 'SABOTAGE_CLOSE':
         yield put({ type: "me/setSight", payload: 4 })
         yield put({ type: "gameInfo/setSabotage", payload: false })
+        yield put({ type: "missionInfo/setSabotageMissionProgress", payload: 0 })
         break;
 
       case 'SABOTAGE_SOLVE':
