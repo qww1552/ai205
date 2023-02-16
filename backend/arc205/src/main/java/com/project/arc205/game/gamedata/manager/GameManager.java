@@ -16,9 +16,9 @@ import com.project.arc205.game.mission.model.ActiveMission;
 import com.project.arc205.game.mission.model.entity.GameMapMission;
 import com.project.arc205.game.mission.model.repository.GameMapMissionRepository;
 import com.project.arc205.game.room.model.entity.Room;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class GameManager {
     }
 
     private Map<String, GameCharacter> createGameCharacter(Map<String, Player> players) {
-        Map<String, GameCharacter> gameCharacters = new HashMap<>();
+        Map<String, GameCharacter> gameCharacters = new ConcurrentHashMap<>();
 
         for (Player player : players.values()) {
             String playerId = player.getId();

@@ -16,11 +16,11 @@ import com.project.arc205.game.mission.model.ActiveMission;
 import com.project.arc205.game.mission.model.BasicSabotageMissionGoal;
 import com.project.arc205.game.mission.model.SabotageMission;
 import com.project.arc205.game.mission.model.entity.GameMapMission;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -115,7 +115,7 @@ public class GameData {
     }
 
     public void votingStart() {
-        voted = new HashMap<>(getSurvivorCount());
+        voted = new ConcurrentHashMap<>(getSurvivorCount());
     }
 
     public void votingEnd() {
@@ -154,15 +154,16 @@ public class GameData {
 
     public void checkGameEnd() {
         log.info("check game end: {}", roomId.toString());
-        GameEndEvent gameEndEvent = null;
+        Role winRole = null;
         if (this.isMafiaWin()) {
-            gameEndEvent = new GameEndEvent(roomId, Role.MAFIA);
+            winRole = Role.MAFIA;
         } else if (this.isCitizenWin()) {
-            gameEndEvent = new GameEndEvent(roomId, Role.CITIZEN);
+            winRole = Role.CITIZEN;
         }
 
-        log.info("  game end event: {}", gameEndEvent);
-        if (gameEndEvent != null) {
+        if (winRole != null) {
+            GameEndEvent gameEndEvent = new GameEndEvent(roomId, Role.CITIZEN);
+            log.info("  game end event: {}", gameEndEvent);
             Events.raise(gameEndEvent);
         }
     }
