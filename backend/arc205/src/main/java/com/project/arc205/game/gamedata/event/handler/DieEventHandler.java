@@ -14,6 +14,8 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,8 @@ public class DieEventHandler {
     private final PlayerRepository playerRepository;
     private final SimpMessagingTemplate template;
 
+
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     @EventListener
     public void sendDie(DieEvent event) {
         UUID roomId = playerRepository.findByPlayerId(event.getPlayerId()).getRoom().getId();
@@ -44,6 +48,7 @@ public class DieEventHandler {
         log.info("{}: {}", destination, responseData);
     }
 
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     @EventListener
     public void sendYouDie(DieEvent event) {
         Player player = playerRepository.findByPlayerId(event.getPlayerId());

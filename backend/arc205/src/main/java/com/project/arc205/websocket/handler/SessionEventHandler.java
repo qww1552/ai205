@@ -63,7 +63,9 @@ public class SessionEventHandler {
         log.info("onDisconnect : {}", event);
         Player player = playerRepository.findBySessionId(event.getSessionId());
 //        Player player = (Player) event.getUser();
-        Events.raise(new LeaveEvent(player.getId(), player.getRoom().getId()));
+        if (player.getRoom() != null) {
+            Events.raise(new LeaveEvent(player.getId(), player.getRoom().getId()));
+        }
         player.exit();
         playerRepository.deleteBySessionId(event.getSessionId());
     }

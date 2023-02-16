@@ -37,10 +37,6 @@ public class LeaveEventHandler {
 
         //remove from game
         gameData.getGameCharacters().remove(event.getPlayerId());
-
-        //refresh game data
-        gameData.refreshMissionCount();
-        gameData.checkGameEnd();
     }
 
     private void setLeaveCharacter(UUID roomId, GameCharacter gameCharacter) {
