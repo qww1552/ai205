@@ -24,12 +24,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameData {
@@ -189,4 +187,14 @@ public class GameData {
         return this.sabotage;
     }
 
+    @Override
+    public String toString() {
+        return new StringBuilder().append("GameData{").append("roomId=").append(roomId)
+                .append(", totalMissionCount=").append(totalMissionCount)
+                .append(", completedMissionCount=").append(completedMissionCount)
+                .append(", meetingLimitTime=").append(meetingLimitTime).append(", votingLimitTime=")
+                .append(votingLimitTime).append(", voted=").append(voted).append(", inMeeting=")
+                .append(inMeeting).append(", sabotage=").append(sabotage)
+                .append(", gameCharacters=").append(gameCharacters).append('}').toString();
+    }
 }

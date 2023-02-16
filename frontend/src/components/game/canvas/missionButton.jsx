@@ -17,7 +17,7 @@ const MissionButton = ({ position }) => {
           }}
         onIntersectionExit={(e) => {
           if(e.colliderObject.name?.search('me_') >= 0)
-            console.log('미션버튼') 
+            // console.log('미션버튼') 
             action('missionInfo/setAdjacentMissionBtn', false)
         }}
       >

@@ -3,13 +3,18 @@ import { roomRequest } from 'api';
 import { selectGameInfo } from 'app/gameInfo';
 import { selectMe } from 'app/me';
 import { action } from 'app/store';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useRouteLoaderData } from 'react-router-dom';
+import {
+  PlusCircleFilled,
+  MinusCircleFilled
+} from '@ant-design/icons';
+let dummyData = {}
 
 const LobbySimple = () => {
-
   const [otherPlayers, setotherPlayers] = useState([])
+  
   const roomId = useRouteLoaderData("lobby");
   const openNotification = (player) => {
     // console.log(player)
@@ -17,11 +22,24 @@ const LobbySimple = () => {
       message: `${player.id}님이 입장했습니다`,
       description:`${otherPlayers.length}명이 대기중`,
       duration: 2,
+      icon: <PlusCircleFilled style={{ color: '#108ee9' }} />,
       onClick: () => {
-        console.log('Notification Clicked!');
+        // console.log('Notification Clicked!');
       },
     });
   };
+  const opendelNotification = (player) => {
+    // console.log(player)
+    notification.open({
+      message: `${player}님이 퇴장했습니다`,
+      description:`${otherPlayers.length}명이 대기중`,
+      duration: 2,
+      icon: <MinusCircleFilled style={{ color: '#ed2131' }} />,
+      onClick: () => {
+        // console.log('Notification Clicked!');
+      },
+    });
+  }
 
   const me = useSelector(selectMe);
   const navigate = useNavigate();
@@ -37,7 +55,20 @@ const LobbySimple = () => {
     
     document.title = `Waiting Room - ${otherPlayers.length} otherPlayers`;
     if (otherPlayers.length>=1) {
-      openNotification(otherPlayers[otherPlayers.length-1])
+      let newDummy = {}
+      for (let player of otherPlayers) {
+        if (!(player.id in dummyData)) {
+          openNotification(player)
+          newDummy[player.id] = true
+        } else {
+          delete dummyData[player.id]
+          newDummy[player.id] = true
+        }
+      }
+      for (let player of Object.keys(dummyData)) {
+        opendelNotification(player)
+      }
+      dummyData = {...newDummy}
     }
   }, [otherPlayers.length]);
 
