@@ -1,8 +1,19 @@
-import { Modal, Button, Input } from 'antd';
+import { Modal, Input, Collapse, Row, Col, Divider,Button } from 'antd';
 import { roomListRequest } from 'api';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import RegistSimple from 'components/game/regist/registSImple';
+import './roomListstyle.css'
+import { Avatar, Card } from 'antd';
+import {
+  CrownOutlined,
+  SyncOutlined
+} from '@ant-design/icons'
+
+const { Meta } = Card;
+
+
 const BASE_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost'}:8080/api/v1`
 const RoomList = () => {
   const navigate = useNavigate();
@@ -10,7 +21,8 @@ const RoomList = () => {
   const [rooms, setRooms] = useState([])
   let ids = []
   const [isNewRoomOpen, setIsNewMapOpen] = useState(false)
-  const fn = () =>{}
+  const [regist,setRegist] = useState(false)
+
   const RoomMake = async (body) => {
     await roomListRequest().then((res) => {
       setRooms(res.data)
@@ -32,14 +44,13 @@ const RoomList = () => {
           for(let room of res3.data) {
             // console.log(res3.data)
             if (!(room.id in ids)&&(room.title === title)) {
-              navigate(`${room.id}/regist`)
+              setRegist(room.id)
               setRooms(res3.data)
               break;
             }
           }})})
      }
-
-    
+  
 
   const titleHandler = (e) => {
     e.preventDefault();
@@ -54,6 +65,9 @@ const RoomList = () => {
     })
   },[])
 
+  useEffect(()=>{
+    console.log(regist)
+  },[regist])
   const submitHandler = (e) =>{
     e.preventDefault();
     // console.log(title)
@@ -63,41 +77,86 @@ const RoomList = () => {
     RoomMake(body)
   }
   // const rooms = [{id: "0c827963-6661-5511-92f9-dd7d375b968d", name : "first"}, {id: "aa", name : "second"}];
-
   return (
-    <div className="game-rooms">
-      <h1>Game Rooms</h1>
-      <ul>
-        {rooms.map(room => (
-          <li key={room.id}>
-            <Link to={`${room.id}/regist`}>{room.title}</Link> - {room.amountOfPlayers}명 접속중
-          </li>
-        ))}
-      </ul>
+    <div>  
       <>
-      <button onClick={()=>{setIsNewMapOpen(true)}}>새방만들기</button>
-      <button onClick={()=>{roomListRequest().then((res) => {
-        setRooms(res.data)})}}>방목록 새로고침</button>
+
     <Modal
-    title='Room Name 입력'
+    title='ROOM TITLE'
     open={isNewRoomOpen}
     width={300}
-    closable={true}
+    onCancel={()=>{setIsNewMapOpen(false)}}
     footer={[
     ]}>
     <div> 
-      <form onSubmit={submitHandler}>
-        <div align="center">
-        <Input style={{ width: 'calc(100% - 200px)' }} value={title} onChange={titleHandler} defaultChecked/>
+
+        <div align="center" style={{marginBottom: '5%'}}>
+        <Input value={title} onChange={titleHandler} placeholder='Room Title'/>
         </div>
         <div align="center">
-        <Button type='primary'>만들기</Button>
+        <Button type='primary' ghost onClick={submitHandler}>만들기</Button>
         </div>
-      </form>
+
 
     </div>
     </Modal>
     </>
+    {/*  */}
+    
+<div className='div1'>
+        <div className="header">
+        <h1>Game Rooms</h1>
+            <h2>A subtitle for your page goes here</h2>
+        </div>
+
+
+</div>
+<div className="content div5">
+  <br></br>
+<Row gutter={[16, 16]}>
+<Col span={6}>
+      <Button type="primary" size='large' onClick={()=>{setIsNewMapOpen(true)}} icon={<CrownOutlined />} >NEW GAME</Button>
+      </Col>
+      <Col span={6}>
+      <Button type="primary" size='large' onClick={()=>{roomListRequest().then((res) => {
+        setRooms(res.data)
+        console.log(rooms)})}} ghost icon={<SyncOutlined />}>REFRESH</Button>
+      </Col>
+      <Col span={6} order={2}>
+
+      </Col>
+      <Col span={6} order={1}>
+
+      </Col>
+      </Row>
+      <Divider>Room List</Divider>
+<Row gutter={[16, 16]}>
+
+    {rooms.map(room => (
+      
+        <Col span={12} key={room.id}>
+      <Card onClick={()=>{
+        console.log('a')
+        setRegist(room.id)}} key={room.id} hoverable >        
+          <Meta title={room.title}
+          description={`(${room.amountOfPlayers}/6)`}></Meta>
+        </Card>
+        <Modal
+        title={`ROOM:${room.title}`}
+        open={room.id === regist}
+        onCancel={()=>{
+          setRegist(false)}
+        }
+        footer
+        key={room.id}><RegistSimple roomId={{data:room.id}}/></Modal>
+        </Col>
+        
+      
+    ))}
+  </Row>
+    
+    </div>
+
     </div>
   );
 };
