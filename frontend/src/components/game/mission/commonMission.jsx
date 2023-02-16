@@ -48,7 +48,7 @@ const CommonMission = (props)=>{
           if (!secondPoseToggle) {
             if (props.subType1 !== currentPose) {
             
-              setTeachableProgress(props.subType1 + " 동작이 감지되지 않았어요...")
+              setTeachableProgress(props.motion1 + " 동작이 감지되지 않았어요...")
             } else  {
               // console.log("첫번쨰 동작 @!!!!!!!!!!!!!!!!!!!!!")
               secondPoseToggle = true
@@ -56,7 +56,7 @@ const CommonMission = (props)=>{
             } 
           } else { // 2번째 동작
             if (props.subType2 !== currentPose) {
-              setTeachableProgress(props.subType2 + " 동작이 감지되지 않았어요...")
+              setTeachableProgress(props.motion2 + " 동작이 감지되지 않았어요...")
             } else  {
               setTeachableProgress("두번째 동작 성공!")
               // console.log("두번쨰 동작 @!!!!!!!!!!!!!!!!!!!!!")
@@ -69,9 +69,9 @@ const CommonMission = (props)=>{
           }
         } else { 
             // 미션이 종료 되었을때 수행
-            setTeachableProgress(props.type + " 동작 유지 미션 완료!")
+            setTeachableProgress( " 동작 유지 미션 완료!")
             secondPoseToggle = false
-            alert("미션완료");
+          
             window.deleteCanvas();
             setIsVisible(false);
             clearInterval(teachableTimer.current)
@@ -115,9 +115,9 @@ const CommonMission = (props)=>{
       <div id="label-container"></div>
       <div style={{ display: isVisible ? "block" : "none" }}>{teachableProgress}</div>
       <div>
-        <Row type="flex" justify="center" align="middle" style={{backgroundColor:'black'}}>
+        <Row type="flex" justify="center" align="middle">
         {otherPlayers.map((sub,i) => {     
-          return (<>{sub.streamManager!==undefined && sub.player.isAlive && sub.mutedVideo!==true && (<Col span={4}>
+          return (<>{sub.streamManager!==undefined && sub.player.isAlive && sub.mutedVideo!==true && (<Col span={8}>
             {/* Todo: 지금은 isAlive, isVoted 값이 초기화가 안된상태라 작동이 안됨... */}
             <UserVideoComponent  user={sub}/>
           </Col>) }</>)    
