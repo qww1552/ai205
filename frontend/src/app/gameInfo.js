@@ -80,6 +80,7 @@ export const gameInfoSlice = createSlice({
         isGameStop : false,
         isInSabotage: false,
       }
+      console.log(state.isInSabotage)
     }
   },
 });

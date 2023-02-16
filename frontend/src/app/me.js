@@ -25,6 +25,7 @@ export const meSlice = createSlice({
     },
     setPlayer: (state, action) => {
       state.player = action.payload;
+      console.log(state.player)
     },
     addPlayerVideo: (state, action) => {
       return {
@@ -116,6 +117,7 @@ export const meSlice = createSlice({
     setInit: (state, action) => {
       state = {
         // 내 플레이어 정보
+        
         player: { id: "player1", isAlive: true, role: "MAFIA", sight: 4, missions: [] },
         location: {
           y: 0,
@@ -127,7 +129,9 @@ export const meSlice = createSlice({
         adjustPlayer: null,
         adjustBody: null,
       };
+
     }
+
   }
 });
 

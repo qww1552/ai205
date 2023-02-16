@@ -176,7 +176,7 @@ const channelHandling = {
     }
   },
   MEETING: function* (operation, data) {
-
+    console.log(operation, data)
     switch (operation) {
       // 미팅 시작 알림 받음
       case 'START':

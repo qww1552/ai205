@@ -1,0 +1,96 @@
+# default
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8080
+  ssl:
+    enabled: false
+
+spring:
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/arc?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: ssafy
+    password: ssafy
+    initialization-mode: always
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+OPENVIDU_URL: http://localhost:4443/
+OPENVIDU_SECRET: MY_SECRET
+
+allowed-origins: "http://localhost:3000"
+
+--- # prod
+
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8080
+  ssl:
+    enabled: false
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://i8a205.p.ssafy.io:3306/arc?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ssafy
+    password: mafia
+    data: classpath:data.sql
+    initialization-mode: always
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: false
+        show-sql: false
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+
+OPENVIDU_URL: https://i8a205.p.ssafy.io:8443/
+OPENVIDU_SECRET: MY_SECRET
+
+allowed-origins: "https://i8a205.p.ssafy.io"

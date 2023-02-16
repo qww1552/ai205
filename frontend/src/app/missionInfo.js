@@ -10,6 +10,7 @@ const initialState = {
   ],
 
   sabotageMissionProgress: 0,
+  sabotageMissionProgress: 0,
 }
 
 export const missionInfoSlice = createSlice({

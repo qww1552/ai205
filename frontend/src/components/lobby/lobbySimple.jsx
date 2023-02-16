@@ -51,15 +51,7 @@ const LobbySimple = () => {
   let isInGame = useSelector(selectGameInfo).isInGame;
 
   useEffect(()=> {
-    action("dead/setInit",'')
-    action("gameInfo/setInit",'')
-    action("gameResult/setInit",'')
-    action("gameSet/setInit",'')
-    action("me/setInit",'')
-    action("missionInfo/setInit",'')
-    action("others/setInit",'')
-    action("result/setInit",'')
-    action("voteInfo/setInit",'')
+    console.log(otherPlayers)
     action('SOCKET_CONNECT_REQUEST', {roomId})
     action("videoInfo/setMySessionId", roomId)
     setplayerInfo();
@@ -90,7 +82,8 @@ const LobbySimple = () => {
     const timer = setInterval(() => {
       setplayerInfo();
     }, 2000)
-    return () => clearInterval(timer);
+    return () => {clearInterval(timer)
+      dummyData = {}};
   },[]);
 
   const setplayerInfo = () => {
