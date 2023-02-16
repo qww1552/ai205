@@ -40,8 +40,8 @@ export const videoInfoSlice = createSlice({
       state.mainUser = undefined;
     },
     mutedSound(state, action) {
-      console.log("setSound!!!!");
-      console.log(state.mainUser);
+      // console.log("setSound!!!!");
+      // console.log(state.mainUser);
       if (state.mainUser.streamManager.stream === action.payload.streamManager.stream) {
         state.mainUser = {...state.mainUser, audioActive : !state.mainUser.audioActive}
       } else {
@@ -59,7 +59,7 @@ export const videoInfoSlice = createSlice({
       }
     },
     mutedVideo(state, action) {
-      console.log("setVideo!!!!");
+      // console.log("setVideo!!!!");
       if (state.mainUser.streamManager.stream === action.payload.streamManager.stream) {
           state.mainUser = {...state.mainUser, videoActive : !state.mainUser.videoActive}
       } else {

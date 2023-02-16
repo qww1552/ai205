@@ -8,7 +8,7 @@ const SUBSCRIBE_URL = '/sub/room'
 const PUBLISHER_URL = '/pub/room'
 
 const createClient = () => {
-  console.log("--createClient")
+  // console.log("--createClient")
   const socket = new SockJS(`${BASE_URL}/ws`);
   const stomp_client = over(socket);
 
@@ -16,7 +16,7 @@ const createClient = () => {
 }
 
 const connectClient = (client, topic, player, callback) => {
-  console.log("--connectClient")
+  // console.log("--connectClient")
   client.connect({playerId : player.id}, 
   () => {
     client.subscribe(topic, callback, {playerId : player.id});
