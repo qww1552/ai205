@@ -162,7 +162,7 @@ public class GameData {
         }
 
         if (winRole != null) {
-            GameEndEvent gameEndEvent = new GameEndEvent(roomId, Role.CITIZEN);
+            GameEndEvent gameEndEvent = new GameEndEvent(roomId, winRole);
             log.info("  game end event: {}", gameEndEvent);
             Events.raise(gameEndEvent);
         }
