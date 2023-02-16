@@ -17,13 +17,13 @@ export default function ModalViewVideoComponent() {
   const dispatch = new useDispatch();
 
   const handleSound = (user) => {
-    console.log("handleSound~~!")
+    // console.log("handleSound~~!")
     dispatch(mutedSound(user));
     dispatch(mutedVideo(user))
   }
 
   const handleVideo = (user) => {
-    console.log("handleVideo!!")
+    // console.log("handleVideo!!")
    
   }
  

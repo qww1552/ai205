@@ -42,8 +42,8 @@ const WebchatMeeting = () => {
   const voteResult = useSelector(selectVoteInfo).voteResult.voteResults
   const VoteEvent = (voteduserInfo) => {
     if (voteduserInfo.isAlive) {
-      console.log(voteduserInfo.id)
-      console.log('에게투표함?')
+      // console.log(voteduserInfo.id)
+      // console.log('에게투표함?')
       if (VoteduserInfo === voteduserInfo.id) {
         setVoteduserinfo('skip')
       }
@@ -61,18 +61,18 @@ const WebchatMeeting = () => {
   
   // Todo: 여기서 웹소켓을 통해 누구한테 투표했는지 전송한다
   const submitEvent =() =>{
-    console.log({VoteduserInfo},'한테 대충 제출하는 이벤트')
+    // console.log({VoteduserInfo},'한테 대충 제출하는 이벤트')
     action('VOTE_REQUEST', { to: VoteduserInfo})
   }
 
   const handleSound = (user) => {
-    console.log("handleSound~~!")
+    // console.log("handleSound~~!")
     dispatch(mutedSound(user));
     dispatch(mutedVideo(user))
   }
 
   const handleVideo = (user) => {
-    console.log("handleVideo!!")
+    // console.log("handleVideo!!")
    
   }
 
@@ -105,13 +105,14 @@ const WebchatMeeting = () => {
       {isInVoteResult === true&&
         <Col span={24}>
           <Card size="small">
-          <DeleteTwoTone twoToneColor='SlateGrey' style={{fontSize: '24px'}}/>
-          {skipinfo === []?"아무도 기권하지 않았습니다":<VoteResultFrom from={getSkipevent()}/>}
+          <div style={{float:'left'}}>기권표:</div>
+          {skipinfo === []?"아무도 기권하지 않았습니다":<span><VoteResultFrom from={getSkipevent()}/></span>}
         </Card>
         </Col>}
       </Row>
       <Row justify="center">
       {(me.player.isAlive&&!me.player.isVoted)&&<Button type="primary" onClick={submitEvent} disabled={!isInVote}>{VoteduserInfo === 'skip'?'SKIP':'VOTE'}</Button>}
+      {(!me.player.isAlive)&&<Button>'YOU DIED'</Button>}
       </Row>      
       
     </div>

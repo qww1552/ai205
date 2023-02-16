@@ -34,8 +34,8 @@ const TimerMeeting = (props) => {
   }, []);
 
   useEffect(()=>{
-    console.log(totalMeetingTime,voteLimitTime)
-    console.log(gameset)
+    // console.log(totalMeetingTime,voteLimitTime)
+    // console.log(gameset)
   },[totalMeetingTime,voteLimitTime])
 
   useEffect(() => {

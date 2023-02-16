@@ -49,10 +49,7 @@ const VoteMeeting = () => {
         </Col>
       </Row>
       <Row >
-
-
         <Col span={2}>  
-
         </Col>
       </Row>
       {/* <ChatComponent/> */}
