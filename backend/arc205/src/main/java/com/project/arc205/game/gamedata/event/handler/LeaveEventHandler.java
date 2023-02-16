@@ -19,8 +19,10 @@ public class LeaveEventHandler {
     public void leaveGame(LeaveEvent event) {
         log.info("LeaveEvent(leaveGame): {}", event);
         GameData gameData = gameRepository.findById(event.getRoomId());
+
         gameData.getGameCharacters().remove(event.getPlayerId());
+
+        gameData.refreshMissionCount();
         gameData.checkGameEnd();
     }
-
 }
