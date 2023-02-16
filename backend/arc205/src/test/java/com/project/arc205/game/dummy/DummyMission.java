@@ -9,7 +9,7 @@ public class DummyMission extends ActiveMission {
         super(id, title, location);
     }
 
-    public static DummyMission getInstance() {
+    public static DummyMission getTestMission() {
         return new DummyMission("1", "dummy", new Location(0.0, 0.0));
     }
 

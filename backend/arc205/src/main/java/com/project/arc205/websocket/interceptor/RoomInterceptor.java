@@ -1,4 +1,4 @@
-package com.project.arc205.game.room.interceptor;
+package com.project.arc205.websocket.interceptor;
 
 import com.project.arc205.game.gamecharacter.model.entity.Player;
 import com.project.arc205.game.gamecharacter.repository.PlayerRepository;

@@ -7,14 +7,17 @@ import com.project.arc205.common.util.Constant;
 import com.project.arc205.game.gamecharacter.exception.GameCharacterNotFoundException;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.event.GameEndEvent;
+import com.project.arc205.game.gamedata.event.MissionProgressChangeEvent;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
-import java.util.HashMap;
+import com.project.arc205.game.mission.model.ActiveMission;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,13 +45,11 @@ public class GameData {
     private Map<String, GameCharacter> gameCharacters;  //캐릭터 정보(key: playerId, value: GameCharacter)
 
     @Builder
-    private GameData(UUID roomId, int totalMissionCount,
+    private GameData(UUID roomId,
             int meetingLimitTime, int votingLimitTime, Map<String, GameCharacter> gameCharacters,
             int sabotageCoolTime,
             Location startLocation) {
         this.roomId = roomId;
-        this.totalMissionCount = totalMissionCount;
-        this.completedMissionCount = 0;
         this.meetingLimitTime = meetingLimitTime;
         this.votingLimitTime = votingLimitTime;
         this.gameCharacters = gameCharacters;
@@ -56,16 +57,13 @@ public class GameData {
         this.inMeeting = false;
         this.sabotage = new Sabotage(this.roomId, sabotageCoolTime);
         moveGameCharactersTo(startLocation);
+        refreshMissionCount();
     }
 
     public static GameData of(UUID roomId, GameSetting gameSetting,
             Map<String, GameCharacter> gameCharacters, Location startLocation) {
-
-        int citizenCount = gameCharacters.size() - gameSetting.getNumberOfMafias();
-
         return GameData.builder()
                 .roomId(roomId)
-                .totalMissionCount(gameSetting.getNumberOfMissions() * citizenCount)
                 .meetingLimitTime(gameSetting.getMeetingLimitTime())
                 .votingLimitTime(gameSetting.getVoteLimitTime())
                 .gameCharacters(gameCharacters)
@@ -83,17 +81,20 @@ public class GameData {
         return (int) (completedMissionCount * 100.0 / totalMissionCount);
     }
 
-//    public int getMissionProgress() {
-//        AtomicInteger total = new AtomicInteger();
-//        AtomicInteger complete = new AtomicInteger();
-//        gameCharacters.values().stream().filter(v -> v.getRole() == Role.CITIZEN).forEach(v -> {
-//            Map<String, ActiveMission> missions = v.getMissions();
-//            total.addAndGet(missions.size());
-//            complete.addAndGet(
-//                (int) missions.values().stream().filter(ActiveMission::isSolved).count());
-//        });
-//        return (int) (complete.doubleValue() / total.doubleValue() * 100.0);
-//    }
+    public void refreshMissionCount() {
+        AtomicInteger total = new AtomicInteger();
+        AtomicInteger complete = new AtomicInteger();
+        gameCharacters.values().stream().filter(v -> v.getRole() == Role.CITIZEN).forEach(v -> {
+            Map<String, ActiveMission> missions = v.getMissions();
+            total.addAndGet(missions.size());
+            complete.addAndGet(
+                    (int) missions.values().stream().filter(ActiveMission::isSolved).count());
+        });
+        this.totalMissionCount = total.get();
+        this.completedMissionCount = complete.get();
+        Events.raise(new MissionProgressChangeEvent(roomId,
+                getMissionProgress()));           //TODO: change observe missionCount update ?
+    }
 
     public boolean meetingStart() {
         if (inMeeting) {
@@ -112,7 +113,7 @@ public class GameData {
     }
 
     public void votingStart() {
-        voted = new HashMap<>(getSurvivorCount());
+        voted = new ConcurrentHashMap<>(getSurvivorCount());
     }
 
     public void votingEnd() {
@@ -150,21 +151,31 @@ public class GameData {
     }
 
     public void checkGameEnd() {
-        int aliveMafiaCount = getSurvivorCount(Role.MAFIA);
-        int aliveCitizenCount = getSurvivorCount(Role.CITIZEN);
-
-        log.info("check game end: {}, {}", aliveCitizenCount, aliveMafiaCount);
-        GameEndEvent gameEndEvent = null;
-        if (aliveMafiaCount >= aliveCitizenCount) {
-            gameEndEvent = new GameEndEvent(roomId, Role.MAFIA);
-        } else if (aliveMafiaCount == 0 || totalMissionCount == completedMissionCount) {
-            gameEndEvent = new GameEndEvent(roomId, Role.CITIZEN);
+        log.info("check game end: {}", roomId.toString());
+        Role winRole = null;
+        if (this.isMafiaWin()) {
+            winRole = Role.MAFIA;
+        } else if (this.isCitizenWin()) {
+            winRole = Role.CITIZEN;
         }
 
-        log.info("game end event: {}", gameEndEvent);
-        if (gameEndEvent != null) {
+        if (winRole != null) {
+            GameEndEvent gameEndEvent = new GameEndEvent(roomId, winRole);
+            log.info("  game end event: {}", gameEndEvent);
             Events.raise(gameEndEvent);
         }
+    }
+
+    private boolean isMafiaWin() {
+        int aliveMafiaCount = getSurvivorCount(Role.MAFIA);
+        int aliveCitizenCount = getSurvivorCount(Role.CITIZEN);
+        return aliveMafiaCount >= aliveCitizenCount;
+    }
+
+    private boolean isCitizenWin() {
+        refreshMissionCount();
+        int aliveMafiaCount = getSurvivorCount(Role.MAFIA);
+        return aliveMafiaCount == 0 || totalMissionCount == completedMissionCount;
     }
 
     public GameCharacter getGameCharacter(String playerId) {
