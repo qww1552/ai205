@@ -5,6 +5,7 @@ import {selectOhterPlayers} from "app/others"
 import { useSelector } from 'react-redux';
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 import { selectGameInfo } from "app/gameInfo";
+import { selectMissionInfo } from "app/missionInfo";
 
 const CommonMission = (props)=>{
  
@@ -13,8 +14,10 @@ const CommonMission = (props)=>{
   const [teachableProgress, setTeachableProgress] = useState("미션 수행하기!")
   const [poseGuideFirst, setPoseGuideFirst] = useState("")
   const [poseGuideSecond, setPoseGuideSecond] = useState("")
+
   const otherPlayers = useSelector(selectOhterPlayers);
   const isInSabotage = useSelector(selectGameInfo).isInSabotage
+  const sabotageMissionProgress = useSelector(selectMissionInfo).sabotageMissionProgress
 
   const teachableTimer = useRef(null);
 
@@ -121,6 +124,7 @@ const CommonMission = (props)=>{
         })}
         </Row>
       </div>
+      <Progress percent={sabotageMissionProgress} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
       <Button id="closeMission" onClick={() => {
         setIsVisible(false);
         window.deleteCanvas();
