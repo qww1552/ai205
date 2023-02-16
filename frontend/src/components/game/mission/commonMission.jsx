@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Progress,Row,Col } from 'antd'
+import { Button, Progress,Row,Col, Card, Carousel } from 'antd'
 import { action } from "app/store"
 import {selectOhterPlayers} from "app/others"
 import { useSelector } from 'react-redux';
 import UserVideoComponent from "components/webchat/UserVideoComponent";
 import { selectGameInfo } from "app/gameInfo";
 import { selectMissionInfo } from "app/missionInfo";
+
 
 const CommonMission = (props)=>{
  
@@ -33,6 +34,13 @@ const CommonMission = (props)=>{
     btn.setAttribute("onclick", `init("${filePath}")`);
     btn.addEventListener("click",getCurrentPose);
   }, [props.type]);
+
+  useEffect(() => {
+    if(!isInSabotage) {
+      action("gameInfo/setMissionModalOpen", false);
+
+    }
+  },[isInSabotage])
 
   useEffect(() => {
 
@@ -71,7 +79,6 @@ const CommonMission = (props)=>{
             // 미션이 종료 되었을때 수행
             setTeachableProgress( " 동작 유지 미션 완료!")
             secondPoseToggle = false
-          
             window.deleteCanvas();
             setIsVisible(false);
             clearInterval(teachableTimer.current)
@@ -100,21 +107,65 @@ const CommonMission = (props)=>{
   return (
    
     <>
-      <h1> {props.content} </h1>
-      <div>
-        <img src={poseGuideFirst} style={{width:"300px", height:"200px", display:poseGuideFirst?"inline":"none"}} alt="가이드1"/>
-        <img src={poseGuideSecond} style={{width:"300px", height:"200px", display:poseGuideSecond?"inline":"none"}} alt="가이드2"/>
-      </div>
-      <Button id="teachable">
-        미션 수행하기
-      </Button>
-      <div id="currentPose" style={{display:"none"}}> </div>
-      <div id="divCanvas">
-        
-      </div>
-      <div id="label-container"></div>
-      <div style={{ display: isVisible ? "block" : "none" }}>{teachableProgress}</div>
-      <div>
+      <Card
+        title={props.content}
+        style={{ width: "100%" }}
+        actions={[
+          <Button id="teachable">미션 수행하기</Button>,
+          <Button
+            id="closeMission"
+            onClick={() => {
+              setIsVisible(false);
+              window.deleteCanvas();
+              action("gameInfo/setMissionModalOpen", false);
+            }}
+          >
+            닫기
+          </Button>,
+        ]}
+      >
+        <Carousel autoplay>
+          <div>
+            <img
+              src={poseGuideFirst}
+              style={{
+                width: "100%",
+                height: "50%",
+                display: poseGuideFirst ? "inline" : "none",
+              }}
+              alt="가이드1"
+            />
+          </div>
+          {poseGuideSecond && (
+            <div>
+              <img
+                src={poseGuideSecond}
+                style={{
+                  width: "100%",
+                  height: "50%",
+                  display: poseGuideSecond ? "inline" : "none",
+                }}
+                alt="가이드2"
+              />
+            </div>
+          )}
+        </Carousel>
+        <Progress percent={sabotageMissionProgress} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
+
+        <Row gutter={[0, 16]}>
+          <Col span={24}></Col>
+          <Col span={12}>
+            <div id="divCanvas"></div>
+          </Col>
+          <Col span={12}>
+            <div id="currentPose" style={{ display: "none" }}>
+            </div>
+            <div id="label-container"></div>
+            <div style={{ display: isVisible ? "block" : "none" }}>
+              <h3>{teachableProgress}</h3>
+            </div>
+          </Col>
+        </Row>
         <Row type="flex" justify="center" align="middle">
         {otherPlayers.map((sub,i) => {     
           return (<>{sub.streamManager!==undefined && sub.player.isAlive && sub.mutedVideo!==true && (<Col span={8}>
@@ -123,14 +174,7 @@ const CommonMission = (props)=>{
           </Col>) }</>)    
         })}
         </Row>
-      </div>
-      <Progress percent={sabotageMissionProgress} strokeColor="green" trailColor="silver" strokeWidth="15px" showInfo={false}/>
-      <Button id="closeMission" onClick={() => {
-        setIsVisible(false);
-        window.deleteCanvas();
-        clearInterval(teachableTimer.current)
-        action('gameInfo/setMissionModalOpen', false)
-      }}>미션 포기</Button>
+      </Card>
     </>
   );
 }
