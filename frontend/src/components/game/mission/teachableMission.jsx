@@ -49,27 +49,27 @@ const TeachableMission = (props) => {
           if (!secondPoseToggle) {
             if (props.subType1 !== currentPose) {
               currentPoseTimer = 0
-              setTeachableProgress(props.subType1 + " 동작이 감지되지 않았어요...")
+              setTeachableProgress(props.motion1 + " 동작이 감지되지 않았어요...")
             } else if (currentPoseTimer < targetPoseTimer) {
               currentPoseTimer += 1
-              setTeachableProgress(props.subType1 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
+              setTeachableProgress(props.motion1 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
             } else {
-              setTeachableProgress("좋아요! 다음은 " + props.subType2 + " 동작을 취해주세요!")
+              setTeachableProgress("좋아요! 다음은 " + props.motion2 + " 동작을 취해주세요!")
               secondPoseToggle = true
               currentPoseTimer = 0
             }    
           } else { // 2번째 동작
             if (props.subType2 !== currentPose) {
               currentPoseTimer = 0
-              setTeachableProgress(props.subType2 + " 동작이 감지되지 않았어요...")
+              setTeachableProgress(props.motion2 + " 동작이 감지되지 않았어요...")
             } else if (currentPoseTimer < targetPoseTimer) {
               currentPoseTimer += 1
-              setTeachableProgress(props.subType2 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
+              setTeachableProgress(props.motion2 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
             } else {
-              setTeachableProgress(props.type + " 동작 유지 미션 완료!")
+              setTeachableProgress(" 동작 유지 미션 완료!")
               secondPoseToggle = false
               currentPoseTimer = 0
-              alert("미션완료");
+            
               window.deleteCanvas();
               props.setComplete(true);
               setIsVisible(false);
@@ -80,14 +80,14 @@ const TeachableMission = (props) => {
         } else { // 동작이 1개인 미션일 경우
           if (props.type !== currentPose) {
             currentPoseTimer = 0
-            setTeachableProgress(props.type + " 동작이 감지되지 않았어요...")
+            setTeachableProgress(props.motion1 + " 동작이 감지되지 않았어요...")
           } else if (currentPoseTimer < targetPoseTimer) {
             currentPoseTimer += 1
-            setTeachableProgress(props.type + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
+            setTeachableProgress(props.motion1 + " 동작을 " + currentPoseTimer + "초 동안 유지 중이에요!")
           } else {
-            setTeachableProgress(props.type + " 동작 유지 미션 완료!")
+            setTeachableProgress(" 동작 유지 미션 완료!")
             currentPoseTimer = 0
-            alert("미션완료");
+          
             window.deleteCanvas();
             props.setComplete(true);
             setIsVisible(false);
