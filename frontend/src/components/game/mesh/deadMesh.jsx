@@ -31,7 +31,7 @@ const DeadMesh = ({color=0}) => {
     if(once) return;
 
     cnt += 1;
-    if (cnt === FPS) {
+    if (cnt === 4) {
       texture.offset.x += 1 / TEXTURE_WIDTH;
       cnt = 0
     }
