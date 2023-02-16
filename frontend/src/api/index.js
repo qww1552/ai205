@@ -3,12 +3,13 @@ import axios from "axios"
 import { over } from "stompjs"
 import { useNavigate } from "react-router-dom"
 
-const BASE_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'localhost'}:8080/api/v1`
+const BASE_URL = `${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'http://localhost:8080'}/api/v1`
+
 const SUBSCRIBE_URL = '/sub/room'
 const PUBLISHER_URL = '/pub/room'
 
 const createClient = () => {
-  // console.log("--createClient")
+  console.log("--createClient")
   const socket = new SockJS(`${BASE_URL}/ws`);
   const stomp_client = over(socket);
 
@@ -16,7 +17,7 @@ const createClient = () => {
 }
 
 const connectClient = (client, topic, player, callback) => {
-  // console.log("--connectClient")
+  console.log("--connectClient")
   client.connect({playerId : player.id}, 
   () => {
     client.subscribe(topic, callback, {playerId : player.id});

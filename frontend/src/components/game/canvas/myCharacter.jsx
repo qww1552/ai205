@@ -38,6 +38,8 @@ const MyCharacter = ({ color }) => {
 
   const [sightColor, setSightColor] = useState("white")
 
+  const timer = useRef();
+
   useEffect(() => {
     if(isInSabotage) {
       setSightColor("red")
@@ -48,7 +50,7 @@ const MyCharacter = ({ color }) => {
   },[isInSabotage])
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    timer.current = setInterval(() => {
       if (!isInMeeting) {
         action("LOCAITION_SEND_REQUEST", {
           x: ref.current.translation().x,
@@ -57,7 +59,7 @@ const MyCharacter = ({ color }) => {
       }
     }, 300);
     return () => {
-      clearInterval(timer);
+      clearInterval(timer.current);
     };
   }, []);
 
@@ -150,7 +152,8 @@ const MyCharacter = ({ color }) => {
               // 미션 버튼
               action(
                 "missionInfo/setAdjacentMissionBtn",
-                e.colliderObject.name[e.colliderObject.name.length - 1]
+                // e.colliderObject.name[e.colliderObject.name.length - 1]
+                e.colliderObject.name.split('_')[1]
               );
             } else {
               // 유저들

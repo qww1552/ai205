@@ -9,6 +9,7 @@ const initialState = {
   myMissionList: [
   ],
 
+  sabotageMissionProgress: 0,
 }
 
 export const missionInfoSlice = createSlice({
@@ -38,6 +39,10 @@ export const missionInfoSlice = createSlice({
         ],
       
       }
+    },
+
+    setSabotageMissionProgress: (state, action) => {
+      state.sabotageMissionProgress = action.payload;
     }
 
   },

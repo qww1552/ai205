@@ -22,8 +22,7 @@ import { setOtherPlayerVideoInfo,setIsSpeakingFalse,setIsSpeakingTrue,removeOthe
 import { selectGameInfo } from 'app/gameInfo';
 import { useNavigate, useRouteLoaderData } from 'react-router-dom';
 import gameResult from 'app/gameResult';
-  const APPLICATION_SERVER_URL = `http://${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRES : 'localhost'}:8080/api/v1/`;
-
+  const APPLICATION_SERVER_URL = `${ process.env.REACT_APP_IP_ADDRESS ? process.env.REACT_APP_IP_ADDRESS : 'http://localhost:8080'}/api/v1`
 const Game = () => {
 
     const ref = useRef();
@@ -200,7 +199,7 @@ const Game = () => {
 
     const createSession = async (sessionId) => {
         const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions",
+        APPLICATION_SERVER_URL + "/api/sessions",
         { customSessionId: sessionId },
         {
             headers: { "Content-Type": "application/json" },
@@ -212,7 +211,7 @@ const Game = () => {
 
     const createToken = async (sessionId) => {
         const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+        APPLICATION_SERVER_URL + "/api/sessions/" + sessionId + "/connections",
         {},
         {
             headers: { "Content-Type": "application/json" },

@@ -121,7 +121,7 @@ public class GameCharacterServiceTests {
     void missionComplete() {
         Map<String, GameCharacter> gameCharacterMap = new HashMap<>();
         Mafia mafia = getTestMafia();
-        DummyMission mission = DummyMission.getInstance();
+        DummyMission mission = DummyMission.getTestMission();
         Citizen citizen = getTestCitizenWithMission(
                 new HashMap<>(Map.of(mission.getId(), mission)));
         gameCharacterMap.put(mafia.getPlayerId(), mafia);

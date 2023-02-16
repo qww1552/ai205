@@ -18,7 +18,7 @@ public class CitizenTests {
 
     @BeforeEach
     void init() {
-        dummyMission = DummyMission.getInstance();
+        dummyMission = DummyMission.getTestMission();
     }
 
     @Test
