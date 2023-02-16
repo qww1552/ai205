@@ -10,9 +10,6 @@ import com.project.arc205.game.gamedata.event.GameEndEvent;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
-import com.project.arc205.game.mission.model.BasicSabotageMissionGoal;
-import com.project.arc205.game.mission.model.SabotageMission;
-import com.project.arc205.game.mission.model.entity.GameMapMission;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +139,7 @@ public class GameData {
         }
     }
 
-    private int getSurvivorCount() {
+    public int getSurvivorCount() {
         return (int) gameCharacters.values().stream()
                 .filter(GameCharacter::getIsAlive).count();
     }
@@ -173,11 +170,5 @@ public class GameData {
     public GameCharacter getGameCharacter(String playerId) {
         return Optional.of(gameCharacters.get(playerId)).orElseThrow(
                 GameCharacterNotFoundException::new);
-    }
-
-    public void openSabotage(GameMapMission mission) {
-        int targetCount = getSurvivorCount();
-        BasicSabotageMissionGoal goal = new BasicSabotageMissionGoal(targetCount);
-        sabotage.open(SabotageMission.of(mission, goal));
     }
 }

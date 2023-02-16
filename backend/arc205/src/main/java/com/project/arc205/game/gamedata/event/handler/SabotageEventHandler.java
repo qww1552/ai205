@@ -14,6 +14,8 @@ import com.project.arc205.game.gamedata.event.SabotageRequestEvent;
 import com.project.arc205.game.gamedata.model.entity.GameData;
 import com.project.arc205.game.gamedata.model.entity.Sabotage;
 import com.project.arc205.game.gamedata.repository.GameRepository;
+import com.project.arc205.game.mission.model.BasicSabotageMissionGoal;
+import com.project.arc205.game.mission.model.SabotageMission;
 import com.project.arc205.game.mission.model.entity.GameMapMission;
 import com.project.arc205.game.mission.model.entity.Mission;
 import java.util.Date;
@@ -59,8 +61,9 @@ public class SabotageEventHandler {
         GameData gameData = gameRepository.findById(roomId);
 
         GameMapMission mission = this.getGameMapMission();
-
-        gameData.openSabotage(mission);
+        int targetCount = gameData.getSurvivorCount();
+        BasicSabotageMissionGoal goal = new BasicSabotageMissionGoal(targetCount);
+        gameData.getSabotage().open(SabotageMission.of(mission, goal));
     }
 
     @Async
