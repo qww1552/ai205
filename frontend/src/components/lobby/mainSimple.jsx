@@ -1,18 +1,19 @@
 import { Link, Outlet } from "react-router-dom";
-import "./style.css"
+import "./mainSimplestyle.css"
 const MainSimple = () => {
     return (<>
+            <Link to="rooms">
+            <div className="image">
 
-            <div>
-                
-            <h1>MainPage</h1>
-            <div>
-                <Link to="rooms">rooms</Link>
-            </div>
+            {/* <div>
+                rooms
+            </div> */}
             <Outlet>
                 
             </Outlet>
-            </div>
+            </div></Link>
+
+
 
     </>)
 }

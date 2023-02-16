@@ -25,29 +25,46 @@ const RegistSimple = (props) => {
           },
         });
       };
+    const warnigMessage = () => {
+        messageApi.open({
+            type: 'warning',
+            content: '생성할수 없는 이름입니다! 다른 이름을 입력해주세요',
+            duration: 2.0,
+            className: 'custom-class',
+            style: {
+              marginTop: '20vh',
+            },
+          });
+
+    }
 
     const roomId = props.roomId.data
     const NameMake = () => {
-        let isIn = true
-        roomRequest(roomId)
-        .then((res)=>{
-            const players = res.data.data.players
-            for (let idx in players) {
-                if (players[idx].id === userName) {
-                    success()
-                    isIn = false
-                    break;
-                } 
-            }
-            if(isIn) {
-                action('me/setPlayer',{id: userName})
-                nav(`/rooms/${roomId}/lobby`)
-            }
-
-        }).catch((e) =>{
-            console.log('실패!')
-            console.log(e)
-        })
+        if (userName === "" || userName === "skip") {
+            warnigMessage()
+        }else{
+            let isIn = true
+            roomRequest(roomId)
+            .then((res)=>{
+                const players = res.data.data.players
+                for (let idx in players) {
+                    if (players[idx].id === userName) {
+                        success()
+                        isIn = false
+                        break;
+                    } 
+                }
+                if(isIn) {
+                    action('me/setPlayer',{id: userName})
+                    nav(`/rooms/${roomId}/lobby`)
+                }
+    
+            }).catch((e) =>{
+                console.log('실패!')
+                console.log(e)
+            })
+        }
+ 
     }
         
     const onClickbtn = () => {
