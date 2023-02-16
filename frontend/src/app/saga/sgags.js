@@ -203,6 +203,9 @@ const channelHandling = {
         yield put({ type: "gameInfo/setInVoteResult", payload: true })
         yield put({ type: "gameInfo/setGameStop", payload: false })
 
+        // 시체 인접 판정 초기화
+        yield put({ type: "me/setAdjustBody", payload: null })
+
         // 투표 관련 초기화
 
         // 시체들 초기화
