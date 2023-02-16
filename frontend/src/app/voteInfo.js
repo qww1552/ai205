@@ -20,6 +20,19 @@ export const voteInfoSlice = createSlice({
       
       state.voteResult = action.payload
     },
+    setInit: (state, action) => {
+      state = {
+        //무효표는 아이디 "skip" 으로
+        voteResult: [
+          { id: "", from: ["from_id",] },
+        ],
+        // 당선된 사람
+        elected: { id: "", role: "" },
+      
+        // 남은 투표권 수
+        remainingVoteTicket: 0,
+      }
+    }
   },
 });
 
@@ -30,5 +43,6 @@ export const voteInfoSlice = createSlice({
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectVoteInfo = (state) => state.voteInfo;
 
+export const { setResult, setInit } = voteInfoSlice.actions;
 
 export default voteInfoSlice.reducer;

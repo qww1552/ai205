@@ -59,12 +59,33 @@ export const gameInfoSlice = createSlice({
     },
     setSabotage: (state, action) => {
       state.isInSabotage = action.payload
+    },
+    setInit: (state, action) => {
+      state = {
+        // 회의 버튼에 인접해 있는지 체크하는 변수
+        isAdjacentMeetingBtn: false,
+        // 회의가 진행중인지 체크하는 변수
+        isInMeeting: false,
+        // 투표가 진행중인지 체크하는 변수
+        isInVote: false,
+        // 투표가 끝났는지 체크하는 변수
+        isInVoteResult: false,
+        // 게임 시작했는지 체크하는 변수
+        isInGame: false,
+        // 채팅창을 열어야 하는지 체크하는 변수
+        isChatModalOpen: false,
+        // 미션창을 열어야 하는지 체크하는 변수
+        isMissionModalOpen: false,
+        unReadMessage:0,
+        isGameStop : false,
+        isInSabotage: false,
+      }
     }
   },
 });
 
 export const {
-  setAdjacentMeetingBtn, setInMeeting, setInVote, setInVoteResult, setChatModalOpen, setMissionModalOpen, setunReadMessage 
+  setAdjacentMeetingBtn, setInMeeting, setInVote, setInVoteResult, setChatModalOpen, setMissionModalOpen, setunReadMessage, setInit 
 } = gameInfoSlice.actions;
 
 export const selectGameInfo = (state) => state.gameInfo;

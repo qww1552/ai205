@@ -161,11 +161,20 @@ export const othersSlice = createSlice({
           return;
         }
       }
+    },
+    setInit: (state, action) =>{
+      state = {
+        // 다른 플레이어 수
+        otherPlayersCnt: 0,
+      
+        // 다른 플레이어 정보
+        players: [],
+      };
     }
   },
 });
 
-export const { setOtherPlayer, setOtherPlayerVideoInfo, setIsSpeakingFalse, setIsSpeakingTrue, removeOtherPlayerVideoInfo, setOtherSoundOn, setOtherSoundOff, setOtherVideoOn, setOtherVideoOff } = othersSlice.actions;
+export const { setOtherPlayer, setOtherPlayerVideoInfo, setIsSpeakingFalse, setIsSpeakingTrue, removeOtherPlayerVideoInfo, setOtherSoundOn, setOtherSoundOff, setOtherVideoOn, setOtherVideoOff, setInit } = othersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

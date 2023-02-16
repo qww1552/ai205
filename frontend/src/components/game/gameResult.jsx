@@ -1,6 +1,7 @@
 import { Row, Button, Modal, Col } from 'antd';
 import { selectGameInfo } from 'app/gameInfo';
 import { selectGameResult } from 'app/gameResult';
+import { action } from 'app/store';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,7 +15,18 @@ const GameResult = () => {
   const navigate = useNavigate();
   const [Text, setText] = useState("")
   const [winSide, setWinSide] = useState("")
-
+  const gameOver=() =>{
+    action("dead/setInit",'')
+    action("gameInfo/setInit",'')
+    action("gameResult/setInit",'')
+    action("gameSet/setInit",'')
+    action("me/setInit",'')
+    action("missionInfo/setInit",'')
+    action("others/setInit",'')
+    action("result/setInit",'')
+    action("voteInfo/setInit",'')
+    navigate(`/rooms`)
+  }
 
   const getWinSide=()=>{
     
@@ -42,9 +54,8 @@ const GameResult = () => {
         <div>{player.id}:{player.role}</div>
       })} */}
       <Row justify="center">
-      <Link to={`/rooms`}><Button type="primary">메인화면으로 돌아가기</Button></Link>
+      <Button type="primary" onClick={()=>{gameOver()}}>메인화면으로 돌아가기</Button>
       </Row>     
-      
     </div>
     </Modal>
     </>

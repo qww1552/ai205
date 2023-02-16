@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { action } from './store';
 
 const initialState = {
   deadList : []
@@ -13,12 +14,17 @@ export const deadSlice = createSlice({
     },
     setDeadList : (state, action) => {
       state.deadList = action.payload
+    },
+    setInit: (state, action) => {
+      state = {
+        deadList : []
+      }
     }
   },
 });
 
 
 export const selectDead = (state) => state.dead;
-
+export const {setInit} = deadSlice.actions;
 
 export default deadSlice.reducer;

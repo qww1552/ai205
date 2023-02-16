@@ -16,6 +16,14 @@ export const gameResultSlice = createSlice({
       state.gameResult = action.payload
 
     },
+    setInit:(state, action) => {
+      state = {
+
+        win: "",
+      
+        players: [{ id:"", alive:"", role:""},],
+      }
+    }
   },
 });
 
@@ -25,6 +33,7 @@ export const gameResultSlice = createSlice({
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectGameResult = (state) => state.gameResult;
+export const {setInit} = gameResultSlice.actions;
 
 
 export default gameResultSlice.reducer;
