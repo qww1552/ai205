@@ -7,13 +7,9 @@ import com.project.arc205.common.util.Constant;
 import com.project.arc205.game.gamecharacter.exception.GameCharacterNotFoundException;
 import com.project.arc205.game.gamecharacter.model.entity.GameCharacter;
 import com.project.arc205.game.gamedata.event.GameEndEvent;
-import com.project.arc205.game.gamedata.model.exception.SabotageNotActiveException;
 import com.project.arc205.game.meeting.exception.AlreadyVotedException;
 import com.project.arc205.game.meeting.exception.InvalidTargetException;
 import com.project.arc205.game.meeting.exception.NotVotingPeriodException;
-import com.project.arc205.game.mission.model.BasicSabotageMissionGoal;
-import com.project.arc205.game.mission.model.SabotageMission;
-import com.project.arc205.game.mission.model.entity.GameMapMission;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +20,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameData {
 
@@ -141,7 +139,7 @@ public class GameData {
         }
     }
 
-    private int getSurvivorCount() {
+    public int getSurvivorCount() {
         return (int) gameCharacters.values().stream()
                 .filter(GameCharacter::getIsAlive).count();
     }
@@ -172,29 +170,5 @@ public class GameData {
     public GameCharacter getGameCharacter(String playerId) {
         return Optional.of(gameCharacters.get(playerId)).orElseThrow(
                 GameCharacterNotFoundException::new);
-    }
-
-    public void openSabotage(GameMapMission mission) {
-        int targetCount = getSurvivorCount();
-        BasicSabotageMissionGoal goal = new BasicSabotageMissionGoal(targetCount);
-        sabotage.open(SabotageMission.of(mission, goal));
-    }
-
-    public Sabotage getSabotage() {
-        if (!sabotage.isActive()) {
-            throw new SabotageNotActiveException(roomId.toString());
-        }
-        return this.sabotage;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder().append("GameData{").append("roomId=").append(roomId)
-                .append(", totalMissionCount=").append(totalMissionCount)
-                .append(", completedMissionCount=").append(completedMissionCount)
-                .append(", meetingLimitTime=").append(meetingLimitTime).append(", votingLimitTime=")
-                .append(votingLimitTime).append(", voted=").append(voted).append(", inMeeting=")
-                .append(inMeeting).append(", sabotage=").append(sabotage)
-                .append(", gameCharacters=").append(gameCharacters).append('}').toString();
     }
 }

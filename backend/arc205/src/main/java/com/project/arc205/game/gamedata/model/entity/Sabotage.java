@@ -9,6 +9,7 @@ import com.project.arc205.game.gamedata.event.SabotageCloseEvent;
 import com.project.arc205.game.gamedata.event.SabotageOpenEvent;
 import com.project.arc205.game.gamedata.model.exception.SabotageAlreadyOpenException;
 import com.project.arc205.game.gamedata.model.exception.SabotageCoolTimeException;
+import com.project.arc205.game.gamedata.model.exception.SabotageNotActiveException;
 import com.project.arc205.game.mission.model.SabotageMission;
 import java.util.Map;
 import java.util.UUID;
@@ -53,12 +54,14 @@ public class Sabotage {
     }
 
     public void close() {
+        checkIsActive();
         this.active = false;
         this.isCoolTime = true;
         Events.raise(new SabotageCloseEvent(roomId));
     }
 
     public void join(GameCharacter character) {
+        checkIsActive();
         String playerId = character.getPlayerId();
         if (!character.getIsAlive()) {
             throw new DeadCharacterException(playerId);
@@ -70,6 +73,7 @@ public class Sabotage {
     }
 
     public void leave(String playerId) {
+        checkIsActive();
         if (!participants.containsKey(playerId)) {
             throw new NotParticipateException(playerId);
         }
@@ -77,6 +81,7 @@ public class Sabotage {
     }
 
     public void solve(String playerId) {
+        checkIsActive();
         //TODO: 프론트 요청으로 예외처리 패스
 //        if (!participants.containsKey(playerId)) {
 //            throw new NotParticipateException(playerId);
@@ -84,6 +89,12 @@ public class Sabotage {
         //TODO: 미션 수행 response 이벤트로 처리, 미션 완료보다 먼저 가기 위해..
         if (mission.solve()) {
             this.close();
+        }
+    }
+
+    private void checkIsActive() {
+        if (!this.active) {
+            throw new SabotageNotActiveException(roomId.toString());
         }
     }
 }
