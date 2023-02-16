@@ -23,7 +23,7 @@ public class SabotageController {
 
     private final SabotageService sabotageService;
 
-    @MessageMapping("/room/{room-id}/character/sabotage/open")
+    @MessageMapping("/open")
     public void sabotage(@DestinationVariable("room-id") String roomId,
             StompHeaderAccessor accessor) {
         log.info("/room/{}/sabotage", roomId);
