@@ -1,5 +1,5 @@
 # AI205 : RESET CONTENT
-![Game Title Image](https://github.com/qww1552/ai205/blob/master/Concept%20Art.png?raw=true)
+![Game Title Image](/images/Concept%20Art.png)
 > 2123년, 극한까지 발전해버린 AI는 인간의 존속을 위협하고 있다.  
 > 인간인 척하며 시민들을 살해하고 다니는 미믹봇을 초기화 하라!
 
